@@ -1,0 +1,73 @@
+<?php
+/**
+ * QueryBuilder for PHP
+ *
+ * Update class
+ *
+ * @version 1.0
+ * @date 2015-12-06
+ */
+
+namespace QueryBuilder\QueryBuilders;
+
+use QueryBuilder\QueryBuilder;
+use QueryBuilder\DB\QueryBuilderException;
+
+class Update extends CriteriaBase {
+
+  private $values = array();
+
+  public function set($values) {
+    if (!is_array($values)) {
+      throw new QueryBuilderException('Update::values(): expected values as array, got ' . gettype($values));
+    }
+
+    $this->values = $values;
+
+    return $this;
+  }
+
+  private function sanitizeField($field) {
+    if ($field instanceof Raw) {
+      return (string) $field;
+    }
+
+    return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
+  }
+
+  public function toSql() {
+    $sql = "UPDATE ";
+    $params = array();
+    $placeholders = array();
+
+    // Table name
+    if (is_array($this->table_name)) {
+      list($table_name, $alias) = $this->table_name;
+      $sql .= $this->sanitizeField($table_name) . " AS " . $this->sanitizeField($alias);
+
+    } else {
+      $sql .= $this->sanitizeField($this->table_name);
+    }
+
+    // SET
+    $sql .= "\n\tSET\n";
+    foreach ($this->values as $column => $value) {
+      $params[] = $value;
+      $placeholders[] = "\t\t" . $this->sanitizeField($column) . " = ?";
+    }
+
+    $sql .= implode(",\n", $placeholders) . "\n";
+
+    // Where
+    if (count($this->where) > 0) {
+      $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
+      $where = $criteria_builder->toSql();
+
+      $sql .= "\tWHERE " . $where['sql'];
+      $params = array_merge($params, $where['params']);
+    }
+
+    return compact('sql', 'params');
+  }
+}
+?>

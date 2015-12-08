@@ -1,5 +1,5 @@
 {
-  "name": "Kekos/query-builder",
+  "name": "kekos/query-builder",
   "type": "library",
   "description": "Small SQL query builder",
   "keywords": ["query", "builder", "database", "PDO", "SQL"],

@@ -1,5 +1,16 @@
 {
   "name": "Kekos/query-builder",
+  "type": "library",
+  "description": "Small SQL query builder",
+  "keywords": ["query", "builder", "database", "PDO", "SQL"],
+  "homepage": "https://github.com/Kekos/query-builder",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Christoffer Lindahl",
+      "homepage": "http://kekos.se/"
+    }
+  ],
   "require": {
     "php": ">= 5.3.0"
   },

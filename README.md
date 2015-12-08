@@ -9,6 +9,14 @@ This library only supports a subset of Pixie's fetures:
 Query Builder is not able to open database connections or execute the built
 queries.
 
+## Install
+
+You can install Query Builder via [Composer](http://getcomposer.org/):
+
+```
+composer require kekos/query-builder
+```
+
 ## API
 
 Start by configure Query Builder with an adapter:

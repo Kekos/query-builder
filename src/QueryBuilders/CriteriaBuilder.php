@@ -4,8 +4,8 @@
  *
  * CriteriaBuilder class
  *
- * @version 1.0
- * @date 2015-12-06
+ * @version 1.1
+ * @date 2015-12-13
  */
 
 namespace QueryBuilder\QueryBuilders;
@@ -84,7 +84,7 @@ class CriteriaBuilder {
         $params = array_merge($params, $statement['key']->getParams());
 
       } else if ($value === null) {
-        $sql .= $statement['joiner'] . ' ' . $key . ' IS NULL';
+        $sql .= $statement['joiner'] . ' ' . $key . ' IS NULL ';
 
       } else {
         $params[] = $value;

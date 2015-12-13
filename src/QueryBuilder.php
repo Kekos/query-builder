@@ -4,8 +4,8 @@
  *
  * QueryBuilder class
  *
- * @version 1.0
- * @date 2015-12-06
+ * @version 1.1
+ * @date 2015-12-13
  */
 
 namespace QueryBuilder;
@@ -46,7 +46,7 @@ class QueryBuilder {
 
       foreach ($field_parts as $key => $field) {
         $key = trim($key);
-        if ($key != '*') {
+        if ($key != '*' && $field != '*') {
           $field_parts[$key] = $sanitizer . $field . $sanitizer;
         }
       }

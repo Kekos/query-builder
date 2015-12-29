@@ -15,5 +15,14 @@ $result = QB::update('user')
   ->toSql();
 
 var_dump($result['sql'], $result['params']);
+
+$result = QB::update('user')
+  ->set([
+      'firstname' => QB::raw('REPLACE(firstname, ?, ?)', array('Doe', 'Eod'))
+    ])
+  ->where('firstname', 'LIKE', '%Doe%')
+  ->toSql();
+
+var_dump($result['sql'], $result['params']);
 ?>
 </pre>

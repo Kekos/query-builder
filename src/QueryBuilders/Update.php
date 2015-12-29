@@ -52,8 +52,14 @@ class Update extends CriteriaBase {
     // SET
     $sql .= "\n\tSET\n";
     foreach ($this->values as $column => $value) {
-      $params[] = $value;
-      $placeholders[] = "\t\t" . $this->sanitizeField($column) . " = ?";
+      if ($value instanceof Raw) {
+        $params = array_merge($params, $value->getParams());
+        $placeholders[] = "\t\t" . $this->sanitizeField($column) . " = " . $value;
+
+      } else {
+        $params[] = $value;
+        $placeholders[] = "\t\t" . $this->sanitizeField($column) . " = ?";
+      }
     }
 
     $sql .= implode(",\n", $placeholders) . "\n";

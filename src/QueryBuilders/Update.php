@@ -4,14 +4,14 @@
  *
  * Update class
  *
- * @version 1.0
- * @date 2015-12-06
+ * @version 1.1
+ * @date 2015-12-29
  */
 
 namespace QueryBuilder\QueryBuilders;
 
 use QueryBuilder\QueryBuilder;
-use QueryBuilder\DB\QueryBuilderException;
+use QueryBuilder\QueryBuilderException;
 
 class Update extends CriteriaBase {
 

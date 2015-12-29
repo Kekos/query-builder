@@ -28,5 +28,14 @@ $result = QB::select('user')
   ->toSql();
 
 var_dump($result['sql'], $result['params']);
+
+$result = QB::select('user')
+  ->where(function($qb) {
+    $qb->where('id', 'BETWEEN', array(2, 5))
+      ->whereOr('username', 'LIKE', '%chris%');
+  })
+  ->toSql();
+
+var_dump($result['sql'], $result['params']);
 ?>
 </pre>

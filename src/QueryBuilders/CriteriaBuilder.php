@@ -70,14 +70,22 @@ class CriteriaBuilder {
         $sql .= $statement['joiner'] . ' (' . $criteria['sql'] . ') ';
 
       } else if (is_array($value)) {
-        $placeholders = array();
-        foreach ($value as $element) {
-          $placeholders[] = '?';
-          $params[] = $element;
-        }
+        $sql .= $statement['joiner'] . ' ' . $key . ' ' . $statement['operator'];
 
-        $placeholders = implode(', ', $placeholders);
-        $sql .= $statement['joiner'] . ' ' . $key . ' ' . $statement['operator'] . ' (' . $placeholders . ') ';
+        if ($statement['operator'] === 'BETWEEN') {
+          $params = array_merge($params, $value);
+          $sql .= ' ? AND ? ';
+
+        } else {
+          $placeholders = array();
+          foreach ($value as $element) {
+            $placeholders[] = '?';
+            $params[] = $element;
+          }
+
+          $placeholders = implode(', ', $placeholders);
+          $sql .= ' (' . $placeholders . ') ';
+        }
 
       } else if ($statement['key'] instanceof Raw) {
         $sql .= $statement['joiner'] . ' ' . $key . ' ';

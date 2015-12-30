@@ -4,8 +4,8 @@
  *
  * Select class
  *
- * @version 1.0
- * @date 2015-12-06
+ * @version 1.1
+ * @date 2015-12-30
  */
 
 namespace QueryBuilder\QueryBuilders;
@@ -36,7 +36,7 @@ class Select extends CriteriaBase {
       }
     }
 
-    $this->columns = $columns;
+    $this->columns = array_merge($this->columns, $columns);
 
     return $this;
   }

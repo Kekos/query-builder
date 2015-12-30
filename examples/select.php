@@ -37,5 +37,12 @@ $result = QB::select('user')
   ->toSql();
 
 var_dump($result['sql'], $result['params']);
+
+$result = QB::select('user')
+  ->columns('id')
+  ->columns(['fname' => 'firstname'])
+  ->toSql();
+
+var_dump($result['sql'], $result['params']);
 ?>
 </pre>

@@ -4,8 +4,8 @@
  *
  * JoinBuilder class
  *
- * @version 1.0
- * @date 2015-12-06
+ * @version 1.1
+ * @date 2017-12-31
  */
 
 namespace QueryBuilder\QueryBuilders;
@@ -42,7 +42,8 @@ class JoinBuilder extends CriteriaBuilder {
       $table = $this->sanitizeField($table) . " AS " . $this->sanitizeField($alias);
 
     } else if ($this->table instanceof Raw) {
-      $table = (string) $raw;
+      $table = (string) $this->table;
+      $params = array_merge($params, $this->table->getParams());
 
     } else {
       $table = $this->sanitizeField($this->table);

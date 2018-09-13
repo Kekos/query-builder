@@ -10,8 +10,7 @@
 
 namespace QueryBuilder;
 
-interface AdapterInterface {
-
-  public function getSanitizer();
+interface AdapterInterface
+{
+    public function getSanitizer();
 }
-?>

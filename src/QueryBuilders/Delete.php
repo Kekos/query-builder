@@ -12,39 +12,39 @@ namespace QueryBuilder\QueryBuilders;
 
 use QueryBuilder\QueryBuilder;
 
-class Delete extends CriteriaBase {
+class Delete extends CriteriaBase
+{
+    private function sanitizeField($field)
+    {
+        if ($field instanceof Raw) {
+            return (string)$field;
+        }
 
-  private function sanitizeField($field) {
-    if ($field instanceof Raw) {
-      return (string) $field;
+        return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
-  }
+    public function toSql()
+    {
+        $sql = "DELETE FROM ";
+        $params = [];
 
-  public function toSql() {
-    $sql = "DELETE FROM ";
-    $params = array();
+        // Table name
+        if (is_array($this->table_name)) {
+            list($table_name, $alias) = $this->table_name;
+            $sql .= $this->sanitizeField($table_name) . " AS " . $this->sanitizeField($alias);
+        } else {
+            $sql .= $this->sanitizeField($this->table_name);
+        }
 
-    // Table name
-    if (is_array($this->table_name)) {
-      list($table_name, $alias) = $this->table_name;
-      $sql .= $this->sanitizeField($table_name) . " AS " . $this->sanitizeField($alias);
+        // Where
+        if (count($this->where) > 0) {
+            $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
+            $where = $criteria_builder->toSql();
 
-    } else {
-      $sql .= $this->sanitizeField($this->table_name);
+            $sql .= "\n\tWHERE " . $where['sql'];
+            $params = $where['params'];
+        }
+
+        return compact('sql', 'params');
     }
-
-    // Where
-    if (count($this->where) > 0) {
-      $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
-      $where = $criteria_builder->toSql();
-
-      $sql .= "\n\tWHERE " . $where['sql'];
-      $params = $where['params'];
-    }
-
-    return compact('sql', 'params');
-  }
 }
-?>

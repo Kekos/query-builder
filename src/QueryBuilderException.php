@@ -10,6 +10,6 @@
 
 namespace QueryBuilder;
 
-class QueryBuilderException extends \Exception {
+class QueryBuilderException extends \Exception
+{
 }
-?>

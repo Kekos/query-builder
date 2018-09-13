@@ -10,26 +10,25 @@
 
 namespace QueryBuilder\QueryBuilders;
 
-use QueryBuilder\QueryBuilder;
+abstract class VerbBase
+{
+    protected $adapter;
+    protected $table_name;
 
-abstract class VerbBase {
-
-  protected $adapter;
-  protected $table_name;
-
-  public function __construct($table_name, $adapter) {
-    $this->table_name = $table_name;
-    $this->adapter = $adapter;
-  }
-
-  public function alias($alias) {
-    if (is_array($this->table_name)) {
-      $this->table_name[1] = $alias;
-    } else {
-      $this->table_name = array($this->table_name, $alias);
+    public function __construct($table_name, $adapter)
+    {
+        $this->table_name = $table_name;
+        $this->adapter = $adapter;
     }
 
-    return $this;
-  }
+    public function alias($alias)
+    {
+        if (is_array($this->table_name)) {
+            $this->table_name[1] = $alias;
+        } else {
+            $this->table_name = [$this->table_name, $alias];
+        }
+
+        return $this;
+    }
 }
-?>

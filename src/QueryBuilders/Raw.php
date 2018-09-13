@@ -10,22 +10,24 @@
 
 namespace QueryBuilder\QueryBuilders;
 
-class Raw {
+class Raw
+{
+    protected $sql;
+    protected $params;
 
-  protected $sql;
-  protected $params;
+    public function __construct($sql, $params = [])
+    {
+        $this->sql = $sql;
+        $this->params = $params;
+    }
 
-  public function __construct($sql, $params = array()) {
-    $this->sql = $sql;
-    $this->params = $params;
-  }
+    public function getParams()
+    {
+        return $this->params;
+    }
 
-  public function getParams() {
-    return $this->params;
-  }
-
-  public function __toString() {
-    return $this->sql;
-  }
+    public function __toString()
+    {
+        return $this->sql;
+    }
 }
-?>

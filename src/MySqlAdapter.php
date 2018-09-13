@@ -10,10 +10,10 @@
 
 namespace QueryBuilder;
 
-class MySqlAdapter implements AdapterInterface {
-
-  public function getSanitizer() {
-    return '`';
-  }
+class MySqlAdapter implements AdapterInterface
+{
+    public function getSanitizer()
+    {
+        return '`';
+    }
 }
-?>

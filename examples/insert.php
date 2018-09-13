@@ -7,11 +7,11 @@ use QueryBuilder\QueryBuilder as QB;
 QB::setAdapter(new QueryBuilder\MySqlAdapter());
 
 $result = QB::insert('user')
-  ->values([
-      'username' => 'Kekos',
-      'firstname' => 'Christoffer'
+    ->values([
+        'username' => 'Kekos',
+        'firstname' => 'Christoffer'
     ])
-  ->toSql();
+    ->toSql();
 
 var_dump($result['sql'], $result['params']);
 ?>

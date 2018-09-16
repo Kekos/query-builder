@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -10,6 +10,12 @@
 
 namespace QueryBuilder;
 
+use QueryBuilder\QueryBuilders\Delete;
+use QueryBuilder\QueryBuilders\Insert;
+use QueryBuilder\QueryBuilders\Raw;
+use QueryBuilder\QueryBuilders\Select;
+use QueryBuilder\QueryBuilders\Update;
+
 class QueryBuilder
 {
     private static $adapter;
@@ -18,47 +24,49 @@ class QueryBuilder
     {
     }
 
-    public static function setAdapter($adapter)
+    public static function setAdapter($adapter): void
     {
         self::$adapter = $adapter;
     }
 
-    public static function select($table_name)
+    public static function select($table_name): Select
     {
-        return new QueryBuilders\Select($table_name, self::$adapter);
+        return new Select($table_name, self::$adapter);
     }
 
-    public static function insert($table_name)
+    public static function insert($table_name): Insert
     {
-        return new QueryBuilders\Insert($table_name, self::$adapter);
+        return new Insert($table_name, self::$adapter);
     }
 
-    public static function update($table_name)
+    public static function update($table_name): Update
     {
-        return new QueryBuilders\Update($table_name, self::$adapter);
+        return new Update($table_name, self::$adapter);
     }
 
-    public static function delete($table_name)
+    public static function delete($table_name): Delete
     {
-        return new QueryBuilders\Delete($table_name, self::$adapter);
+        return new Delete($table_name, self::$adapter);
     }
 
-    public static function raw($sql, $params = [])
+    public static function raw(string $sql, array $params = []): Raw
     {
-        return new QueryBuilders\Raw($sql, $params);
+        return new Raw($sql, $params);
     }
 
-    public static function sanitizeField($field, $sanitizer)
+    public static function sanitizeField($field, string $sanitizer)
     {
         if (is_string($field)) {
             $field_parts = explode('.', $field);
 
-            foreach ($field_parts as $key => $field) {
-                $key = trim($key);
-                if ($key != '*' && $field != '*') {
-                    $field_parts[$key] = $sanitizer . $field . $sanitizer;
+            $field_parts = array_map(function (string $field) use ($sanitizer): string {
+                if ($field === '*') {
+                    return $field;
                 }
-            }
+
+                return $sanitizer . $field . $sanitizer;
+
+            }, $field_parts);
 
             return implode('.', $field_parts);
         }

@@ -20,7 +20,7 @@ var_dump($result['sql'], $result['params']);
 
 $result = QB::select('user')
     ->orderby('id')
-    ->where(function ($qb) {
+    ->where(function ($qb): void {
         $qb->where('name', 'LIKE', '%chris%')
             ->whereOr('username', 'LIKE', '%chris%');
     })
@@ -30,7 +30,7 @@ $result = QB::select('user')
 var_dump($result['sql'], $result['params']);
 
 $result = QB::select('user')
-    ->where(function ($qb) {
+    ->where(function ($qb): void {
         $qb->where('id', 'BETWEEN', [2, 5])
             ->whereOr('username', 'LIKE', '%chris%');
     })

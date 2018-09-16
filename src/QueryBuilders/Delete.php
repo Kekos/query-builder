@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -23,7 +23,7 @@ class Delete extends CriteriaBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql()
+    public function toSql(): array
     {
         $sql = "DELETE FROM ";
         $params = [];

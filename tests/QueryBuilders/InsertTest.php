@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace QueryBuilder\Tests\QueryBuilders;
 
 use PHPUnit\Framework\TestCase;
@@ -10,14 +10,14 @@ class InsertTest extends TestCase
     /** @var Insert */
     private $insert;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->insert = new Insert('foo_join', new MySqlAdapter());
     }
 
-    public function testToSql()
+    public function testToSql(): void
     {
         $expected = [
             'sql' => "INSERT INTO `foo_join` (`foo`, `baz`, `boo`)\n\tVALUES (?, ?, ?)",

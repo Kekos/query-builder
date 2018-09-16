@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -10,6 +10,7 @@
 
 namespace QueryBuilder\QueryBuilders;
 
+use QueryBuilder\AdapterInterface;
 use QueryBuilder\QueryBuilder;
 
 class CriteriaBuilder
@@ -17,31 +18,31 @@ class CriteriaBuilder
     protected $statements;
     protected $adapter;
 
-    public function __construct($adapter, $statements = [])
+    public function __construct(AdapterInterface $adapter, array $statements = [])
     {
         $this->adapter = $adapter;
         $this->statements = $statements;
     }
 
-    public function where($key, $operator = null, $value = null, $joiner = 'AND')
+    public function where($key, $operator = null, $value = null, $joiner = 'AND'): self
     {
         $this->statements[] = compact('key', 'operator', 'value', 'joiner');
         return $this;
     }
 
-    public function whereNot($key, $operator = null, $value = null)
+    public function whereNot($key, $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'AND NOT');
         return $this;
     }
 
-    public function whereOr($key, $operator = null, $value = null)
+    public function whereOr($key, $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
         return $this;
     }
 
-    public function whereOrNot($key, $operator = null, $value = null)
+    public function whereOrNot($key, $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR NOT');
         return $this;
@@ -60,7 +61,7 @@ class CriteriaBuilder
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql()
+    public function toSql(): array
     {
         $sql = "";
         $params = [];

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -17,18 +17,14 @@ class Update extends CriteriaBase
 {
     private $values = [];
 
-    public function set($values)
+    public function set(array $values): self
     {
-        if (!is_array($values)) {
-            throw new QueryBuilderException('Update::values(): expected values as array, got ' . gettype($values));
-        }
-
         $this->values = $values;
 
         return $this;
     }
 
-    private function sanitizeField($field)
+    private function sanitizeField($field): string
     {
         if ($field instanceof Raw) {
             return (string)$field;
@@ -37,7 +33,7 @@ class Update extends CriteriaBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql()
+    public function toSql(): array
     {
         $sql = "UPDATE ";
         $params = [];

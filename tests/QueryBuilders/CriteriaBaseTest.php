@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace QueryBuilder\Tests\QueryBuilders;
 
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ class CriteriaBaseTest extends TestCase
         'value' => 'baz',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -36,7 +36,7 @@ class CriteriaBaseTest extends TestCase
         );
     }
 
-    public function testMethodsReturnsSameInstance()
+    public function testMethodsReturnsSameInstance(): void
     {
         foreach (self::$methods as $method) {
             $return_val = call_user_func([$this->criteria_instance, $method], 1, 2, 3, 4);
@@ -44,7 +44,7 @@ class CriteriaBaseTest extends TestCase
         }
     }
 
-    public function testWhereAddsCriteria()
+    public function testWhereAddsCriteria(): void
     {
         $expected = self::$base_expected;
         $expected['joiner'] = 'boo';
@@ -54,7 +54,7 @@ class CriteriaBaseTest extends TestCase
         $this->assertAttributeEquals([$expected], 'where', $this->criteria_instance);
     }
 
-    public function testWhereNotAddsCriteria()
+    public function testWhereNotAddsCriteria(): void
     {
         $expected = self::$base_expected;
 
@@ -65,7 +65,7 @@ class CriteriaBaseTest extends TestCase
         $this->assertAttributeEquals([$expected], 'where', $this->criteria_instance);
     }
 
-    public function testWhereOrAddsCriteria()
+    public function testWhereOrAddsCriteria(): void
     {
         $expected = self::$base_expected;
 
@@ -76,7 +76,7 @@ class CriteriaBaseTest extends TestCase
         $this->assertAttributeEquals([$expected], 'where', $this->criteria_instance);
     }
 
-    public function testWhereOrNotAddsCriteria()
+    public function testWhereOrNotAddsCriteria(): void
     {
         $expected = self::$base_expected;
 

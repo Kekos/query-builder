@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace QueryBuilder\Tests\QueryBuilders;
 
 use PHPUnit\Framework\TestCase;
@@ -11,14 +11,14 @@ class UpdateTest extends TestCase
     /** @var Update */
     private $update;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->update = new Update('foo', new MySqlAdapter());
     }
 
-    public function testToSql()
+    public function testToSql(): void
     {
         $expected = [
             'sql' => "UPDATE `foo`\n\t"
@@ -35,7 +35,7 @@ class UpdateTest extends TestCase
         $this->assertEquals($expected, $this->update->toSql());
     }
 
-    public function testToSqlWithRaw()
+    public function testToSqlWithRaw(): void
     {
         $raw_sql = '(SELECT bar FROM b WHERE id = ?)';
         $expected = [
@@ -52,7 +52,7 @@ class UpdateTest extends TestCase
         $this->assertEquals($expected, $this->update->toSql());
     }
 
-    public function testToSqlWhere()
+    public function testToSqlWhere(): void
     {
         $expected = [
             'sql' => "UPDATE `foo`\n\t"

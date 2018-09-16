@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace QueryBuilder\Tests\QueryBuilders;
 
 use PHPUnit\Framework\TestCase;
@@ -24,14 +24,14 @@ class CriteriaBuilderTest extends TestCase
         'value' => 'baz',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->criteria_instance = new CriteriaBuilder(new MySqlAdapter());
     }
 
-    public function testMethodsReturnsSameInstance()
+    public function testMethodsReturnsSameInstance(): void
     {
         foreach (self::$methods as $method) {
             $return_val = call_user_func([$this->criteria_instance, $method], 1, 2, 3, 4);
@@ -39,7 +39,7 @@ class CriteriaBuilderTest extends TestCase
         }
     }
 
-    public function testWhereAddsCriteria()
+    public function testWhereAddsCriteria(): void
     {
         $expected = self::$base_expected;
         $expected['joiner'] = 'boo';
@@ -49,7 +49,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
     }
 
-    public function testWhereNotAddsCriteria()
+    public function testWhereNotAddsCriteria(): void
     {
         $expected = self::$base_expected;
 
@@ -60,7 +60,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
     }
 
-    public function testWhereOrAddsCriteria()
+    public function testWhereOrAddsCriteria(): void
     {
         $expected = self::$base_expected;
 
@@ -71,7 +71,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
     }
 
-    public function testWhereOrNotAddsCriteria()
+    public function testWhereOrNotAddsCriteria(): void
     {
         $expected = self::$base_expected;
 
@@ -82,7 +82,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
     }
 
-    public function testToSqlWhereSimple()
+    public function testToSqlWhereSimple(): void
     {
         $expected = [
             'sql' => '`foo` = ? ',
@@ -94,7 +94,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
-    public function testToSqlWhereBetween()
+    public function testToSqlWhereBetween(): void
     {
         $between = [20, 40];
         $expected = [
@@ -107,7 +107,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
-    public function testToSqlWhereNull()
+    public function testToSqlWhereNull(): void
     {
         $expected = [
             'sql' => '`foo` IS NULL ',
@@ -119,7 +119,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
-    public function testToSqlWhereAnd()
+    public function testToSqlWhereAnd(): void
     {
         $expected = [
             'sql' => '`foo` = ? AND `baz` < ? ',
@@ -133,7 +133,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
-    public function testToSqlWhereAndNot()
+    public function testToSqlWhereAndNot(): void
     {
         $expected = [
             'sql' => '`foo` = ? AND NOT `baz` < ? ',
@@ -147,7 +147,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
-    public function testToSqlWhereOr()
+    public function testToSqlWhereOr(): void
     {
         $expected = [
             'sql' => '`foo` = ? OR `baz` < ? ',
@@ -161,7 +161,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
-    public function testToSqlWhereOrNot()
+    public function testToSqlWhereOrNot(): void
     {
         $expected = [
             'sql' => '`foo` = ? OR NOT `baz` < ? ',
@@ -175,7 +175,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
-    public function testToSqlWhereClosure()
+    public function testToSqlWhereClosure(): void
     {
         $expected = [
             'sql' => '`foo` = ? AND (`boo` >= ? OR `baz` < ? ) ',
@@ -184,7 +184,7 @@ class CriteriaBuilderTest extends TestCase
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
-            ->where(function (CriteriaBuilder $cb) {
+            ->where(function (CriteriaBuilder $cb): void {
                 $cb
                     ->where('boo', '>=', 5)
                     ->whereOr('baz', '<', 42);
@@ -194,7 +194,7 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
-    public function testToSqlWhereRaw()
+    public function testToSqlWhereRaw(): void
     {
         $raw_sql = "(SELECT * FROM table2 WHERE moo > ?)";
         $expected = [

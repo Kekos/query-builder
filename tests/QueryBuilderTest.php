@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace QueryBuilder\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -7,7 +7,7 @@ use QueryBuilder\QueryBuilder;
 
 class QueryBuilderTest extends TestCase
 {
-    public function testSetAdapter()
+    public function testSetAdapter(): void
     {
         $adapter = new MySqlAdapter();
         QueryBuilder::setAdapter($adapter);
@@ -15,7 +15,7 @@ class QueryBuilderTest extends TestCase
         $this->assertAttributeEquals($adapter, 'adapter', 'QueryBuilder\\QueryBuilder');
     }
 
-    public function testSelect()
+    public function testSelect(): void
     {
         $return = QueryBuilder::select('foo');
 
@@ -23,7 +23,7 @@ class QueryBuilderTest extends TestCase
         $this->assertAttributeEquals('foo', 'table_name', $return);
     }
 
-    public function testInsert()
+    public function testInsert(): void
     {
         $return = QueryBuilder::insert('foo');
 
@@ -31,7 +31,7 @@ class QueryBuilderTest extends TestCase
         $this->assertAttributeEquals('foo', 'table_name', $return);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $return = QueryBuilder::update('foo');
 
@@ -39,7 +39,7 @@ class QueryBuilderTest extends TestCase
         $this->assertAttributeEquals('foo', 'table_name', $return);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $return = QueryBuilder::delete('foo');
 
@@ -47,7 +47,7 @@ class QueryBuilderTest extends TestCase
         $this->assertAttributeEquals('foo', 'table_name', $return);
     }
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $sql = 'SELECT ?';
         $params = [42];
@@ -58,19 +58,19 @@ class QueryBuilderTest extends TestCase
         $this->assertAttributeEquals($params, 'params', $return);
     }
 
-    public function testSanitizeFieldStar()
+    public function testSanitizeFieldStar(): void
     {
         $return = QueryBuilder::sanitizeField('*', '`');
         $this->assertEquals('*', $return);
     }
 
-    public function testSanitizeFieldStarAlias()
+    public function testSanitizeFieldStarAlias(): void
     {
         $return = QueryBuilder::sanitizeField('foo.*', '`');
         $this->assertEquals('`foo`.*', $return);
     }
 
-    public function testSanitizeFieldAlias()
+    public function testSanitizeFieldAlias(): void
     {
         $return = QueryBuilder::sanitizeField('foo.bar', '`');
         $this->assertEquals('`foo`.`bar`', $return);

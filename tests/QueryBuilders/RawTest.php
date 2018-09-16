@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace QueryBuilder\Tests\QueryBuilders;
 
 use PHPUnit\Framework\TestCase;
@@ -6,7 +6,7 @@ use QueryBuilder\QueryBuilders\Raw;
 
 class RawTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $sql = 'SELECT';
         $params = [42];
@@ -16,7 +16,7 @@ class RawTest extends TestCase
         $this->assertAttributeEquals($sql, 'sql', $raw);
     }
 
-    public function testGetParams()
+    public function testGetParams(): void
     {
         $sql = 'SELECT';
         $params = [42, 'bar'];
@@ -26,7 +26,7 @@ class RawTest extends TestCase
         $this->assertEquals($params, $raw->getParams());
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $sql = 'SELECT';
         $params = [];

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -12,7 +12,7 @@ namespace QueryBuilder;
 
 class MySqlAdapter implements AdapterInterface
 {
-    public function getSanitizer()
+    public function getSanitizer(): string
     {
         return '`';
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -23,7 +23,7 @@ class Select extends CriteriaBase
     private $limit_offset = null;
     private $limit_row_count = null;
 
-    public function columns($columns)
+    public function columns($columns): self
     {
         if (!is_array($columns)) {
             $columns = [$columns];
@@ -42,10 +42,10 @@ class Select extends CriteriaBase
         return $this;
     }
 
-    public function join($table, $key, $operator = null, $value = null, $join_type = 'INNER')
+    public function join($table, $key, $operator = null, $value = null, $join_type = 'INNER'): self
     {
         if (!$key instanceof \Closure) {
-            $key = function ($join_builder) use ($key, $operator, $value) {
+            $key = function (JoinBuilder $join_builder) use ($key, $operator, $value): void {
                 $join_builder->on($key, $operator, $value);
             };
         }
@@ -57,55 +57,55 @@ class Select extends CriteriaBase
         return $this;
     }
 
-    public function leftJoin($table, $key, $operator = null, $value = null)
+    public function leftJoin($table, $key, $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'LEFT');
         return $this;
     }
 
-    public function rightJoin($table, $key, $operator = null, $value = null)
+    public function rightJoin($table, $key, $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT');
         return $this;
     }
 
-    public function leftOuterJoin($table, $key, $operator = null, $value = null)
+    public function leftOuterJoin($table, $key, $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'LEFT OUTER');
         return $this;
     }
 
-    public function rightOuterJoin($table, $key, $operator = null, $value = null)
+    public function rightOuterJoin($table, $key, $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT OUTER');
         return $this;
     }
 
-    public function where($key, $operator = null, $value = null, $joiner = 'AND')
+    public function where($key, $operator = null, $value = null, $joiner = 'AND'): self
     {
         $this->where[] = compact('key', 'operator', 'value', 'joiner');
         return $this;
     }
 
-    public function whereNot($key, $operator = null, $value = null)
+    public function whereNot($key, $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'AND NOT');
         return $this;
     }
 
-    public function whereOr($key, $operator = null, $value = null)
+    public function whereOr($key, $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
         return $this;
     }
 
-    public function whereOrNot($key, $operator = null, $value = null)
+    public function whereOrNot($key, $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR NOT');
         return $this;
     }
 
-    public function groupby($columns)
+    public function groupby($columns): self
     {
         if (!is_array($columns)) {
             $columns = [$columns];
@@ -118,31 +118,31 @@ class Select extends CriteriaBase
         return $this;
     }
 
-    public function having($key, $operator = null, $value = null, $joiner = 'AND')
+    public function having($key, $operator = null, $value = null, $joiner = 'AND'): self
     {
         $this->having[] = compact('key', 'operator', 'value', 'joiner');
         return $this;
     }
 
-    public function havingNot($key, $operator = null, $value = null)
+    public function havingNot($key, $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'AND NOT');
         return $this;
     }
 
-    public function havingOr($key, $operator = null, $value = null)
+    public function havingOr($key, $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'OR');
         return $this;
     }
 
-    public function havingOrNot($key, $operator = null, $value = null)
+    public function havingOrNot($key, $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'OR NOT');
         return $this;
     }
 
-    public function orderby($columns, $default_dir = 'ASC')
+    public function orderby($columns, $default_dir = 'ASC'): self
     {
         if (!is_array($columns)) {
             $columns = [$columns];
@@ -168,12 +168,8 @@ class Select extends CriteriaBase
         return $this;
     }
 
-    public function limit($row_count, $offset = null)
+    public function limit(int $row_count, ?int $offset = null): self
     {
-        if (!is_numeric($row_count)) {
-            throw new QueryBuilderException('Select::limit(): expected row_count as numeric, got ' . gettype($row_count));
-        }
-
         $this->limit_row_count = $row_count;
 
         if (is_numeric($offset)) {
@@ -183,7 +179,7 @@ class Select extends CriteriaBase
         return $this;
     }
 
-    private function sanitizeField($field)
+    private function sanitizeField($field): string
     {
         if ($field instanceof Raw) {
             return (string)$field;
@@ -192,7 +188,7 @@ class Select extends CriteriaBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql()
+    public function toSql(): array
     {
         $sql = "SELECT ";
         $params = [];

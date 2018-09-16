@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -17,12 +17,8 @@ class Insert extends VerbBase
 {
     private $values = [];
 
-    public function values($values)
+    public function values(array $values): self
     {
-        if (!is_array($values)) {
-            throw new QueryBuilderException('Insert::values(): expected values as array, got ' . gettype($values));
-        }
-
         $this->values = $values;
 
         return $this;
@@ -37,7 +33,7 @@ class Insert extends VerbBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql()
+    public function toSql(): array
     {
         $sql = "INSERT INTO ";
         $params = [];

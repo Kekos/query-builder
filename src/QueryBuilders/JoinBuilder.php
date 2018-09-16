@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -10,12 +10,14 @@
 
 namespace QueryBuilder\QueryBuilders;
 
+use QueryBuilder\AdapterInterface;
+
 class JoinBuilder extends CriteriaBuilder
 {
     protected $table;
     protected $join_type;
 
-    public function __construct($adapter, $statements, $table, $join_type)
+    public function __construct(AdapterInterface $adapter, array $statements, $table, string $join_type)
     {
         parent::__construct($adapter, $statements);
 
@@ -23,19 +25,19 @@ class JoinBuilder extends CriteriaBuilder
         $this->join_type = $join_type;
     }
 
-    public function on($key, $operator = null, $value = null, $joiner = 'AND')
+    public function on($key, $operator = null, $value = null, $joiner = 'AND'): self
     {
         $this->where($key, $operator, $value, $joiner);
         return $this;
     }
 
-    public function onOr($key, $operator = null, $value = null)
+    public function onOr($key, $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
         return $this;
     }
 
-    public function toSql()
+    public function toSql(): array
     {
         extract(parent::toSql());
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -10,18 +10,20 @@
 
 namespace QueryBuilder\QueryBuilders;
 
+use QueryBuilder\AdapterInterface;
+
 abstract class VerbBase
 {
     protected $adapter;
     protected $table_name;
 
-    public function __construct($table_name, $adapter)
+    public function __construct($table_name, AdapterInterface $adapter)
     {
         $this->table_name = $table_name;
         $this->adapter = $adapter;
     }
 
-    public function alias($alias)
+    public function alias($alias): self
     {
         if (is_array($this->table_name)) {
             $this->table_name[1] = $alias;

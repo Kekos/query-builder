@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace QueryBuilder\Tests\QueryBuilders;
 
 use PHPUnit\Framework\TestCase;
@@ -10,86 +10,80 @@ class SelectTest extends TestCase
     /** @var Select */
     private $select;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->select = new Select('foo', new MySqlAdapter());
     }
 
-    public function testColumnsSingle()
+    public function testColumnsSingle(): void
     {
         $this->select->columns('foo');
         $this->assertAttributeEquals(['`foo`'], 'columns', $this->select);
     }
 
-    public function testColumnsMulti()
+    public function testColumnsMulti(): void
     {
         $this->select->columns(['foo', 'bar']);
         $this->assertAttributeEquals(['`foo`', '`bar`'], 'columns', $this->select);
     }
 
-    public function testColumnsAlias()
+    public function testColumnsAlias(): void
     {
         $this->select->columns(['x' => 'foo']);
         $this->assertAttributeEquals(['x' => '`foo` AS `x`'], 'columns', $this->select);
     }
 
-    public function testGroupbySingle()
+    public function testGroupbySingle(): void
     {
         $this->select->groupby('foo');
         $this->assertAttributeEquals(['`foo`'], 'group_by', $this->select);
     }
 
-    public function testGroupbyMulti()
+    public function testGroupbyMulti(): void
     {
         $this->select->groupby(['foo', 'bar']);
         $this->assertAttributeEquals(['`foo`', '`bar`'], 'group_by', $this->select);
     }
 
-    public function testOrderbySingle()
+    public function testOrderbySingle(): void
     {
         $this->select->orderby('foo');
         $this->assertAttributeEquals(['`foo` ASC'], 'order_by', $this->select);
     }
 
-    public function testOrderbySingleDir()
+    public function testOrderbySingleDir(): void
     {
         $this->select->orderby('foo', 'DESC');
         $this->assertAttributeEquals(['`foo` DESC'], 'order_by', $this->select);
     }
 
-    public function testOrderbyInvalidDirThrows()
+    public function testOrderbyInvalidDirThrows(): void
     {
         $this->expectException('QueryBuilder\\QueryBuilderException');
         $this->select->orderby('foo', 'BASC');
     }
 
-    public function testOrderbyMulti()
+    public function testOrderbyMulti(): void
     {
         $this->select->orderby(['foo', 'bar' => 'DESC']);
         $this->assertAttributeEquals(['`foo` ASC', '`bar` DESC'], 'order_by', $this->select);
     }
 
-    public function testLimit()
+    public function testLimit(): void
     {
         $this->select->limit(10);
         $this->assertAttributeEquals(10, 'limit_row_count', $this->select);
     }
 
-    public function testLimitOffset()
+    public function testLimitOffset(): void
     {
         $this->select->limit(10, 20);
         $this->assertAttributeEquals(20, 'limit_offset', $this->select);
     }
 
-    public function testLimitInvalidThrows()
-    {
-        $this->expectException('QueryBuilder\\QueryBuilderException');
-        $this->select->limit('foo');
-    }
-
-    public function testToSqlSimple()
+    public function testToSqlSimple(): void
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo`\n",
@@ -99,7 +93,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
-    public function testToSqlAlias()
+    public function testToSqlAlias(): void
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo` AS `f`\n",
@@ -111,7 +105,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $select->toSql());
     }
 
-    public function testToSqlColumns()
+    public function testToSqlColumns(): void
     {
         $expected = [
             'sql' => "SELECT `bar` AS `foo`\n\tFROM `foo`\n",
@@ -125,7 +119,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
-    public function testToSqlColumnsMulti()
+    public function testToSqlColumnsMulti(): void
     {
         $expected = [
             'sql' => "SELECT `bar` AS `foo`, `baz`\n\tFROM `foo`\n",
@@ -140,7 +134,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
-    public function testToSqlWhere()
+    public function testToSqlWhere(): void
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo`\n\tWHERE `bar` = ? \n",
@@ -152,7 +146,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
-    public function testToSqlGroupBy()
+    public function testToSqlGroupBy(): void
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo`\n\tGROUP BY `bar`, `boo`\n",
@@ -164,7 +158,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
-    public function testToSqlHaving()
+    public function testToSqlHaving(): void
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo`\n\tHAVING `bar` = ? \n",
@@ -176,7 +170,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
-    public function testToSqlOrderBy()
+    public function testToSqlOrderBy(): void
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo`\n\tORDER BY `bar` ASC, `boo` DESC\n",
@@ -188,7 +182,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
-    public function testToSqlLimit()
+    public function testToSqlLimit(): void
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo`\n\tLIMIT 20, 10\n",
@@ -200,7 +194,7 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
-    public function testToSqlCombined()
+    public function testToSqlCombined(): void
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo`\n\t"

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace QueryBuilder\Tests\QueryBuilders;
 
 use PHPUnit\Framework\TestCase;
@@ -24,14 +24,14 @@ class JoinBuilderTest extends TestCase
         'value' => 'baz',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->join_instance = new JoinBuilder(new MySqlAdapter(), [], 'foo_join', self::$join_type);
     }
 
-    public function testMethodsReturnsSameInstance()
+    public function testMethodsReturnsSameInstance(): void
     {
         foreach (self::$methods as $method) {
             $return_val = call_user_func([$this->join_instance, $method], 1, 2, 3, 4);
@@ -39,7 +39,7 @@ class JoinBuilderTest extends TestCase
         }
     }
 
-    public function testOnAddsCriteria()
+    public function testOnAddsCriteria(): void
     {
         $expected = self::$base_expected;
         $expected['joiner'] = 'boo';
@@ -49,7 +49,7 @@ class JoinBuilderTest extends TestCase
         $this->assertAttributeEquals([$expected], 'statements', $this->join_instance);
     }
 
-    public function testOnOrAddsCriteria()
+    public function testOnOrAddsCriteria(): void
     {
         $expected = self::$base_expected;
 
@@ -60,7 +60,7 @@ class JoinBuilderTest extends TestCase
         $this->assertAttributeEquals([$expected], 'statements', $this->join_instance);
     }
 
-    public function testToSqlSimple()
+    public function testToSqlSimple(): void
     {
         $expected = [
             'sql' => 'INNER JOIN `foo_join` ON `bar` = ? ',
@@ -72,7 +72,7 @@ class JoinBuilderTest extends TestCase
         $this->assertEquals($expected, $this->join_instance->toSql());
     }
 
-    public function testToSqlAlias()
+    public function testToSqlAlias(): void
     {
         $expected = [
             'sql' => 'INNER JOIN `foo_join` AS `fj` ON `bar` = ? ',
@@ -91,7 +91,7 @@ class JoinBuilderTest extends TestCase
         $this->assertEquals($expected, $join_instance->toSql());
     }
 
-    public function testToSqlOnRaw()
+    public function testToSqlOnRaw(): void
     {
         $raw_sql = "`bar` = `baz`";
         $expected = [

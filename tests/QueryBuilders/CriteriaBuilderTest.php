@@ -107,6 +107,19 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
+    public function testToSqlWhereIn()
+    {
+        $between = [20, 40, 50];
+        $expected = [
+            'sql' => '`foo` IN (?, ?, ?) ',
+            'params' => $between,
+        ];
+
+        $this->criteria_instance->where('foo', 'IN', $between);
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
     public function testToSqlWhereNull()
     {
         $expected = [

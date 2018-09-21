@@ -202,6 +202,7 @@ class Select extends CriteriaBase
             foreach ($this->joins as $join_builder) {
                 $join = $join_builder->toSql();
                 $sql .= "\t" . $join['sql'] . "\n";
+                $params = array_merge($params, $join['params']);
             }
         }
 

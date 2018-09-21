@@ -143,7 +143,7 @@ class SelectTest extends TestCase
     public function testToSqlWhere()
     {
         $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tWHERE `bar` = ? \n",
+            'sql' => "SELECT *\n\tFROM `foo`\n\tWHERE `bar` = ?\n",
             'params' => [42],
         ];
 
@@ -167,7 +167,7 @@ class SelectTest extends TestCase
     public function testToSqlHaving()
     {
         $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tHAVING `bar` = ? \n",
+            'sql' => "SELECT *\n\tFROM `foo`\n\tHAVING `bar` = ?\n",
             'params' => [42],
         ];
 
@@ -204,9 +204,9 @@ class SelectTest extends TestCase
     {
         $expected = [
             'sql' => "SELECT *\n\tFROM `foo`\n\t"
-                . "WHERE `bar` = ? \n\t"
+                . "WHERE `bar` = ?\n\t"
                 . "GROUP BY `bar`, `boo`\n\t"
-                . "HAVING `bar` = ? \n\t"
+                . "HAVING `bar` = ?\n\t"
                 . "ORDER BY `bar` ASC, `boo` DESC\n\t"
                 . "LIMIT 20, 10\n",
             'params' => [42, 42],

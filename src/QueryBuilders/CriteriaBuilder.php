@@ -113,6 +113,7 @@ class CriteriaBuilder
 
         // Remove leading AND and OR
         $sql = preg_replace('/^(\s?AND ?|\s?OR ?)/i', '', $sql);
+        $sql = trim($sql);
 
         return compact('sql', 'params');
     }

@@ -85,7 +85,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereSimple(): void
     {
         $expected = [
-            'sql' => '`foo` = ? ',
+            'sql' => '`foo` = ?',
             'params' => ['bar'],
         ];
 
@@ -98,7 +98,7 @@ class CriteriaBuilderTest extends TestCase
     {
         $between = [20, 40];
         $expected = [
-            'sql' => '`foo` BETWEEN ? AND ? ',
+            'sql' => '`foo` BETWEEN ? AND ?',
             'params' => $between,
         ];
 
@@ -111,7 +111,7 @@ class CriteriaBuilderTest extends TestCase
     {
         $between = [20, 40, 50];
         $expected = [
-            'sql' => '`foo` IN (?, ?, ?) ',
+            'sql' => '`foo` IN (?, ?, ?)',
             'params' => $between,
         ];
 
@@ -123,7 +123,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereNull(): void
     {
         $expected = [
-            'sql' => '`foo` IS NULL ',
+            'sql' => '`foo` IS NULL',
             'params' => [],
         ];
 
@@ -135,7 +135,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereAnd(): void
     {
         $expected = [
-            'sql' => '`foo` = ? AND `baz` < ? ',
+            'sql' => '`foo` = ? AND `baz` < ?',
             'params' => ['bar', 5],
         ];
 
@@ -149,7 +149,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereAndNot(): void
     {
         $expected = [
-            'sql' => '`foo` = ? AND NOT `baz` < ? ',
+            'sql' => '`foo` = ? AND NOT `baz` < ?',
             'params' => ['bar', 5],
         ];
 
@@ -163,7 +163,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereOr(): void
     {
         $expected = [
-            'sql' => '`foo` = ? OR `baz` < ? ',
+            'sql' => '`foo` = ? OR `baz` < ?',
             'params' => ['bar', 5],
         ];
 
@@ -177,7 +177,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereOrNot(): void
     {
         $expected = [
-            'sql' => '`foo` = ? OR NOT `baz` < ? ',
+            'sql' => '`foo` = ? OR NOT `baz` < ?',
             'params' => ['bar', 5],
         ];
 
@@ -191,7 +191,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereClosure(): void
     {
         $expected = [
-            'sql' => '`foo` = ? AND (`boo` >= ? OR `baz` < ? ) ',
+            'sql' => '`foo` = ? AND (`boo` >= ? OR `baz` < ?)',
             'params' => ['bar', 5, 42],
         ];
 
@@ -211,7 +211,7 @@ class CriteriaBuilderTest extends TestCase
     {
         $raw_sql = "(SELECT * FROM table2 WHERE moo > ?)";
         $expected = [
-            'sql' => '`foo` = ? AND ' . $raw_sql . ' ',
+            'sql' => '`foo` = ? AND ' . $raw_sql,
             'params' => ['bar', 42],
         ];
 

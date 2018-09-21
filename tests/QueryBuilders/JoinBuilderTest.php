@@ -63,7 +63,7 @@ class JoinBuilderTest extends TestCase
     public function testToSqlSimple(): void
     {
         $expected = [
-            'sql' => 'INNER JOIN `foo_join` ON `bar` = ? ',
+            'sql' => 'INNER JOIN `foo_join` ON `bar` = ?',
             'params' => [42],
         ];
 
@@ -75,7 +75,7 @@ class JoinBuilderTest extends TestCase
     public function testToSqlAlias(): void
     {
         $expected = [
-            'sql' => 'INNER JOIN `foo_join` AS `fj` ON `bar` = ? ',
+            'sql' => 'INNER JOIN `foo_join` AS `fj` ON `bar` = ?',
             'params' => [42],
         ];
 
@@ -95,7 +95,7 @@ class JoinBuilderTest extends TestCase
     {
         $raw_sql = "`bar` = `baz`";
         $expected = [
-            'sql' => 'INNER JOIN `foo_join` ON ' . $raw_sql . ' ',
+            'sql' => 'INNER JOIN `foo_join` ON ' . $raw_sql,
             'params' => [],
         ];
 

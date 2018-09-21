@@ -20,7 +20,7 @@ class DeleteTest extends TestCase
     public function testToSql(): void
     {
         $expected = [
-            'sql' => "DELETE FROM `foo_join`\n\tWHERE `id` = ? ",
+            'sql' => "DELETE FROM `foo_join`\n\tWHERE `id` = ?",
             'params' => [42],
         ];
 

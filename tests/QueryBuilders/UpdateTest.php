@@ -56,7 +56,7 @@ class UpdateTest extends TestCase
     {
         $expected = [
             'sql' => "UPDATE `foo`\n\t"
-                . "SET\n\t\t`foo` = ?\n\tWHERE `baz` = ? AND `boo` IS NULL ",
+                . "SET\n\t\t`foo` = ?\n\tWHERE `baz` = ? AND `boo` IS NULL",
             'params' => ['bar', 42],
         ];
 

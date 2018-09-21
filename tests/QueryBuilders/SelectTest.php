@@ -248,8 +248,8 @@ class SelectTest extends TestCase
     public function testToSqlLimit()
     {
         $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tLIMIT 20, 10\n",
-            'params' => [],
+            'sql' => "SELECT *\n\tFROM `foo`\n\tLIMIT ?, ?\n",
+            'params' => [20, 10],
         ];
 
         $this->select->limit(10, 20);
@@ -265,8 +265,8 @@ class SelectTest extends TestCase
                 . "GROUP BY `bar`, `boo`\n\t"
                 . "HAVING `bar` = ?\n\t"
                 . "ORDER BY `bar` ASC, `boo` DESC\n\t"
-                . "LIMIT 20, 10\n",
-            'params' => [42, 42],
+                . "LIMIT ?, ?\n",
+            'params' => [42, 42, 20, 10],
         ];
 
         $this->select

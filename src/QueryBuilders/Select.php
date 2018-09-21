@@ -251,10 +251,12 @@ class Select extends CriteriaBase
             $sql .= "\tLIMIT ";
 
             if ($this->limit_offset !== null) {
-                $sql .= $this->limit_offset . ", ";
+                $sql .= "?, ";
+                $params[] = $this->limit_offset;
             }
 
-            $sql .= $this->limit_row_count . "\n";
+            $sql .= "?\n";
+            $params[] = $this->limit_row_count;
         }
 
         return compact('sql', 'params');

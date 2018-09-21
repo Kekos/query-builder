@@ -184,7 +184,6 @@ class Select extends CriteriaBase
             }
 
             $sql .= implode(", ", $sanitized_columns) . "\n";
-
         } else {
             $sql .= "*\n";
         }
@@ -194,7 +193,6 @@ class Select extends CriteriaBase
             $table_name = $this->sanitizeFieldParam($table_name, $params)
                 . " AS "
                 . $this->sanitizeField($alias);
-
         } else {
             $table_name = $this->sanitizeFieldParam($this->table_name, $params);
         }

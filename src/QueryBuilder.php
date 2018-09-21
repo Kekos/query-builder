@@ -65,7 +65,6 @@ class QueryBuilder
                 }
 
                 return $sanitizer . $field . $sanitizer;
-
             }, $field_parts);
 
             return implode('.', $field_parts);

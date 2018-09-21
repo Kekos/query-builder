@@ -21,19 +21,19 @@ class SelectTest extends TestCase
     public function testColumnsSingle(): void
     {
         $this->select->columns('foo');
-        $this->assertAttributeEquals(['`foo`'], 'columns', $this->select);
+        $this->assertAttributeEquals(['foo'], 'columns', $this->select);
     }
 
     public function testColumnsMulti(): void
     {
         $this->select->columns(['foo', 'bar']);
-        $this->assertAttributeEquals(['`foo`', '`bar`'], 'columns', $this->select);
+        $this->assertAttributeEquals(['foo', 'bar'], 'columns', $this->select);
     }
 
     public function testColumnsAlias(): void
     {
         $this->select->columns(['x' => 'foo']);
-        $this->assertAttributeEquals(['x' => '`foo` AS `x`'], 'columns', $this->select);
+        $this->assertAttributeEquals(['x' => 'foo'], 'columns', $this->select);
     }
 
     public function testGroupbySingle(): void
@@ -131,6 +131,22 @@ class SelectTest extends TestCase
 
         $this->select->columns([
             'foo' => new Raw($subquery),
+        ]);
+
+        $this->assertEquals($expected, $this->select->toSql());
+    }
+
+    public function testToSqlColumnsSubqueryParams(): void
+    {
+        $subquery = '(SELECT bar FROM baz WHERE baz.id = ?)';
+
+        $expected = [
+            'sql' => "SELECT " . $subquery . " AS `foo`\n\tFROM `foo`\n",
+            'params' => [42],
+        ];
+
+        $this->select->columns([
+            'foo' => new Raw($subquery, [42]),
         ]);
 
         $this->assertEquals($expected, $this->select->toSql());

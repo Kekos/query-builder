@@ -29,14 +29,6 @@ class Select extends CriteriaBase
             $columns = [$columns];
         }
 
-        foreach ($columns as $alias => &$column) {
-            $column = $this->sanitizeField($column);
-
-            if (is_string($alias)) {
-                $column .= " AS " . $this->sanitizeField($alias);
-            }
-        }
-
         $this->columns = array_merge($this->columns, $columns);
 
         return $this;
@@ -164,13 +156,34 @@ class Select extends CriteriaBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
+    private function sanitizeFieldParam($field, array &$params): string
+    {
+        if ($field instanceof Raw) {
+            $params = array_merge($params, $field->getParams());
+        }
+
+        return $this->sanitizeField($field);
+    }
+
     public function toSql(): array
     {
         $sql = "SELECT ";
         $params = [];
 
         if (count($this->columns) > 0) {
-            $sql .= implode(", ", $this->columns) . "\n";
+            $sanitized_columns = [];
+            foreach ($this->columns as $alias => $column) {
+                $column = $this->sanitizeFieldParam($column, $params);
+
+                if (is_string($alias)) {
+                    $column .= " AS " . $this->sanitizeField($alias);
+                }
+
+                $sanitized_columns[] = $column;
+            }
+
+            $sql .= implode(", ", $sanitized_columns) . "\n";
+
         } else {
             $sql .= "*\n";
         }

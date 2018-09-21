@@ -3,6 +3,7 @@ namespace QueryBuilder\Tests\QueryBuilders;
 
 use PHPUnit\Framework\TestCase;
 use QueryBuilder\MySqlAdapter;
+use QueryBuilder\QueryBuilders\Raw;
 use QueryBuilder\QueryBuilders\Select;
 
 class SelectTest extends TestCase
@@ -114,6 +115,22 @@ class SelectTest extends TestCase
 
         $this->select->columns([
             'foo' => 'bar',
+        ]);
+
+        $this->assertEquals($expected, $this->select->toSql());
+    }
+
+    public function testToSqlColumnsSubquery(): void
+    {
+        $subquery = '(SELECT bar FROM baz WHERE baz.id = 42)';
+
+        $expected = [
+            'sql' => "SELECT " . $subquery . " AS `foo`\n\tFROM `foo`\n",
+            'params' => [],
+        ];
+
+        $this->select->columns([
+            'foo' => new Raw($subquery),
         ]);
 
         $this->assertEquals($expected, $this->select->toSql());

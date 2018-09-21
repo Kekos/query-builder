@@ -173,6 +173,18 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
+    public function testToSqlJoin()
+    {
+        $expected = [
+            'sql' => "SELECT *\n\tFROM `foo`\n\tINNER JOIN `bar` ON `bar`.`foo_id` = `foo`.`id`\n",
+            'params' => [],
+        ];
+
+        $this->select->join('bar', new Raw("`bar`.`foo_id` = `foo`.`id`"));
+
+        $this->assertEquals($expected, $this->select->toSql());
+    }
+
     public function testToSqlWhere()
     {
         $expected = [

@@ -33,7 +33,7 @@ class Insert extends VerbBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql(): array
+    public function toSql(): Raw
     {
         $sql = "INSERT INTO ";
         $params = [];
@@ -64,6 +64,6 @@ class Insert extends VerbBase
 
         $sql .= implode(", ", $placeholders) . ")";
 
-        return compact('sql', 'params');
+        return new Raw($sql, $params);
     }
 }

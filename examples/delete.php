@@ -10,6 +10,6 @@ $result = QB::delete('user')
     ->where('id', '=', 2)
     ->toSql();
 
-var_dump($result['sql'], $result['params']);
+var_dump($result);
 ?>
 </pre>

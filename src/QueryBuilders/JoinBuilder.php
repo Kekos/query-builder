@@ -37,9 +37,10 @@ class JoinBuilder extends CriteriaBuilder
         return $this;
     }
 
-    public function toSql(): array
+    public function toSql(): Raw
     {
-        extract(parent::toSql());
+        $upstream_sql = parent::toSql();
+        $params = $upstream_sql->getParams();
 
         if (is_array($this->table)) {
             list($table, $alias) = $this->table;
@@ -53,8 +54,8 @@ class JoinBuilder extends CriteriaBuilder
             }
         }
 
-        $sql = $this->join_type . " JOIN " . $table . " ON " . $sql;
+        $sql = $this->join_type . " JOIN " . $table . " ON " . $upstream_sql;
 
-        return compact('sql', 'params');
+        return new Raw($sql, $params);
     }
 }

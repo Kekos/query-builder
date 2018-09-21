@@ -61,7 +61,7 @@ class CriteriaBuilder
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql(): array
+    public function toSql(): Raw
     {
         $sql = "";
         $params = [];
@@ -75,9 +75,9 @@ class CriteriaBuilder
                 $key($criteria_builder);
 
                 $criteria = $criteria_builder->toSql();
-                $params = array_merge($params, $criteria['params']);
+                $params = array_merge($params, $criteria->getParams());
 
-                $sql .= $statement['joiner'] . ' (' . $criteria['sql'] . ') ';
+                $sql .= $statement['joiner'] . ' (' . $criteria . ') ';
             } else {
                 if (is_array($value)) {
                     $sql .= $statement['joiner'] . ' ' . $key . ' ' . $statement['operator'];
@@ -115,6 +115,6 @@ class CriteriaBuilder
         $sql = preg_replace('/^(\s?AND ?|\s?OR ?)/i', '', $sql);
         $sql = trim($sql);
 
-        return compact('sql', 'params');
+        return new Raw($sql, $params);
     }
 }

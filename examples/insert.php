@@ -13,6 +13,6 @@ $result = QB::insert('user')
     ])
     ->toSql();
 
-var_dump($result['sql'], $result['params']);
+var_dump($result);
 ?>
 </pre>

@@ -45,7 +45,7 @@ $result = QueryBuilder::select(['user', 'u'])
   ->toSql();
 ```
 
-`$result` will be an associative array with keys `sql` and `params`.
+`$result` will be an object of type `QueryBuilder\QueryBuilders\Raw`.
 
 #### Nested `where` or `having`
 

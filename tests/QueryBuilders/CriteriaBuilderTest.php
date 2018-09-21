@@ -84,10 +84,7 @@ class CriteriaBuilderTest extends TestCase
 
     public function testToSqlWhereSimple(): void
     {
-        $expected = [
-            'sql' => '`foo` = ?',
-            'params' => ['bar'],
-        ];
+        $expected = new Raw('`foo` = ?', ['bar']);
 
         $this->criteria_instance->where('foo', '=', 'bar');
 
@@ -97,10 +94,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereBetween(): void
     {
         $between = [20, 40];
-        $expected = [
-            'sql' => '`foo` BETWEEN ? AND ?',
-            'params' => $between,
-        ];
+        $expected = new Raw('`foo` BETWEEN ? AND ?', $between);
 
         $this->criteria_instance->where('foo', 'BETWEEN', $between);
 
@@ -110,10 +104,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereIn(): void
     {
         $between = [20, 40, 50];
-        $expected = [
-            'sql' => '`foo` IN (?, ?, ?)',
-            'params' => $between,
-        ];
+        $expected = new Raw('`foo` IN (?, ?, ?)', $between);
 
         $this->criteria_instance->where('foo', 'IN', $between);
 
@@ -122,10 +113,7 @@ class CriteriaBuilderTest extends TestCase
 
     public function testToSqlWhereNull(): void
     {
-        $expected = [
-            'sql' => '`foo` IS NULL',
-            'params' => [],
-        ];
+        $expected = new Raw('`foo` IS NULL');
 
         $this->criteria_instance->where('foo', '=', null);
 
@@ -134,10 +122,7 @@ class CriteriaBuilderTest extends TestCase
 
     public function testToSqlWhereAnd(): void
     {
-        $expected = [
-            'sql' => '`foo` = ? AND `baz` < ?',
-            'params' => ['bar', 5],
-        ];
+        $expected = new Raw('`foo` = ? AND `baz` < ?', ['bar', 5]);
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
@@ -148,10 +133,7 @@ class CriteriaBuilderTest extends TestCase
 
     public function testToSqlWhereAndNot(): void
     {
-        $expected = [
-            'sql' => '`foo` = ? AND NOT `baz` < ?',
-            'params' => ['bar', 5],
-        ];
+        $expected = new Raw('`foo` = ? AND NOT `baz` < ?', ['bar', 5]);
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
@@ -162,10 +144,7 @@ class CriteriaBuilderTest extends TestCase
 
     public function testToSqlWhereOr(): void
     {
-        $expected = [
-            'sql' => '`foo` = ? OR `baz` < ?',
-            'params' => ['bar', 5],
-        ];
+        $expected = new Raw('`foo` = ? OR `baz` < ?', ['bar', 5]);
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
@@ -176,10 +155,7 @@ class CriteriaBuilderTest extends TestCase
 
     public function testToSqlWhereOrNot(): void
     {
-        $expected = [
-            'sql' => '`foo` = ? OR NOT `baz` < ?',
-            'params' => ['bar', 5],
-        ];
+        $expected = new Raw('`foo` = ? OR NOT `baz` < ?', ['bar', 5]);
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
@@ -190,10 +166,7 @@ class CriteriaBuilderTest extends TestCase
 
     public function testToSqlWhereClosure(): void
     {
-        $expected = [
-            'sql' => '`foo` = ? AND (`boo` >= ? OR `baz` < ?)',
-            'params' => ['bar', 5, 42],
-        ];
+        $expected = new Raw('`foo` = ? AND (`boo` >= ? OR `baz` < ?)', ['bar', 5, 42]);
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
@@ -210,10 +183,7 @@ class CriteriaBuilderTest extends TestCase
     public function testToSqlWhereRaw(): void
     {
         $raw_sql = "(SELECT * FROM table2 WHERE moo > ?)";
-        $expected = [
-            'sql' => '`foo` = ? AND ' . $raw_sql,
-            'params' => ['bar', 42],
-        ];
+        $expected = new Raw('`foo` = ? AND ' . $raw_sql, ['bar', 42]);
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')

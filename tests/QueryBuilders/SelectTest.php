@@ -86,20 +86,14 @@ class SelectTest extends TestCase
 
     public function testToSqlSimple(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n",
-            'params' => [],
-        ];
+        $expected = new Raw("SELECT *\n\tFROM `foo`\n", []);
 
         $this->assertEquals($expected, $this->select->toSql());
     }
 
     public function testToSqlAlias(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo` AS `f`\n",
-            'params' => [],
-        ];
+        $expected = new Raw("SELECT *\n\tFROM `foo` AS `f`\n", []);
 
         $select = new Select(['foo', 'f'], new MySqlAdapter());
 
@@ -108,10 +102,7 @@ class SelectTest extends TestCase
 
     public function testToSqlColumns(): void
     {
-        $expected = [
-            'sql' => "SELECT `bar` AS `foo`\n\tFROM `foo`\n",
-            'params' => [],
-        ];
+        $expected = new Raw("SELECT `bar` AS `foo`\n\tFROM `foo`\n", []);
 
         $this->select->columns([
             'foo' => 'bar',
@@ -124,10 +115,7 @@ class SelectTest extends TestCase
     {
         $subquery = '(SELECT bar FROM baz WHERE baz.id = 42)';
 
-        $expected = [
-            'sql' => "SELECT " . $subquery . " AS `foo`\n\tFROM `foo`\n",
-            'params' => [],
-        ];
+        $expected = new Raw("SELECT " . $subquery . " AS `foo`\n\tFROM `foo`\n", []);
 
         $this->select->columns([
             'foo' => new Raw($subquery),
@@ -140,10 +128,7 @@ class SelectTest extends TestCase
     {
         $subquery = '(SELECT bar FROM baz WHERE baz.id = ?)';
 
-        $expected = [
-            'sql' => "SELECT " . $subquery . " AS `foo`\n\tFROM `foo`\n",
-            'params' => [42],
-        ];
+        $expected = new Raw("SELECT " . $subquery . " AS `foo`\n\tFROM `foo`\n", [42]);
 
         $this->select->columns([
             'foo' => new Raw($subquery, [42]),
@@ -154,10 +139,7 @@ class SelectTest extends TestCase
 
     public function testToSqlColumnsMulti(): void
     {
-        $expected = [
-            'sql' => "SELECT `bar` AS `foo`, `baz`\n\tFROM `foo`\n",
-            'params' => [],
-        ];
+        $expected = new Raw("SELECT `bar` AS `foo`, `baz`\n\tFROM `foo`\n", []);
 
         $this->select->columns([
             'foo' => 'bar',
@@ -169,10 +151,10 @@ class SelectTest extends TestCase
 
     public function testToSqlJoin(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tINNER JOIN `bar` ON `bar`.`foo_id` = `foo`.`id`\n",
-            'params' => [],
-        ];
+        $expected = new Raw(
+            "SELECT *\n\tFROM `foo`\n\tINNER JOIN `bar` ON `bar`.`foo_id` = `foo`.`id`\n",
+            []
+        );
 
         $this->select->join('bar', new Raw("`bar`.`foo_id` = `foo`.`id`"));
 
@@ -181,10 +163,10 @@ class SelectTest extends TestCase
 
     public function testToSqlJoinParams(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tINNER JOIN `bar` ON `id` = ?\n",
-            'params' => [42],
-        ];
+        $expected = new Raw(
+            "SELECT *\n\tFROM `foo`\n\tINNER JOIN `bar` ON `id` = ?\n",
+            [42]
+        );
 
         $this->select->join('bar', 'id', '=', 42);
 
@@ -193,10 +175,10 @@ class SelectTest extends TestCase
 
     public function testToSqlWhere(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tWHERE `bar` = ?\n",
-            'params' => [42],
-        ];
+        $expected = new Raw(
+            "SELECT *\n\tFROM `foo`\n\tWHERE `bar` = ?\n",
+            [42]
+        );
 
         $this->select->where('bar', '=', 42);
 
@@ -205,10 +187,7 @@ class SelectTest extends TestCase
 
     public function testToSqlGroupBy(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tGROUP BY `bar`, `boo`\n",
-            'params' => [],
-        ];
+        $expected = new Raw("SELECT *\n\tFROM `foo`\n\tGROUP BY `bar`, `boo`\n", []);
 
         $this->select->groupby(['bar', 'boo']);
 
@@ -217,10 +196,7 @@ class SelectTest extends TestCase
 
     public function testToSqlHaving(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tHAVING `bar` = ?\n",
-            'params' => [42],
-        ];
+        $expected = new Raw("SELECT *\n\tFROM `foo`\n\tHAVING `bar` = ?\n", [42]);
 
         $this->select->having('bar', '=', 42);
 
@@ -229,10 +205,10 @@ class SelectTest extends TestCase
 
     public function testToSqlOrderBy(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tORDER BY `bar` ASC, `boo` DESC\n",
-            'params' => [],
-        ];
+        $expected = new Raw(
+            "SELECT *\n\tFROM `foo`\n\tORDER BY `bar` ASC, `boo` DESC\n",
+            []
+        );
 
         $this->select->orderby(['bar' => 'ASC', 'boo' => 'DESC']);
 
@@ -241,10 +217,7 @@ class SelectTest extends TestCase
 
     public function testToSqlLimit(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\tLIMIT ?, ?\n",
-            'params' => [20, 10],
-        ];
+        $expected = new Raw("SELECT *\n\tFROM `foo`\n\tLIMIT ?, ?\n", [20, 10]);
 
         $this->select->limit(10, 20);
 
@@ -253,15 +226,16 @@ class SelectTest extends TestCase
 
     public function testToSqlCombined(): void
     {
-        $expected = [
-            'sql' => "SELECT *\n\tFROM `foo`\n\t"
-                . "WHERE `bar` = ?\n\t"
-                . "GROUP BY `bar`, `boo`\n\t"
-                . "HAVING `bar` = ?\n\t"
-                . "ORDER BY `bar` ASC, `boo` DESC\n\t"
-                . "LIMIT ?, ?\n",
-            'params' => [42, 42, 20, 10],
-        ];
+        $expected = new Raw(
+            "SELECT *\n\tFROM `foo`\n\t"
+            . "WHERE `bar` = ?\n\t"
+            . "GROUP BY `bar`, `boo`\n\t"
+            . "HAVING `bar` = ?\n\t"
+            . "ORDER BY `bar` ASC, `boo` DESC\n\t"
+            . "LIMIT ?, ?\n",
+            [42, 42, 20, 10]
+        )
+        ;
 
         $this->select
             ->where('bar', '=', 42)
@@ -277,10 +251,7 @@ class SelectTest extends TestCase
     {
         $subquery = '(SELECT bar FROM baz WHERE baz.id = ?)';
 
-        $expected = [
-            'sql' => "SELECT *\n\tFROM " . $subquery . " AS `foo`\n",
-            'params' => [42],
-        ];
+        $expected = new Raw("SELECT *\n\tFROM " . $subquery . " AS `foo`\n", [42]);
 
         $select = new Select(new Raw($subquery, [42]), new MySqlAdapter());
         $select->alias('foo');
@@ -292,10 +263,7 @@ class SelectTest extends TestCase
     {
         $subquery = '(SELECT bar FROM baz WHERE baz.id = ?)';
 
-        $expected = [
-            'sql' => "SELECT *\n\tFROM " . $subquery . " AS `foo`\n",
-            'params' => [42],
-        ];
+        $expected = new Raw("SELECT *\n\tFROM " . $subquery . " AS `foo`\n", [42]);
 
         $select = new Select(
             [new Raw($subquery, [42]), 'foo'],

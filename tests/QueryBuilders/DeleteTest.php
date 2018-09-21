@@ -4,6 +4,7 @@ namespace QueryBuilder\Tests\QueryBuilders;
 use PHPUnit\Framework\TestCase;
 use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilders\Delete;
+use QueryBuilder\QueryBuilders\Raw;
 
 class DeleteTest extends TestCase
 {
@@ -19,10 +20,7 @@ class DeleteTest extends TestCase
 
     public function testToSql(): void
     {
-        $expected = [
-            'sql' => "DELETE FROM `foo_join`\n\tWHERE `id` = ?",
-            'params' => [42],
-        ];
+        $expected = new Raw("DELETE FROM `foo_join`\n\tWHERE `id` = ?", [42]);
 
         $this->delete->where('id', '=', 42);
 

@@ -33,4 +33,6 @@ abstract class VerbBase
 
         return $this;
     }
+
+    abstract public function toSql(): Raw;
 }

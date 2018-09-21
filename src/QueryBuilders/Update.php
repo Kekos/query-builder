@@ -33,7 +33,7 @@ class Update extends CriteriaBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql(): array
+    public function toSql(): Raw
     {
         $sql = "UPDATE ";
         $params = [];
@@ -66,10 +66,10 @@ class Update extends CriteriaBase
             $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
             $where = $criteria_builder->toSql();
 
-            $sql .= "\tWHERE " . $where['sql'];
-            $params = array_merge($params, $where['params']);
+            $sql .= "\tWHERE " . $where;
+            $params = array_merge($params, $where->getParams());
         }
 
-        return compact('sql', 'params');
+        return new Raw($sql, $params);
     }
 }

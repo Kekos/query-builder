@@ -14,7 +14,7 @@ $result = QB::update('user')
     ->where('id', '=', 2)
     ->toSql();
 
-var_dump($result['sql'], $result['params']);
+var_dump($result);
 
 $result = QB::update('user')
     ->set([
@@ -23,6 +23,6 @@ $result = QB::update('user')
     ->where('firstname', 'LIKE', '%Doe%')
     ->toSql();
 
-var_dump($result['sql'], $result['params']);
+var_dump($result);
 ?>
 </pre>

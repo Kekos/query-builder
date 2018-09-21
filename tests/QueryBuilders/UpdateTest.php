@@ -20,11 +20,11 @@ class UpdateTest extends TestCase
 
     public function testToSql(): void
     {
-        $expected = [
-            'sql' => "UPDATE `foo`\n\t"
-                . "SET\n\t\t`foo` = ?,\n\t\t`baz` = ?,\n\t\t`boo` = ?\n",
-            'params' => ['bar', 42, null],
-        ];
+        $expected = new Raw(
+            "UPDATE `foo`\n\t"
+            . "SET\n\t\t`foo` = ?,\n\t\t`baz` = ?,\n\t\t`boo` = ?\n",
+            ['bar', 42, null]
+        );
 
         $this->update->set([
             'foo' => 'bar',
@@ -38,11 +38,11 @@ class UpdateTest extends TestCase
     public function testToSqlWithRaw(): void
     {
         $raw_sql = '(SELECT bar FROM b WHERE id = ?)';
-        $expected = [
-            'sql' => "UPDATE `foo`\n\t"
-                . "SET\n\t\t`foo` = ?,\n\t\t`baz` = " . $raw_sql . "\n",
-            'params' => ['bar', 42],
-        ];
+        $expected = new Raw(
+            "UPDATE `foo`\n\t"
+            . "SET\n\t\t`foo` = ?,\n\t\t`baz` = " . $raw_sql . "\n",
+            ['bar', 42]
+        );
 
         $this->update->set([
             'foo' => 'bar',
@@ -54,11 +54,11 @@ class UpdateTest extends TestCase
 
     public function testToSqlWhere(): void
     {
-        $expected = [
-            'sql' => "UPDATE `foo`\n\t"
-                . "SET\n\t\t`foo` = ?\n\tWHERE `baz` = ? AND `boo` IS NULL",
-            'params' => ['bar', 42],
-        ];
+        $expected = new Raw(
+            "UPDATE `foo`\n\t"
+            . "SET\n\t\t`foo` = ?\n\tWHERE `baz` = ? AND `boo` IS NULL",
+            ['bar', 42]
+        );
 
         $this->update
             ->set([

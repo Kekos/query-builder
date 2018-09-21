@@ -165,7 +165,7 @@ class Select extends CriteriaBase
         return $this->sanitizeField($field);
     }
 
-    public function toSql(): array
+    public function toSql(): Raw
     {
         $sql = "SELECT ";
         $params = [];
@@ -204,8 +204,8 @@ class Select extends CriteriaBase
         if (count($this->joins) > 0) {
             foreach ($this->joins as $join_builder) {
                 $join = $join_builder->toSql();
-                $sql .= "\t" . $join['sql'] . "\n";
-                $params = array_merge($params, $join['params']);
+                $sql .= "\t" . $join . "\n";
+                $params = array_merge($params, $join->getParams());
             }
         }
 
@@ -214,8 +214,8 @@ class Select extends CriteriaBase
             $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
             $where = $criteria_builder->toSql();
 
-            $sql .= "\tWHERE " . $where['sql'] . "\n";
-            $params = array_merge($params, $where['params']);
+            $sql .= "\tWHERE " . $where . "\n";
+            $params = array_merge($params, $where->getParams());
         }
 
         // Group by
@@ -228,8 +228,8 @@ class Select extends CriteriaBase
             $criteria_builder = new CriteriaBuilder($this->adapter, $this->having);
             $having = $criteria_builder->toSql();
 
-            $sql .= "\tHAVING " . $having['sql'] . "\n";
-            $params = array_merge($params, $having['params']);
+            $sql .= "\tHAVING " . $having . "\n";
+            $params = array_merge($params, $having->getParams());
         }
 
         // Order by
@@ -250,6 +250,6 @@ class Select extends CriteriaBase
             $params[] = $this->limit_row_count;
         }
 
-        return compact('sql', 'params');
+        return new Raw($sql, $params);
     }
 }

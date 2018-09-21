@@ -16,7 +16,7 @@ $result = QB::select(['user', 'u'])
     ->whereNot('u.id', 'IN', [2])
     ->toSql();
 
-var_dump($result['sql'], $result['params']);
+var_dump($result);
 
 $result = QB::select('user')
     ->orderby('id')
@@ -27,7 +27,7 @@ $result = QB::select('user')
     ->where('active', '=', 1)
     ->toSql();
 
-var_dump($result['sql'], $result['params']);
+var_dump($result);
 
 $result = QB::select('user')
     ->where(function ($qb): void {
@@ -36,13 +36,13 @@ $result = QB::select('user')
     })
     ->toSql();
 
-var_dump($result['sql'], $result['params']);
+var_dump($result);
 
 $result = QB::select('user')
     ->columns('id')
     ->columns(['fname' => 'firstname'])
     ->toSql();
 
-var_dump($result['sql'], $result['params']);
+var_dump($result);
 ?>
 </pre>

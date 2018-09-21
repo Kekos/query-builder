@@ -4,6 +4,7 @@ namespace QueryBuilder\Tests\QueryBuilders;
 use PHPUnit\Framework\TestCase;
 use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilders\Insert;
+use QueryBuilder\QueryBuilders\Raw;
 
 class InsertTest extends TestCase
 {
@@ -19,10 +20,10 @@ class InsertTest extends TestCase
 
     public function testToSql(): void
     {
-        $expected = [
-            'sql' => "INSERT INTO `foo_join` (`foo`, `baz`, `boo`)\n\tVALUES (?, ?, ?)",
-            'params' => ['bar', 42, null],
-        ];
+        $expected = new Raw(
+            "INSERT INTO `foo_join` (`foo`, `baz`, `boo`)\n\tVALUES (?, ?, ?)",
+            ['bar', 42, null]
+        );
 
         $this->insert->values([
             'foo' => 'bar',

@@ -23,7 +23,7 @@ class Delete extends CriteriaBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-    public function toSql(): array
+    public function toSql(): Raw
     {
         $sql = "DELETE FROM ";
         $params = [];
@@ -41,10 +41,10 @@ class Delete extends CriteriaBase
             $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
             $where = $criteria_builder->toSql();
 
-            $sql .= "\n\tWHERE " . $where['sql'];
-            $params = $where['params'];
+            $sql .= "\n\tWHERE " . $where;
+            $params = $where->getParams();
         }
 
-        return compact('sql', 'params');
+        return new Raw($sql, $params);
     }
 }

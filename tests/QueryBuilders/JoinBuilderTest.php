@@ -62,10 +62,7 @@ class JoinBuilderTest extends TestCase
 
     public function testToSqlSimple(): void
     {
-        $expected = [
-            'sql' => 'INNER JOIN `foo_join` ON `bar` = ?',
-            'params' => [42],
-        ];
+        $expected = new Raw('INNER JOIN `foo_join` ON `bar` = ?', [42]);
 
         $this->join_instance->on('bar', '=', 42);
 
@@ -74,10 +71,7 @@ class JoinBuilderTest extends TestCase
 
     public function testToSqlAlias(): void
     {
-        $expected = [
-            'sql' => 'INNER JOIN `foo_join` AS `fj` ON `bar` = ?',
-            'params' => [42],
-        ];
+        $expected = new Raw('INNER JOIN `foo_join` AS `fj` ON `bar` = ?', [42]);
 
         $join_instance = new JoinBuilder(
             new MySqlAdapter(),
@@ -94,10 +88,7 @@ class JoinBuilderTest extends TestCase
     public function testToSqlOnRaw(): void
     {
         $raw_sql = "`bar` = `baz`";
-        $expected = [
-            'sql' => 'INNER JOIN `foo_join` ON ' . $raw_sql,
-            'params' => [],
-        ];
+        $expected = new Raw('INNER JOIN `foo_join` ON ' . $raw_sql, []);
 
         $this->join_instance->where(new Raw($raw_sql));
 

@@ -190,9 +190,12 @@ class Select extends CriteriaBase
 
         if (is_array($this->table_name)) {
             list($table_name, $alias) = $this->table_name;
-            $table_name = $this->sanitizeField($table_name) . " AS " . $this->sanitizeField($alias);
+            $table_name = $this->sanitizeFieldParam($table_name, $params)
+                . " AS "
+                . $this->sanitizeField($alias);
+
         } else {
-            $table_name = $this->sanitizeField($this->table_name);
+            $table_name = $this->sanitizeFieldParam($this->table_name, $params);
         }
 
         $sql .= "\tFROM " . $table_name . "\n";

@@ -272,4 +272,36 @@ class SelectTest extends TestCase
 
         $this->assertEquals($expected, $this->select->toSql());
     }
+
+    public function testToSqlSubquery(): void
+    {
+        $subquery = '(SELECT bar FROM baz WHERE baz.id = ?)';
+
+        $expected = [
+            'sql' => "SELECT *\n\tFROM " . $subquery . " AS `foo`\n",
+            'params' => [42],
+        ];
+
+        $select = new Select(new Raw($subquery, [42]), new MySqlAdapter());
+        $select->alias('foo');
+
+        $this->assertEquals($expected, $select->toSql());
+    }
+
+    public function testToSqlSubqueryDirectAlias(): void
+    {
+        $subquery = '(SELECT bar FROM baz WHERE baz.id = ?)';
+
+        $expected = [
+            'sql' => "SELECT *\n\tFROM " . $subquery . " AS `foo`\n",
+            'params' => [42],
+        ];
+
+        $select = new Select(
+            [new Raw($subquery, [42]), 'foo'],
+            new MySqlAdapter()
+        );
+
+        $this->assertEquals($expected, $select->toSql());
+    }
 }

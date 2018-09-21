@@ -16,6 +16,7 @@ use QueryBuilder\QueryBuilderException;
 class Select extends CriteriaBase
 {
     private $columns = [];
+    /** @var JoinBuilder[] */
     private $joins = [];
     private $group_by = [];
     private $having = [];

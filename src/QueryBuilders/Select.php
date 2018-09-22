@@ -251,6 +251,15 @@ class Select extends CriteriaBase
         return $this->sanitizeField($field);
     }
 
+    private function tableNameToSql($table_name, &$params): string
+    {
+        if ($table_name instanceof Raw) {
+            return '(' . $this->sanitizeFieldParam($table_name, $params) . ')';
+        }
+
+        return $this->sanitizeFieldParam($table_name, $params);
+    }
+
     public function toSql(): Raw
     {
         $sql = "SELECT ";
@@ -275,11 +284,11 @@ class Select extends CriteriaBase
 
         if (is_array($this->table_name)) {
             list($table_name, $alias) = $this->table_name;
-            $table_name = $this->sanitizeFieldParam($table_name, $params)
+            $table_name = $this->tableNameToSql($table_name, $params)
                 . " AS "
                 . $this->sanitizeField($alias);
         } else {
-            $table_name = $this->sanitizeFieldParam($this->table_name, $params);
+            $table_name = $this->tableNameToSql($this->table_name, $params);
         }
 
         $sql .= "\tFROM " . $table_name . "\n";

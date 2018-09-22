@@ -249,9 +249,9 @@ class SelectTest extends TestCase
 
     public function testToSqlSubquery(): void
     {
-        $subquery = '(SELECT bar FROM baz WHERE baz.id = ?)';
+        $subquery = 'SELECT bar FROM baz WHERE baz.id = ?';
 
-        $expected = new Raw("SELECT *\n\tFROM " . $subquery . " AS `foo`\n", [42]);
+        $expected = new Raw("SELECT *\n\tFROM (" . $subquery . ") AS `foo`\n", [42]);
 
         $select = new Select(new Raw($subquery, [42]), new MySqlAdapter());
         $select->alias('foo');
@@ -261,14 +261,33 @@ class SelectTest extends TestCase
 
     public function testToSqlSubqueryDirectAlias(): void
     {
-        $subquery = '(SELECT bar FROM baz WHERE baz.id = ?)';
+        $subquery = 'SELECT bar FROM baz WHERE baz.id = ?';
 
-        $expected = new Raw("SELECT *\n\tFROM " . $subquery . " AS `foo`\n", [42]);
+        $expected = new Raw("SELECT *\n\tFROM (" . $subquery . ") AS `foo`\n", [42]);
 
         $select = new Select(
             [new Raw($subquery, [42]), 'foo'],
             new MySqlAdapter()
         );
+
+        $this->assertEquals($expected, $select->toSql());
+    }
+
+    public function testToSqlSubqueryRaw(): void
+    {
+        $adapter = new MySqlAdapter();
+        $subquery = new Select('baz', $adapter);
+        $subquery
+            ->columns('bar')
+            ->where('baz.id', '=', 42);
+
+        $expected = new Raw(
+            "SELECT *\n\tFROM (SELECT `bar`\n\tFROM `baz`\n\tWHERE `baz`.`id` = ?\n) AS `foo`\n",
+            [42]
+        );
+
+        $select = new Select($subquery->toSql(), $adapter);
+        $select->alias('foo');
 
         $this->assertEquals($expected, $select->toSql());
     }

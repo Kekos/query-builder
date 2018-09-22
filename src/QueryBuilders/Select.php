@@ -10,6 +10,7 @@
 
 namespace QueryBuilder\QueryBuilders;
 
+use Closure;
 use QueryBuilder\QueryBuilder;
 use QueryBuilder\QueryBuilderException;
 
@@ -24,6 +25,13 @@ class Select extends CriteriaBase
     private $limit_offset = null;
     private $limit_row_count = null;
 
+    /**
+     * Adds columns to select
+     *
+     * @param string|string[] $columns Single column as string or multiple
+     *  columns in array. Set column alias as array key.
+     * @return Select
+     */
     public function columns($columns): self
     {
         if (!is_array($columns)) {
@@ -35,9 +43,17 @@ class Select extends CriteriaBase
         return $this;
     }
 
+    /**
+     * @param string|string[] $table
+     * @param string|Closure $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @param string $join_type
+     * @return Select
+     */
     public function join($table, $key, $operator = null, $value = null, $join_type = 'INNER'): self
     {
-        if (!$key instanceof \Closure) {
+        if (!$key instanceof Closure) {
             $key = function (JoinBuilder $join_builder) use ($key, $operator, $value): void {
                 $join_builder->on($key, $operator, $value);
             };
@@ -50,30 +66,62 @@ class Select extends CriteriaBase
         return $this;
     }
 
+    /**
+     * @param string|string[] $table
+     * @param string|Closure $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @return Select
+     */
     public function leftJoin($table, $key, $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'LEFT');
         return $this;
     }
 
+    /**
+     * @param string|string[] $table
+     * @param string|Closure $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @return Select
+     */
     public function rightJoin($table, $key, $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT');
         return $this;
     }
 
+    /**
+     * @param string|string[] $table
+     * @param string|Closure $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @return Select
+     */
     public function leftOuterJoin($table, $key, $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'LEFT OUTER');
         return $this;
     }
 
+    /**
+     * @param string|string[] $table
+     * @param string|Closure $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @return Select
+     */
     public function rightOuterJoin($table, $key, $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT OUTER');
         return $this;
     }
 
+    /**
+     * @param string|string[] $columns
+     * @return Select
+     */
     public function groupby($columns): self
     {
         if (!is_array($columns)) {
@@ -87,30 +135,62 @@ class Select extends CriteriaBase
         return $this;
     }
 
+    /**
+     * @param string|Closure|Raw $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @param string $joiner
+     * @return Select
+     */
     public function having($key, $operator = null, $value = null, $joiner = 'AND'): self
     {
         $this->having[] = compact('key', 'operator', 'value', 'joiner');
         return $this;
     }
 
+    /**
+     * @param string|Closure|Raw $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @return Select
+     */
     public function havingNot($key, $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'AND NOT');
         return $this;
     }
 
+    /**
+     * @param string|Closure|Raw $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @return Select
+     */
     public function havingOr($key, $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'OR');
         return $this;
     }
 
+    /**
+     * @param string|Closure|Raw $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @return Select
+     */
     public function havingOrNot($key, $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'OR NOT');
         return $this;
     }
 
+    /**
+     * @param string|string[] $columns Single column as string or multiple
+     *  columns in array. Set column as array key and direction as value.
+     * @param string $default_dir Default sort direction, standard is "ASC"
+     * @return Select
+     * @throws QueryBuilderException
+     */
     public function orderby($columns, $default_dir = 'ASC'): self
     {
         if (!is_array($columns)) {
@@ -137,6 +217,11 @@ class Select extends CriteriaBase
         return $this;
     }
 
+    /**
+     * @param int $row_count
+     * @param int|null $offset
+     * @return Select
+     */
     public function limit(int $row_count, ?int $offset = null): self
     {
         $this->limit_row_count = $row_count;

@@ -17,6 +17,10 @@ class Insert extends VerbBase
 {
     private $values = [];
 
+    /**
+     * @param array $values Column name as array key
+     * @return Insert
+     */
     public function values(array $values): self
     {
         $this->values = $values;

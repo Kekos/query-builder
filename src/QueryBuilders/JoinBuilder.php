@@ -10,6 +10,7 @@
 
 namespace QueryBuilder\QueryBuilders;
 
+use Closure;
 use QueryBuilder\AdapterInterface;
 
 class JoinBuilder extends CriteriaBuilder
@@ -25,12 +26,25 @@ class JoinBuilder extends CriteriaBuilder
         $this->join_type = $join_type;
     }
 
+    /**
+     * @param string|Closure|Raw $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @param string $joiner
+     * @return static
+     */
     public function on($key, $operator = null, $value = null, $joiner = 'AND'): self
     {
         $this->where($key, $operator, $value, $joiner);
         return $this;
     }
 
+    /**
+     * @param string|Closure|Raw $key
+     * @param string|null $operator
+     * @param mixed|null $value
+     * @return static
+     */
     public function onOr($key, $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');

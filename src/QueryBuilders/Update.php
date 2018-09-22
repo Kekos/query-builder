@@ -17,6 +17,10 @@ class Update extends CriteriaBase
 {
     private $values = [];
 
+    /**
+     * @param array $values Column name as array key
+     * @return Update
+     */
     public function set(array $values): self
     {
         $this->values = $values;

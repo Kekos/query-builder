@@ -17,13 +17,22 @@ abstract class VerbBase
     protected $adapter;
     protected $table_name;
 
+    /**
+     * @param string|string[] $table_name Table name as string or array
+     *  where first value is table name and second value is alias
+     * @param AdapterInterface $adapter
+     */
     public function __construct($table_name, AdapterInterface $adapter)
     {
         $this->table_name = $table_name;
         $this->adapter = $adapter;
     }
 
-    public function alias($alias): self
+    /**
+     * @param string $alias New table alias
+     * @return VerbBase
+     */
+    public function alias(string $alias): self
     {
         if (is_array($this->table_name)) {
             $this->table_name[1] = $alias;

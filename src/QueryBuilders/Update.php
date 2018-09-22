@@ -17,6 +17,11 @@ class Update extends CriteriaBase
 {
     private $values = [];
 
+    /**
+     * @param array $values Column name as array key
+     * @return Update
+     * @throws QueryBuilderException
+     */
     public function set($values)
     {
         if (!is_array($values)) {

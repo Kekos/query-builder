@@ -10,34 +10,60 @@
 
 namespace QueryBuilder;
 
+use QueryBuilder\QueryBuilders\Delete;
+use QueryBuilder\QueryBuilders\Insert;
+use QueryBuilder\QueryBuilders\Select;
+use QueryBuilder\QueryBuilders\Update;
+
 class QueryBuilder
 {
+    /** @var AdapterInterface */
     private static $adapter;
 
     private function __construct()
     {
     }
 
-    public static function setAdapter($adapter)
+    public static function setAdapter(AdapterInterface $adapter)
     {
         self::$adapter = $adapter;
     }
 
+    /**
+     * @param string|string[] $table_name Table name as string or array
+     *  where first value is table name and second value is alias
+     * @return Select
+     */
     public static function select($table_name)
     {
         return new QueryBuilders\Select($table_name, self::$adapter);
     }
 
+    /**
+     * @param string|string[] $table_name Table name as string or array
+     *  where first value is table name and second value is alias
+     * @return Insert
+     */
     public static function insert($table_name)
     {
         return new QueryBuilders\Insert($table_name, self::$adapter);
     }
 
+    /**
+     * @param string|string[] $table_name Table name as string or array
+     *  where first value is table name and second value is alias
+     * @return Update
+     */
     public static function update($table_name)
     {
         return new QueryBuilders\Update($table_name, self::$adapter);
     }
 
+    /**
+     * @param string|string[] $table_name Table name as string or array
+     *  where first value is table name and second value is alias
+     * @return Delete
+     */
     public static function delete($table_name)
     {
         return new QueryBuilders\Delete($table_name, self::$adapter);

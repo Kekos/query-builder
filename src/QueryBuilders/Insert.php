@@ -17,6 +17,11 @@ class Insert extends VerbBase
 {
     private $values = [];
 
+	/**
+	 * @param array $values Column name as array key
+	 * @return Insert
+	 * @throws QueryBuilderException
+	 */
     public function values($values)
     {
         if (!is_array($values)) {

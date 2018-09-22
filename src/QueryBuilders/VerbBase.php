@@ -15,6 +15,7 @@ use QueryBuilder\AdapterInterface;
 abstract class VerbBase
 {
     protected $adapter;
+    /** @var Raw|string|string[] */
     protected $table_name;
 
     /**
@@ -24,7 +25,12 @@ abstract class VerbBase
      */
     public function __construct($table_name, AdapterInterface $adapter)
     {
-        $this->table_name = $table_name;
+        if (is_array($table_name) && isset($table_name['sql'], $table_name['params'])) {
+            $this->table_name = new Raw($table_name['sql'], $table_name['params']);
+        } else {
+            $this->table_name = $table_name;
+        }
+
         $this->adapter = $adapter;
     }
 

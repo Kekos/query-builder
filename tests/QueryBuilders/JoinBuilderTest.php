@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace QueryBuilder\Tests\QueryBuilders;
 
+use RuntimeException;
 use PHPUnit\Framework\TestCase;
 use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilders\JoinBuilder;
@@ -34,7 +35,13 @@ class JoinBuilderTest extends TestCase
     public function testMethodsReturnsSameInstance(): void
     {
         foreach (self::$methods as $method) {
-            $return_val = call_user_func([$this->join_instance, $method], 1, 2, 3, 4);
+            $callable = [$this->join_instance, $method];
+
+            if (!is_callable($callable)) {
+                throw new RuntimeException($method . '() is not callable on ' . JoinBuilder::class);
+            }
+
+            $return_val = call_user_func($callable, 1, 2, 3, 4);
             $this->assertEquals($this->join_instance, $return_val);
         }
     }

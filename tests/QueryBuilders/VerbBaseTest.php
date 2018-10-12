@@ -36,6 +36,7 @@ class VerbBaseTest extends TestCase
 
     public function testAliasReplace(): void
     {
+        /** @var VerbBase $verb_base */
         $verb_base = $this->getMockForAbstractClass(
             'QueryBuilder\\QueryBuilders\\VerbBase',
             [

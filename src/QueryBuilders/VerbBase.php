@@ -18,7 +18,7 @@ abstract class VerbBase
     protected $table_name;
 
     /**
-     * @param string|string[] $table_name Table name as string or array
+     * @param string|string[]|Raw|Raw[] $table_name Table name as string or array
      *  where first value is table name and second value is alias
      * @param AdapterInterface $adapter
      */

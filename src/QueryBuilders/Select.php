@@ -28,7 +28,7 @@ class Select extends CriteriaBase
     /**
      * Adds columns to select
      *
-     * @param string|string[] $columns Single column as string or multiple
+     * @param string|string[]|Raw|Raw[] $columns Single column as string or multiple
      *  columns in array. Set column alias as array key.
      * @return Select
      */
@@ -45,7 +45,7 @@ class Select extends CriteriaBase
 
     /**
      * @param string|string[] $table
-     * @param string|Closure $key
+     * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
      * @param string $join_type
@@ -68,7 +68,7 @@ class Select extends CriteriaBase
 
     /**
      * @param string|string[] $table
-     * @param string|Closure $key
+     * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
      * @return Select
@@ -81,7 +81,7 @@ class Select extends CriteriaBase
 
     /**
      * @param string|string[] $table
-     * @param string|Closure $key
+     * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
      * @return Select
@@ -94,7 +94,7 @@ class Select extends CriteriaBase
 
     /**
      * @param string|string[] $table
-     * @param string|Closure $key
+     * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
      * @return Select
@@ -107,7 +107,7 @@ class Select extends CriteriaBase
 
     /**
      * @param string|string[] $table
-     * @param string|Closure $key
+     * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
      * @return Select

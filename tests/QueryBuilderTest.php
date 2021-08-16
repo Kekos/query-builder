@@ -12,7 +12,7 @@ class QueryBuilderTest extends TestCase
         $adapter = new MySqlAdapter();
         QueryBuilder::setAdapter($adapter);
 
-        $this->assertAttributeEquals($adapter, 'adapter', 'QueryBuilder\\QueryBuilder');
+        $this->assertEquals($adapter, QueryBuilder::getAdapter());
     }
 
     public function testSelect()

@@ -54,8 +54,8 @@ class QueryBuilderTest extends TestCase
         $return = QueryBuilder::raw($sql, $params);
 
         $this->assertInstanceOf('QueryBuilder\\QueryBuilders\\Raw', $return);
-        $this->assertAttributeEquals($sql, 'sql', $return);
-        $this->assertAttributeEquals($params, 'params', $return);
+        $this->assertEquals($sql, (string) $return);
+        $this->assertEquals($params, $return->getParams());
     }
 
     public function testSanitizeFieldStar()

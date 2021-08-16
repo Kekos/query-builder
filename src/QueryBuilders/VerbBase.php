@@ -37,6 +37,14 @@ abstract class VerbBase
     }
 
     /**
+     * @return string|Raw|array{0: string|Raw, 1: string}
+     */
+    public function getTableName()
+    {
+        return $this->table_name;
+    }
+
+    /**
      * @param string $alias New table alias
      * @return self
      */
@@ -49,6 +57,15 @@ abstract class VerbBase
         }
 
         return $this;
+    }
+
+    public function getAlias(): ?string
+    {
+        if (!is_array($this->table_name)) {
+            return null;
+        }
+
+        return $this->table_name[1];
     }
 
     abstract public function toSql(): Raw;

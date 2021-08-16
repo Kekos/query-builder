@@ -19,7 +19,7 @@ class VerbBaseTest extends TestCase
         parent::setUp();
 
         $this->verb_base = $this->getMockForAbstractClass(
-            'QueryBuilder\\QueryBuilders\\VerbBase',
+            VerbBase::class,
             [
                 'test',
                 new MySqlAdapter(),
@@ -35,14 +35,15 @@ class VerbBaseTest extends TestCase
     public function testAlias(): void
     {
         $this->verb_base->alias('alias');
-        $this->assertAttributeEquals(['test', 'alias'], 'table_name', $this->verb_base);
+        $this->assertEquals(['test', 'alias'], $this->verb_base->getTableName());
+        $this->assertEquals('alias', $this->verb_base->getAlias());
     }
 
     public function testAliasReplace(): void
     {
         /** @var VerbBase&MockObject $verb_base */
         $verb_base = $this->getMockForAbstractClass(
-            'QueryBuilder\\QueryBuilders\\VerbBase',
+            VerbBase::class,
             [
                 ['test', 'foo'],
                 new MySqlAdapter(),
@@ -50,6 +51,7 @@ class VerbBaseTest extends TestCase
         );
 
         $verb_base->alias('alias');
-        $this->assertAttributeEquals(['test', 'alias'], 'table_name', $verb_base);
+        $this->assertEquals(['test', 'alias'], $verb_base->getTableName());
+        $this->assertEquals('alias', $verb_base->getAlias());
     }
 }

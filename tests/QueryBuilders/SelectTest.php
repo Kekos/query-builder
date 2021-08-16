@@ -21,43 +21,43 @@ class SelectTest extends TestCase
     public function testColumnsSingle()
     {
         $this->select->columns('foo');
-        $this->assertAttributeEquals(['foo'], 'columns', $this->select);
+        $this->assertEquals(['foo'], $this->select->getColumns());
     }
 
     public function testColumnsMulti()
     {
         $this->select->columns(['foo', 'bar']);
-        $this->assertAttributeEquals(['foo', 'bar'], 'columns', $this->select);
+        $this->assertEquals(['foo', 'bar'], $this->select->getColumns());
     }
 
     public function testColumnsAlias()
     {
         $this->select->columns(['x' => 'foo']);
-        $this->assertAttributeEquals(['x' => 'foo'], 'columns', $this->select);
+        $this->assertEquals(['x' => 'foo'], $this->select->getColumns());
     }
 
     public function testGroupbySingle()
     {
         $this->select->groupby('foo');
-        $this->assertAttributeEquals(['`foo`'], 'group_by', $this->select);
+        $this->assertEquals(['`foo`'], $this->select->getGroupBy());
     }
 
     public function testGroupbyMulti()
     {
         $this->select->groupby(['foo', 'bar']);
-        $this->assertAttributeEquals(['`foo`', '`bar`'], 'group_by', $this->select);
+        $this->assertEquals(['`foo`', '`bar`'], $this->select->getGroupBy());
     }
 
     public function testOrderbySingle()
     {
         $this->select->orderby('foo');
-        $this->assertAttributeEquals(['`foo` ASC'], 'order_by', $this->select);
+        $this->assertEquals(['`foo` ASC'], $this->select->getOrderBy());
     }
 
     public function testOrderbySingleDir()
     {
         $this->select->orderby('foo', 'DESC');
-        $this->assertAttributeEquals(['`foo` DESC'], 'order_by', $this->select);
+        $this->assertEquals(['`foo` DESC'], $this->select->getOrderBy());
     }
 
     public function testOrderbyInvalidDirThrows()
@@ -69,19 +69,19 @@ class SelectTest extends TestCase
     public function testOrderbyMulti()
     {
         $this->select->orderby(['foo', 'bar' => 'DESC']);
-        $this->assertAttributeEquals(['`foo` ASC', '`bar` DESC'], 'order_by', $this->select);
+        $this->assertEquals(['`foo` ASC', '`bar` DESC'], $this->select->getOrderBy());
     }
 
     public function testLimit()
     {
         $this->select->limit(10);
-        $this->assertAttributeEquals(10, 'limit_row_count', $this->select);
+        $this->assertEquals(10, $this->select->getLimitRowCount());
     }
 
     public function testLimitOffset()
     {
         $this->select->limit(10, 20);
-        $this->assertAttributeEquals(20, 'limit_offset', $this->select);
+        $this->assertEquals(20, $this->select->getLimitOffset());
     }
 
     public function testLimitInvalidThrows()

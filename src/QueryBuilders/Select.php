@@ -44,6 +44,14 @@ class Select extends CriteriaBase
     }
 
     /**
+     * @return array<string, string>|string[]
+     */
+    public function getColumns()
+    {
+        return $this->columns;
+    }
+
+    /**
      * @param string|string[] $table
      * @param string|Closure $key
      * @param string|null $operator
@@ -136,6 +144,14 @@ class Select extends CriteriaBase
     }
 
     /**
+     * @return string[]
+     */
+    public function getGroupBy()
+    {
+        return $this->group_by;
+    }
+
+    /**
      * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
@@ -217,6 +233,14 @@ class Select extends CriteriaBase
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getOrderBy()
+    {
+        return $this->order_by;
+    }
+
 	/**
 	 * @param int $row_count
 	 * @param int|null $offset
@@ -236,6 +260,22 @@ class Select extends CriteriaBase
         }
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLimitOffset()
+    {
+        return $this->limit_offset;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLimitRowCount()
+    {
+        return $this->limit_row_count;
     }
 
     private function sanitizeField($field)

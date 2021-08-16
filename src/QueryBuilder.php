@@ -30,6 +30,11 @@ class QueryBuilder
         self::$adapter = $adapter;
     }
 
+    public static function getAdapter(): AdapterInterface
+    {
+        return self::$adapter;
+    }
+
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias

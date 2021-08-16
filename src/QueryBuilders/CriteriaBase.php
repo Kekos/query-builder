@@ -64,4 +64,12 @@ abstract class CriteriaBase extends VerbBase
         $this->where($key, $operator, $value, 'OR NOT');
         return $this;
     }
+
+    /**
+     * @return array[]
+     */
+    public function getWhere()
+    {
+        return $this->where;
+    }
 }

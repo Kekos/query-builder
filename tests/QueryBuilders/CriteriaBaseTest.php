@@ -61,7 +61,7 @@ class CriteriaBaseTest extends TestCase
 
         $this->criteria_instance->where($key, $operator, $value, $joiner);
 
-        $this->assertAttributeEquals([$expected], 'where', $this->criteria_instance);
+        $this->assertEquals([$expected], $this->criteria_instance->getWhere());
     }
 
     public function testWhereNotAddsCriteria(): void
@@ -76,7 +76,7 @@ class CriteriaBaseTest extends TestCase
 
         $expected['joiner'] = 'AND NOT';
 
-        $this->assertAttributeEquals([$expected], 'where', $this->criteria_instance);
+        $this->assertEquals([$expected], $this->criteria_instance->getWhere());
     }
 
     public function testWhereOrAddsCriteria(): void
@@ -91,7 +91,7 @@ class CriteriaBaseTest extends TestCase
 
         $expected['joiner'] = 'OR';
 
-        $this->assertAttributeEquals([$expected], 'where', $this->criteria_instance);
+        $this->assertEquals([$expected], $this->criteria_instance->getWhere());
     }
 
     public function testWhereOrNotAddsCriteria(): void
@@ -106,6 +106,6 @@ class CriteriaBaseTest extends TestCase
 
         $expected['joiner'] = 'OR NOT';
 
-        $this->assertAttributeEquals([$expected], 'where', $this->criteria_instance);
+        $this->assertEquals([$expected], $this->criteria_instance->getWhere());
     }
 }

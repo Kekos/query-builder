@@ -6,16 +6,6 @@ use QueryBuilder\QueryBuilders\Raw;
 
 class RawTest extends TestCase
 {
-    public function testConstructor()
-    {
-        $sql = 'SELECT';
-        $params = [42];
-
-        $raw = new Raw($sql, $params);
-
-        $this->assertAttributeEquals($sql, 'sql', $raw);
-    }
-
     public function testGetParams()
     {
         $sql = 'SELECT';

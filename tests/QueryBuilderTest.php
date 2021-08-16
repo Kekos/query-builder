@@ -20,7 +20,7 @@ class QueryBuilderTest extends TestCase
         $return = QueryBuilder::select('foo');
 
         $this->assertInstanceOf('QueryBuilder\\QueryBuilders\\Select', $return);
-        $this->assertAttributeEquals('foo', 'table_name', $return);
+        $this->assertEquals('foo', $return->getTableName());
     }
 
     public function testInsert()
@@ -28,7 +28,7 @@ class QueryBuilderTest extends TestCase
         $return = QueryBuilder::insert('foo');
 
         $this->assertInstanceOf('QueryBuilder\\QueryBuilders\\Insert', $return);
-        $this->assertAttributeEquals('foo', 'table_name', $return);
+        $this->assertEquals('foo', $return->getTableName());
     }
 
     public function testUpdate()
@@ -36,7 +36,7 @@ class QueryBuilderTest extends TestCase
         $return = QueryBuilder::update('foo');
 
         $this->assertInstanceOf('QueryBuilder\\QueryBuilders\\Update', $return);
-        $this->assertAttributeEquals('foo', 'table_name', $return);
+        $this->assertEquals('foo', $return->getTableName());
     }
 
     public function testDelete()
@@ -44,7 +44,7 @@ class QueryBuilderTest extends TestCase
         $return = QueryBuilder::delete('foo');
 
         $this->assertInstanceOf('QueryBuilder\\QueryBuilders\\Delete', $return);
-        $this->assertAttributeEquals('foo', 'table_name', $return);
+        $this->assertEquals('foo', $return->getTableName());
     }
 
     public function testRaw()

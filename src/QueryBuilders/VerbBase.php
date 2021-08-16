@@ -35,6 +35,14 @@ abstract class VerbBase
     }
 
     /**
+     * @return Raw|string|string[]
+     */
+    public function getTableName()
+    {
+        return $this->table_name;
+    }
+
+    /**
      * @param string $alias New table alias
      * @return VerbBase
      */
@@ -47,5 +55,17 @@ abstract class VerbBase
         }
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAlias()
+    {
+        if (!is_array($this->table_name) || !isset($this->table_name[1])) {
+            return null;
+        }
+
+        return $this->table_name[1];
     }
 }

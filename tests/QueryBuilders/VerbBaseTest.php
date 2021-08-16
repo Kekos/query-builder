@@ -31,11 +31,13 @@ class VerbBaseTest extends TestCase
     public function testAlias()
     {
         $this->verb_base->alias('alias');
-        $this->assertAttributeEquals(['test', 'alias'], 'table_name', $this->verb_base);
+        $this->assertEquals(['test', 'alias'], $this->verb_base->getTableName());
+        $this->assertEquals('alias', $this->verb_base->getAlias());
     }
 
     public function testAliasReplace()
     {
+        /** @var VerbBase $verb_base */
         $verb_base = $this->getMockForAbstractClass(
             'QueryBuilder\\QueryBuilders\\VerbBase',
             [
@@ -45,6 +47,7 @@ class VerbBaseTest extends TestCase
         );
 
         $verb_base->alias('alias');
-        $this->assertAttributeEquals(['test', 'alias'], 'table_name', $verb_base);
+        $this->assertEquals(['test', 'alias'], $verb_base->getTableName());
+        $this->assertEquals('alias', $verb_base->getAlias());
     }
 }

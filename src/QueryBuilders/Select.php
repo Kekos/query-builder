@@ -71,6 +71,14 @@ class Select extends CriteriaBase
     }
 
     /**
+     * @return array<int|string, string|Raw>
+     */
+    public function getColumns(): array
+    {
+        return $this->columns;
+    }
+
+    /**
      * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
      * @param mixed|null $value
@@ -157,6 +165,14 @@ class Select extends CriteriaBase
     }
 
     /**
+     * @return array<int, string|Raw>
+     */
+    public function getGroupBy(): array
+    {
+        return $this->group_by;
+    }
+
+    /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
      * @return self
@@ -233,6 +249,14 @@ class Select extends CriteriaBase
         return $this;
     }
 
+    /**
+     * @return array<int, string>
+     */
+    public function getOrderBy(): array
+    {
+        return $this->order_by;
+    }
+
     public function limit(int $row_count, ?int $offset = null): self
     {
         $this->limit_row_count = $row_count;
@@ -242,6 +266,16 @@ class Select extends CriteriaBase
         }
 
         return $this;
+    }
+
+    public function getLimitOffset(): ?int
+    {
+        return $this->limit_offset;
+    }
+
+    public function getLimitRowCount(): ?int
+    {
+        return $this->limit_row_count;
     }
 
     /**

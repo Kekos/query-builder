@@ -86,4 +86,24 @@ class CriteriaBaseTest extends TestCase
 
         $this->assertEquals([$expected], $this->criteria_instance->getWhere());
     }
+
+    public function testSetWhereReplaces()
+    {
+        $expected = [self::$base_expected];
+        $expected[0]['joiner'] = 'AND';
+
+        $this->criteria_instance->where('id', '=', 1);
+        $this->criteria_instance->setWhere($expected);
+
+        $this->assertEquals($expected, $this->criteria_instance->getWhere());
+    }
+
+    public function testSetWhereThrowsOnInvalidArrayShape()
+    {
+        $this->expectExceptionMessage('Missing at least one of four required keys in criterion array');
+
+        $this->criteria_instance->setWhere([[
+            'foo' => 'bar',
+        ]]);
+    }
 }

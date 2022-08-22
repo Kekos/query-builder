@@ -11,6 +11,7 @@
 namespace QueryBuilder\QueryBuilders;
 
 use Closure;
+use QueryBuilder\QueryBuilderException;
 
 abstract class CriteriaBase extends VerbBase
 {
@@ -71,5 +72,19 @@ abstract class CriteriaBase extends VerbBase
     public function getWhere()
     {
         return $this->where;
+    }
+
+    public function setWhere(array $criteria)
+    {
+        foreach ($criteria as $criterion) {
+            if (!isset($criterion['key'], $criterion['operator'], $criterion['value'], $criterion['joiner'])) {
+                throw new QueryBuilderException(sprintf(
+                    'Missing at least one of four required keys in criterion array: %s',
+                    substr(print_r($criterion, true), 7, -2) // Quick and dirty way to ignore the "Array(" prefix and ")" suffix
+                ));
+            }
+        }
+
+        $this->where = $criteria;
     }
 }

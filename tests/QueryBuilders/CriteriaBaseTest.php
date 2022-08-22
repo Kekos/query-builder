@@ -108,4 +108,47 @@ class CriteriaBaseTest extends TestCase
 
         $this->assertEquals([$expected], $this->criteria_instance->getWhere());
     }
+
+    public function testSetWhereReplaces(): void
+    {
+        $expected = [
+            [
+                'key' => 'foo',
+                'operator' => 'bar',
+                'value' => 'baz',
+                'joiner' => 'AND',
+            ],
+        ];
+
+        $this->criteria_instance->where('id', '=', 1);
+        $this->criteria_instance->setWhere($expected);
+
+        $this->assertEquals($expected, $this->criteria_instance->getWhere());
+    }
+
+    public function testSetWhereThrowsOnInvalidArrayShape(): void
+    {
+        $this->expectExceptionMessage('Missing the required key `key` in criterion array index 0:');
+
+        // @phpstan-ignore argument.type
+        $this->criteria_instance->setWhere([[
+            'foo' => 'bar',
+        ]]);
+    }
+
+    public function testSetWhereThrowsOnInvalidArrayShapeAllowNull(): void
+    {
+        $expected = [
+            [
+                'key' => 'id',
+                'operator' => '=',
+                'value' => null,
+                'joiner' => 'AND',
+            ]
+        ];
+
+        $this->criteria_instance->setWhere($expected);
+
+        $this->assertEquals($expected, $this->criteria_instance->getWhere());
+    }
 }

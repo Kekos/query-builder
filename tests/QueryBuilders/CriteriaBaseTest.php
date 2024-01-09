@@ -100,10 +100,26 @@ class CriteriaBaseTest extends TestCase
 
     public function testSetWhereThrowsOnInvalidArrayShape()
     {
-        $this->expectExceptionMessage('Missing at least one of four required keys in criterion array');
+        $this->expectExceptionMessage('Missing the required key `key` in criterion array index 0:');
 
         $this->criteria_instance->setWhere([[
             'foo' => 'bar',
         ]]);
+    }
+
+    public function testSetWhereThrowsOnInvalidArrayShapeAllowNull()
+    {
+        $expected = [
+            [
+                'key' => 'id',
+                'operator' => '=',
+                'value' => null,
+                'joiner' => 'AND',
+            ]
+        ];
+
+        $this->criteria_instance->setWhere($expected);
+
+        $this->assertEquals($expected, $this->criteria_instance->getWhere());
     }
 }

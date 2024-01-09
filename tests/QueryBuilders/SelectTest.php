@@ -36,6 +36,25 @@ class SelectTest extends TestCase
         $this->assertEquals(['x' => 'foo'], $this->select->getColumns());
     }
 
+    public function testSetColumnsReplaces()
+    {
+        $expected = ['id' => 'foo'];
+        $this->select->columns(['x' => 'foo']);
+
+        $this->select->setColumns($expected);
+
+        $this->assertEquals($expected, $this->select->getColumns());
+    }
+
+    public function testSetJoinsReplaces()
+    {
+        $this->select->join('t', 'id', '=', 'id');
+
+        $this->select->setJoins([]);
+
+        $this->assertEmpty($this->select->getJoins());
+    }
+
     public function testGroupbySingle()
     {
         $this->select->groupby('foo');

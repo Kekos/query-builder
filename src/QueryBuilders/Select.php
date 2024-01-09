@@ -16,6 +16,7 @@ use QueryBuilder\QueryBuilderException;
 
 class Select extends CriteriaBase
 {
+    /** @var array<string, string>|string[] */
     private $columns = [];
     /** @var JoinBuilder[] */
     private $joins = [];
@@ -52,6 +53,13 @@ class Select extends CriteriaBase
     }
 
     /**
+     * @param array<string,string>|string[] $columns
+     */
+    public function setColumns(array $columns) {
+        $this->columns = $columns;
+    }
+
+    /**
      * @param string|string[] $table
      * @param string|Closure $key
      * @param string|null $operator
@@ -72,6 +80,21 @@ class Select extends CriteriaBase
 
         $this->joins[] = $join_builder;
         return $this;
+    }
+
+    /**
+     * @return JoinBuilder[]
+     */
+    public function getJoins()
+    {
+        return $this->joins;
+    }
+
+    /**
+     * @param JoinBuilder[] $joins
+     */
+    public function setJoins(array $joins) {
+        $this->joins = $joins;
     }
 
     /**
@@ -241,12 +264,12 @@ class Select extends CriteriaBase
         return $this->order_by;
     }
 
-	/**
-	 * @param int $row_count
-	 * @param int|null $offset
-	 * @return Select
-	 * @throws QueryBuilderException
-	 */
+    /**
+     * @param int $row_count
+     * @param int|null $offset
+     * @return Select
+     * @throws QueryBuilderException
+     */
     public function limit($row_count, $offset = null)
     {
         if (!is_numeric($row_count)) {
@@ -287,11 +310,11 @@ class Select extends CriteriaBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
-	/**
-	 * @param string|Raw $field
-	 * @param array $params
-	 * @return string
-	 */
+    /**
+     * @param string|Raw $field
+     * @param array $params
+     * @return string
+     */
     private function sanitizeFieldParam($field, array &$params)
     {
         if ($field instanceof Raw) {

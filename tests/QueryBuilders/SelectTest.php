@@ -70,6 +70,15 @@ class SelectTest extends TestCase
         $this->assertEquals(['`foo`', '`bar`'], $this->select->getGroupBy());
     }
 
+    public function testSetGroupByReplaces(): void
+    {
+        $this->select->groupby('foo');
+
+        $this->select->setGroupBy([]);
+
+        $this->assertEmpty($this->select->getGroupBy());
+    }
+
     public function testOrderbySingle(): void
     {
         $this->select->orderby('foo');
@@ -92,6 +101,15 @@ class SelectTest extends TestCase
     {
         $this->select->orderby(['foo', 'bar' => 'DESC']);
         $this->assertEquals(['`foo` ASC', '`bar` DESC'], $this->select->getOrderBy());
+    }
+
+    public function testSetOrderByReplaces(): void
+    {
+        $this->select->orderby('foo', 'DESC');
+
+        $this->select->setOrderBy([]);
+
+        $this->assertEmpty($this->select->getOrderBy());
     }
 
     public function testLimit(): void

@@ -197,6 +197,15 @@ class Select extends CriteriaBase
     }
 
     /**
+     * @param string|array<string|Raw> $columns
+     */
+    public function setGroupBy($columns): void
+    {
+        $this->group_by = [];
+        $this->groupby($columns);
+    }
+
+    /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
      * @return self
@@ -241,7 +250,7 @@ class Select extends CriteriaBase
     }
 
     /**
-     * @param string|string[] $columns Single column as string or multiple
+     * @param string|array<string|int, string|Raw> $columns Single column as string or multiple
      *  columns in array. Set column as array key and direction as value.
      * @param 'ASC'|'DESC' $default_dir Default sort direction, standard is "ASC"
      * @return self
@@ -279,6 +288,17 @@ class Select extends CriteriaBase
     public function getOrderBy(): array
     {
         return $this->order_by;
+    }
+
+    /**
+     * @param string|array<string|int, string|Raw> $columns
+     * @param 'ASC'|'DESC' $default_dir
+     * @throws QueryBuilderException
+     */
+    public function setOrderBy($columns, string $default_dir = 'ASC'): void
+    {
+        $this->order_by = [];
+        $this->orderby($columns, $default_dir);
     }
 
     public function limit(int $row_count, ?int $offset = null): self

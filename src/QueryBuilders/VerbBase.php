@@ -14,6 +14,7 @@ use QueryBuilder\AdapterInterface;
 
 abstract class VerbBase
 {
+    /** @var AdapterInterface */
     protected $adapter;
     /** @var Raw|string|string[] */
     protected $table_name;
@@ -68,4 +69,9 @@ abstract class VerbBase
 
         return $this->table_name[1];
     }
+
+    /**
+     * @return array{sql: string, params: array<int, scalar>}
+     */
+    abstract public function toSql();
 }

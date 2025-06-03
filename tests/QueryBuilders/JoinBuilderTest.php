@@ -103,4 +103,27 @@ class JoinBuilderTest extends TestCase
 
         $this->assertEquals($expected, $this->join_instance->toSql());
     }
+
+    public function testToSqlOnRawSubSelect()
+    {
+        $expected = [
+            'sql' => 'INNER JOIN (SELECT * FROM `bar_join` WHERE `id` = ?) AS `foo_join` ON `bar` = ?',
+            'params' => [
+                2,
+                42,
+            ],
+        ];
+
+        $join_instance = new JoinBuilder(
+            new MySqlAdapter(),
+            [],
+            new Raw('(SELECT * FROM `bar_join` WHERE `id` = ?) AS `foo_join`', [2]),
+            self::$join_type
+        );
+        $join_instance
+            ->on('bar', '=', 42)
+        ;
+
+        $this->assertEquals($expected, $join_instance->toSql());
+    }
 }

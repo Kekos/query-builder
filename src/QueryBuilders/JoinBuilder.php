@@ -62,8 +62,8 @@ class JoinBuilder extends CriteriaBuilder
             $table = $this->sanitizeField($table) . " AS " . $this->sanitizeField($alias);
         } else {
             if ($this->table instanceof Raw) {
-                $table = (string)$this->table;
-                $params = array_merge($params, $this->table->getParams());
+                $table = (string) $this->table;
+                $params = array_merge($this->table->getParams(), $params);
             } else {
                 $table = $this->sanitizeField($this->table);
             }

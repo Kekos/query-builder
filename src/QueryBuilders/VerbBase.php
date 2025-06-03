@@ -45,7 +45,7 @@ abstract class VerbBase
 
     /**
      * @param string $alias New table alias
-     * @return VerbBase
+     * @return static
      */
     public function alias($alias)
     {

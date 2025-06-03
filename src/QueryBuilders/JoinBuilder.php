@@ -53,9 +53,10 @@ class JoinBuilder extends CriteriaBuilder
 
     public function toSql()
     {
+        $parent_sql = parent::toSql();
         /** @var string $sql */
         /** @var array $params */
-        extract(parent::toSql());
+        extract($parent_sql);
 
         if (is_array($this->table)) {
             list($table, $alias) = $this->table;

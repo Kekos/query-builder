@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -57,11 +59,11 @@ class JoinBuilder extends CriteriaBuilder
         $params = $upstream_sql->getParams();
 
         if (is_array($this->table)) {
-            list($table, $alias) = $this->table;
+            [$table, $alias] = $this->table;
             $table = $this->sanitizeField($table) . " AS " . $this->sanitizeField($alias);
         } else {
             if ($this->table instanceof Raw) {
-                $table = (string)$this->table;
+                $table = (string) $this->table;
                 $params = array_merge($params, $this->table->getParams());
             } else {
                 $table = $this->sanitizeField($this->table);

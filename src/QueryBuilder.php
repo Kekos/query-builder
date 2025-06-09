@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -21,9 +23,7 @@ class QueryBuilder
     /** @var AdapterInterface */
     private static $adapter;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function setAdapter(AdapterInterface $adapter): void
     {

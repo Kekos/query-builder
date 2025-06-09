@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -77,7 +79,7 @@ class CriteriaBuilder
     protected function sanitizeField($field)
     {
         if ($field instanceof Raw) {
-            return (string)$field;
+            return (string) $field;
         } else {
             if ($field instanceof Closure) {
                 return $field;

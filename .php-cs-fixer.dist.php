@@ -5,7 +5,7 @@ $finder = (new PhpCsFixer\Finder())
 
 return (new PhpCsFixer\Config())
     ->setRules([
-        '@PSR2' => true,
+        '@PER-CS' => true,
         '@PHP70Migration' => true,
         '@PHP71Migration' => true,
         '@PHP70Migration:risky' => true,

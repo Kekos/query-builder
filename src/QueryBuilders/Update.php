@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -31,7 +33,7 @@ class Update extends CriteriaBase
     private function sanitizeField($field): string
     {
         if ($field instanceof Raw) {
-            return (string)$field;
+            return (string) $field;
         }
 
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
@@ -45,7 +47,7 @@ class Update extends CriteriaBase
 
         // Table name
         if (is_array($this->table_name)) {
-            list($table_name, $alias) = $this->table_name;
+            [$table_name, $alias] = $this->table_name;
             $sql .= $this->sanitizeField($table_name) . " AS " . $this->sanitizeField($alias);
         } else {
             $sql .= $this->sanitizeField($this->table_name);

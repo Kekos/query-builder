@@ -9,7 +9,7 @@ QB::setAdapter(new QueryBuilder\MySqlAdapter());
 $result = QB::insert('user')
     ->values([
         'username' => 'Kekos',
-        'firstname' => 'Christoffer'
+        'firstname' => 'Christoffer',
     ])
     ->toSql();
 

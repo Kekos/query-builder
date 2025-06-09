@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * QueryBuilder for PHP
  *
@@ -10,6 +12,4 @@
 
 namespace QueryBuilder;
 
-class QueryBuilderException extends \Exception
-{
-}
+class QueryBuilderException extends \Exception {}

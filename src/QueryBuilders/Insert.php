@@ -13,15 +13,17 @@ declare(strict_types=1);
 namespace QueryBuilder\QueryBuilders;
 
 use QueryBuilder\QueryBuilder;
-use QueryBuilder\QueryBuilderException;
 
 class Insert extends VerbBase
 {
+    /**
+     * @var array<string, ?scalar>
+     */
     private $values = [];
 
     /**
-     * @param array $values Column name as array key
-     * @return Insert
+     * @param array<string, ?scalar> $values Column name as array key
+     * @return self
      */
     public function values(array $values): self
     {
@@ -30,7 +32,10 @@ class Insert extends VerbBase
         return $this;
     }
 
-    private function sanitizeField($field)
+    /**
+     * @param string|Raw $field
+     */
+    private function sanitizeField($field): string
     {
         if ($field instanceof Raw) {
             return (string) $field;

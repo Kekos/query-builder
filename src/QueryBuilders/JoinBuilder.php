@@ -17,9 +17,24 @@ use QueryBuilder\AdapterInterface;
 
 class JoinBuilder extends CriteriaBuilder
 {
+    /**
+     * @var string|Raw|array{0: string, 1: string}
+     */
     protected $table;
+    /**
+     * @var string
+     */
     protected $join_type;
 
+    /**
+     * @param array<int, array{
+     *        key: string|Closure|Raw,
+     *        operator: ?string,
+     *        value: ?mixed,
+     *        joiner: string,
+     *    }> $statements
+     * @param string|Raw|array{0: string, 1: string} $table
+     */
     public function __construct(AdapterInterface $adapter, array $statements, $table, string $join_type)
     {
         parent::__construct($adapter, $statements);
@@ -30,12 +45,10 @@ class JoinBuilder extends CriteriaBuilder
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @param string $joiner
-     * @return static
+     * @return $this
      */
-    public function on($key, $operator = null, $value = null, $joiner = 'AND'): self
+    public function on($key, ?string $operator = null, $value = null, string $joiner = 'AND'): self
     {
         $this->where($key, $operator, $value, $joiner);
         return $this;
@@ -43,11 +56,10 @@ class JoinBuilder extends CriteriaBuilder
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return static
+     * @return $this
      */
-    public function onOr($key, $operator = null, $value = null): self
+    public function onOr($key, ?string $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
         return $this;
@@ -61,13 +73,11 @@ class JoinBuilder extends CriteriaBuilder
         if (is_array($this->table)) {
             [$table, $alias] = $this->table;
             $table = $this->sanitizeField($table) . " AS " . $this->sanitizeField($alias);
+        } elseif ($this->table instanceof Raw) {
+            $table = (string) $this->table;
+            $params = array_merge($params, $this->table->getParams());
         } else {
-            if ($this->table instanceof Raw) {
-                $table = (string) $this->table;
-                $params = array_merge($params, $this->table->getParams());
-            } else {
-                $table = $this->sanitizeField($this->table);
-            }
+            $table = $this->sanitizeField($this->table);
         }
 
         $sql = $this->join_type . " JOIN " . $table . " ON " . $upstream_sql;

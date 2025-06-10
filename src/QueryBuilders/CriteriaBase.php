@@ -16,16 +16,22 @@ use Closure;
 
 abstract class CriteriaBase extends VerbBase
 {
+    /**
+     * @var array<int, array{
+     *     key: string|Closure|Raw,
+     *     operator: ?string,
+     *     value: ?mixed,
+     *     joiner: string,
+     * }>
+     */
     protected $where = [];
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @param string $joiner
      * @return static
      */
-    public function where($key, $operator = null, $value = null, $joiner = 'AND'): self
+    public function where($key, ?string $operator = null, $value = null, string $joiner = 'AND'): self
     {
         $this->where[] = compact('key', 'operator', 'value', 'joiner');
         return $this;
@@ -33,11 +39,10 @@ abstract class CriteriaBase extends VerbBase
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
      * @return static
      */
-    public function whereNot($key, $operator = null, $value = null): self
+    public function whereNot($key, ?string $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'AND NOT');
         return $this;
@@ -45,11 +50,10 @@ abstract class CriteriaBase extends VerbBase
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
      * @return static
      */
-    public function whereOr($key, $operator = null, $value = null): self
+    public function whereOr($key, ?string $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
         return $this;
@@ -57,11 +61,10 @@ abstract class CriteriaBase extends VerbBase
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
      * @return static
      */
-    public function whereOrNot($key, $operator = null, $value = null): self
+    public function whereOrNot($key, ?string $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR NOT');
         return $this;

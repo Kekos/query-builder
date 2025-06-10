@@ -31,7 +31,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string|string[] $table_name Table name as string or array
+     * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
      * @return Select
      */
@@ -41,7 +41,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string|string[] $table_name Table name as string or array
+     * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
      * @return Insert
      */
@@ -51,7 +51,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string|string[] $table_name Table name as string or array
+     * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
      * @return Update
      */
@@ -61,7 +61,7 @@ class QueryBuilder
     }
 
     /**
-     * @param string|string[] $table_name Table name as string or array
+     * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
      * @return Delete
      */
@@ -70,27 +70,26 @@ class QueryBuilder
         return new Delete($table_name, self::$adapter);
     }
 
+    /**
+     * @param scalar[] $params
+     */
     public static function raw(string $sql, array $params = []): Raw
     {
         return new Raw($sql, $params);
     }
 
-    public static function sanitizeField($field, string $sanitizer)
+    public static function sanitizeField(string $field, string $sanitizer): string
     {
-        if (is_string($field)) {
-            $field_parts = explode('.', $field);
+        $field_parts = explode('.', $field);
 
-            $field_parts = array_map(function (string $field) use ($sanitizer): string {
-                if ($field === '*') {
-                    return $field;
-                }
+        $field_parts = array_map(function (string $field) use ($sanitizer): string {
+            if ($field === '*') {
+                return $field;
+            }
 
-                return $sanitizer . $field . $sanitizer;
-            }, $field_parts);
+            return $sanitizer . $field . $sanitizer;
+        }, $field_parts);
 
-            return implode('.', $field_parts);
-        }
-
-        return $field;
+        return implode('.', $field_parts);
     }
 }

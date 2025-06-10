@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace QueryBuilder\Tests\QueryBuilders;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilders\VerbBase;
@@ -39,7 +40,7 @@ class VerbBaseTest extends TestCase
 
     public function testAliasReplace(): void
     {
-        /** @var VerbBase $verb_base */
+        /** @var VerbBase&MockObject $verb_base */
         $verb_base = $this->getMockForAbstractClass(
             'QueryBuilder\\QueryBuilders\\VerbBase',
             [

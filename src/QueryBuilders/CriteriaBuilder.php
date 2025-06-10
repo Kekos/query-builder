@@ -18,9 +18,28 @@ use QueryBuilder\QueryBuilder;
 
 class CriteriaBuilder
 {
+    /**
+     * @var array<int, array{
+     *      key: string|Closure|Raw,
+     *      operator: ?string,
+     *      value: ?mixed,
+     *      joiner: string,
+     *  }>
+     */
     protected $statements;
+    /**
+     * @var AdapterInterface
+     */
     protected $adapter;
 
+    /**
+     * @param array<int, array{
+     *       key: string|Closure|Raw,
+     *       operator: ?string,
+     *       value: ?mixed,
+     *       joiner: string,
+     *   }> $statements
+     */
     public function __construct(AdapterInterface $adapter, array $statements = [])
     {
         $this->adapter = $adapter;
@@ -29,12 +48,10 @@ class CriteriaBuilder
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @param string $joiner
-     * @return static
+     * @return $this
      */
-    public function where($key, $operator = null, $value = null, $joiner = 'AND'): self
+    public function where($key, ?string $operator = null, $value = null, string $joiner = 'AND'): self
     {
         $this->statements[] = compact('key', 'operator', 'value', 'joiner');
         return $this;
@@ -42,11 +59,10 @@ class CriteriaBuilder
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return static
+     * @return $this
      */
-    public function whereNot($key, $operator = null, $value = null): self
+    public function whereNot($key, ?string $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'AND NOT');
         return $this;
@@ -54,11 +70,10 @@ class CriteriaBuilder
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return static
+     * @return $this
      */
-    public function whereOr($key, $operator = null, $value = null): self
+    public function whereOr($key, ?string $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
         return $this;
@@ -66,24 +81,27 @@ class CriteriaBuilder
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return static
+     * @return $this
      */
-    public function whereOrNot($key, $operator = null, $value = null): self
+    public function whereOrNot($key, ?string $operator = null, $value = null): self
     {
         $this->where($key, $operator, $value, 'OR NOT');
         return $this;
     }
 
+    /**
+     * @param string|Closure|Raw $field
+     * @return ($field is Closure ? Closure : string)
+     */
     protected function sanitizeField($field)
     {
         if ($field instanceof Raw) {
             return (string) $field;
-        } else {
-            if ($field instanceof Closure) {
-                return $field;
-            }
+        }
+
+        if ($field instanceof Closure) {
+            return $field;
         }
 
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
@@ -98,7 +116,7 @@ class CriteriaBuilder
             $key = $this->sanitizeField($statement['key']);
             $value = $statement['value'];
 
-            if ($value === null && $key instanceof Closure) {
+            if ($key instanceof Closure) {
                 $criteria_builder = new CriteriaBuilder($this->adapter);
                 $key($criteria_builder);
 

@@ -17,11 +17,14 @@ use QueryBuilder\QueryBuilderException;
 
 class Update extends CriteriaBase
 {
+    /**
+     * @var array<string, scalar|Raw|null>
+     */
     private $values = [];
 
     /**
-     * @param array $values Column name as array key
-     * @return Update
+     * @param array<string, scalar|Raw|null> $values Column name as array key
+     * @return self
      */
     public function set(array $values): self
     {
@@ -30,6 +33,9 @@ class Update extends CriteriaBase
         return $this;
     }
 
+    /**
+     * @param string|Raw $field
+     */
     private function sanitizeField($field): string
     {
         if ($field instanceof Raw) {

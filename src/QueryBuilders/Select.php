@@ -18,21 +18,46 @@ use QueryBuilder\QueryBuilderException;
 
 class Select extends CriteriaBase
 {
+    /**
+     * @var array<int|string, string|Raw>
+     */
     private $columns = [];
-    /** @var JoinBuilder[] */
+    /**
+     * @var JoinBuilder[]
+     */
     private $joins = [];
+    /**
+     * @var array<int, string|Raw>
+     */
     private $group_by = [];
+    /**
+     * @var array<int, array{
+     *       key: string|Closure|Raw,
+     *       operator: ?string,
+     *       value: ?mixed,
+     *       joiner: string,
+     *   }>
+     */
     private $having = [];
+    /**
+     * @var array<int, string>
+     */
     private $order_by = [];
-    private $limit_offset = null;
-    private $limit_row_count = null;
+    /**
+     * @var ?int
+     */
+    private $limit_offset;
+    /**
+     * @var ?int
+     */
+    private $limit_row_count;
 
     /**
      * Adds columns to select
      *
-     * @param string|string[]|Raw|Raw[] $columns Single column as string or multiple
+     * @param string|array<string|int, string>|Raw|array<string|int, Raw> $columns Single column as string or multiple
      *  columns in array. Set column alias as array key.
-     * @return Select
+     * @return self
      */
     public function columns($columns): self
     {
@@ -46,14 +71,12 @@ class Select extends CriteriaBase
     }
 
     /**
-     * @param string|string[] $table
+     * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @param string $join_type
-     * @return Select
+     * @return self
      */
-    public function join($table, $key, $operator = null, $value = null, $join_type = 'INNER'): self
+    public function join($table, $key, ?string $operator = null, $value = null, string $join_type = 'INNER'): self
     {
         if (!$key instanceof Closure) {
             $key = function (JoinBuilder $join_builder) use ($key, $operator, $value): void {
@@ -69,60 +92,56 @@ class Select extends CriteriaBase
     }
 
     /**
-     * @param string|string[] $table
+     * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return Select
+     * @return self
      */
-    public function leftJoin($table, $key, $operator = null, $value = null): self
+    public function leftJoin($table, $key, ?string $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'LEFT');
         return $this;
     }
 
     /**
-     * @param string|string[] $table
+     * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return Select
+     * @return self
      */
-    public function rightJoin($table, $key, $operator = null, $value = null): self
+    public function rightJoin($table, $key, ?string $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT');
         return $this;
     }
 
     /**
-     * @param string|string[] $table
+     * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return Select
+     * @return self
      */
-    public function leftOuterJoin($table, $key, $operator = null, $value = null): self
+    public function leftOuterJoin($table, $key, ?string $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'LEFT OUTER');
         return $this;
     }
 
     /**
-     * @param string|string[] $table
+     * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return Select
+     * @return self
      */
-    public function rightOuterJoin($table, $key, $operator = null, $value = null): self
+    public function rightOuterJoin($table, $key, ?string $operator = null, $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT OUTER');
         return $this;
     }
 
     /**
-     * @param string|string[] $columns
-     * @return Select
+     * @param string|array<int, string|Raw> $columns
+     * @return self
      */
     public function groupby($columns): self
     {
@@ -139,12 +158,10 @@ class Select extends CriteriaBase
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @param string $joiner
-     * @return Select
+     * @return self
      */
-    public function having($key, $operator = null, $value = null, $joiner = 'AND'): self
+    public function having($key, ?string $operator = null, $value = null, string $joiner = 'AND'): self
     {
         $this->having[] = compact('key', 'operator', 'value', 'joiner');
         return $this;
@@ -152,11 +169,10 @@ class Select extends CriteriaBase
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return Select
+     * @return self
      */
-    public function havingNot($key, $operator = null, $value = null): self
+    public function havingNot($key, ?string $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'AND NOT');
         return $this;
@@ -164,11 +180,10 @@ class Select extends CriteriaBase
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return Select
+     * @return self
      */
-    public function havingOr($key, $operator = null, $value = null): self
+    public function havingOr($key, ?string $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'OR');
         return $this;
@@ -176,11 +191,10 @@ class Select extends CriteriaBase
 
     /**
      * @param string|Closure|Raw $key
-     * @param string|null $operator
      * @param mixed|null $value
-     * @return Select
+     * @return self
      */
-    public function havingOrNot($key, $operator = null, $value = null): self
+    public function havingOrNot($key, ?string $operator = null, $value = null): self
     {
         $this->having($key, $operator, $value, 'OR NOT');
         return $this;
@@ -189,11 +203,11 @@ class Select extends CriteriaBase
     /**
      * @param string|string[] $columns Single column as string or multiple
      *  columns in array. Set column as array key and direction as value.
-     * @param string $default_dir Default sort direction, standard is "ASC"
-     * @return Select
+     * @param 'ASC'|'DESC' $default_dir Default sort direction, standard is "ASC"
+     * @return self
      * @throws QueryBuilderException
      */
-    public function orderby($columns, $default_dir = 'ASC'): self
+    public function orderby($columns, string $default_dir = 'ASC'): self
     {
         if (!is_array($columns)) {
             $columns = [$columns];
@@ -219,11 +233,6 @@ class Select extends CriteriaBase
         return $this;
     }
 
-    /**
-     * @param int $row_count
-     * @param int|null $offset
-     * @return Select
-     */
     public function limit(int $row_count, ?int $offset = null): self
     {
         $this->limit_row_count = $row_count;
@@ -235,6 +244,9 @@ class Select extends CriteriaBase
         return $this;
     }
 
+    /**
+     * @param string|Raw $field
+     */
     private function sanitizeField($field): string
     {
         if ($field instanceof Raw) {
@@ -244,6 +256,10 @@ class Select extends CriteriaBase
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());
     }
 
+    /**
+     * @param string|Raw $field
+     * @param array<int, ?scalar> $params
+     */
     private function sanitizeFieldParam($field, array &$params): string
     {
         if ($field instanceof Raw) {
@@ -253,7 +269,11 @@ class Select extends CriteriaBase
         return $this->sanitizeField($field);
     }
 
-    private function tableNameToSql($table_name, &$params): string
+    /**
+     * @param string|Raw $table_name
+     * @param array<int, ?scalar> $params
+     */
+    private function tableNameToSql($table_name, array &$params): string
     {
         if ($table_name instanceof Raw) {
             return '(' . $this->sanitizeFieldParam($table_name, $params) . ')';

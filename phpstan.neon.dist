@@ -1,2 +1,9 @@
 includes:
 	- vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+  ignoreErrors:
+    -
+      message: '~Parameter #2 \$default_dir of method QueryBuilder\\QueryBuilders\\Select::orderby\(\) expects~'
+      identifier: argument.type
+      path: tests/QueryBuilders/SelectTest.php

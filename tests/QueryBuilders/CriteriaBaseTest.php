@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace QueryBuilder\Tests\QueryBuilders;
 
-use RuntimeException;
 use PHPUnit\Framework\TestCase;
 use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilders\CriteriaBase;
+use RuntimeException;
 
 class CriteriaBaseTest extends TestCase
 {
     /** @var CriteriaBase */
     private $criteria_instance;
 
+    /** @var array<int, string> */
     private static $methods = [
         'where',
         'whereNot',
@@ -21,18 +22,13 @@ class CriteriaBaseTest extends TestCase
         'whereOrNot',
     ];
 
-    private static $base_expected = [
-        'key' => 'foo',
-        'operator' => 'bar',
-        'value' => 'baz',
-    ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->criteria_instance = $this->getMockForAbstractClass(
-            'QueryBuilder\\QueryBuilders\\CriteriaBase',
+            CriteriaBase::class,
             [
                 'test',
                 new MySqlAdapter(),
@@ -56,19 +52,27 @@ class CriteriaBaseTest extends TestCase
 
     public function testWhereAddsCriteria(): void
     {
-        $expected = self::$base_expected;
-        $expected['joiner'] = 'boo';
+        $expected = [
+            'key' => $key =  'foo',
+            'operator' => $operator =  'bar',
+            'value' => $value =  'baz',
+            'joiner' => $joiner = 'boo',
+        ];
 
-        call_user_func_array([$this->criteria_instance, 'where'], $expected);
+        $this->criteria_instance->where($key, $operator, $value, $joiner);
 
         $this->assertAttributeEquals([$expected], 'where', $this->criteria_instance);
     }
 
     public function testWhereNotAddsCriteria(): void
     {
-        $expected = self::$base_expected;
+        $expected = [
+            'key' => $key =  'foo',
+            'operator' => $operator =  'bar',
+            'value' => $value =  'baz',
+        ];
 
-        call_user_func_array([$this->criteria_instance, 'whereNot'], $expected);
+        $this->criteria_instance->whereNot($key, $operator, $value);
 
         $expected['joiner'] = 'AND NOT';
 
@@ -77,9 +81,13 @@ class CriteriaBaseTest extends TestCase
 
     public function testWhereOrAddsCriteria(): void
     {
-        $expected = self::$base_expected;
+        $expected = [
+            'key' => $key =  'foo',
+            'operator' => $operator =  'bar',
+            'value' => $value =  'baz',
+        ];
 
-        call_user_func_array([$this->criteria_instance, 'whereOr'], $expected);
+        $this->criteria_instance->whereOr($key, $operator, $value);
 
         $expected['joiner'] = 'OR';
 
@@ -88,9 +96,13 @@ class CriteriaBaseTest extends TestCase
 
     public function testWhereOrNotAddsCriteria(): void
     {
-        $expected = self::$base_expected;
+        $expected = [
+            'key' => $key =  'foo',
+            'operator' => $operator =  'bar',
+            'value' => $value =  'baz',
+        ];
 
-        call_user_func_array([$this->criteria_instance, 'whereOrNot'], $expected);
+        $this->criteria_instance->whereOrNot($key, $operator, $value);
 
         $expected['joiner'] = 'OR NOT';
 

@@ -16,11 +16,17 @@ use QueryBuilder\AdapterInterface;
 
 abstract class VerbBase
 {
+    /**
+     * @var AdapterInterface
+     */
     protected $adapter;
+    /**
+     * @var string|Raw|array{0: string|Raw, 1: string}
+     */
     protected $table_name;
 
     /**
-     * @param string|string[]|Raw|Raw[] $table_name Table name as string or array
+     * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
      * @param AdapterInterface $adapter
      */
@@ -32,7 +38,7 @@ abstract class VerbBase
 
     /**
      * @param string $alias New table alias
-     * @return VerbBase
+     * @return self
      */
     public function alias(string $alias): self
     {

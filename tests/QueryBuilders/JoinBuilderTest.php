@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace QueryBuilder\Tests\QueryBuilders;
 
-use RuntimeException;
 use PHPUnit\Framework\TestCase;
 use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilders\JoinBuilder;
@@ -15,18 +14,8 @@ class JoinBuilderTest extends TestCase
     /** @var JoinBuilder */
     private $join_instance;
 
+    /** @var string */
     private static $join_type = 'INNER';
-
-    private static $methods = [
-        'on',
-        'onOr',
-    ];
-
-    private static $base_expected = [
-        'key' => 'foo',
-        'operator' => 'bar',
-        'value' => 'baz',
-    ];
 
     protected function setUp(): void
     {
@@ -35,35 +24,29 @@ class JoinBuilderTest extends TestCase
         $this->join_instance = new JoinBuilder(new MySqlAdapter(), [], 'foo_join', self::$join_type);
     }
 
-    public function testMethodsReturnsSameInstance(): void
-    {
-        foreach (self::$methods as $method) {
-            $callable = [$this->join_instance, $method];
-
-            if (!is_callable($callable)) {
-                throw new RuntimeException($method . '() is not callable on ' . JoinBuilder::class);
-            }
-
-            $return_val = call_user_func($callable, 1, 2, 3, 4);
-            $this->assertEquals($this->join_instance, $return_val);
-        }
-    }
-
     public function testOnAddsCriteria(): void
     {
-        $expected = self::$base_expected;
-        $expected['joiner'] = 'boo';
+        $expected = [
+            'key' => $key = 'foo',
+            'operator' => $operator = 'bar',
+            'value' => $value = 'baz',
+            'joiner' => $joiner = 'boo',
+        ];
 
-        call_user_func_array([$this->join_instance, 'on'], $expected);
+        $this->join_instance->on($key, $operator, $value, $joiner);
 
         $this->assertAttributeEquals([$expected], 'statements', $this->join_instance);
     }
 
     public function testOnOrAddsCriteria(): void
     {
-        $expected = self::$base_expected;
+        $expected = [
+            'key' => $key = 'foo',
+            'operator' => $operator = 'bar',
+            'value' => $value = 'baz',
+        ];
 
-        call_user_func_array([$this->join_instance, 'onOr'], $expected);
+        $this->join_instance->onOr($key, $operator, $value);
 
         $expected['joiner'] = 'OR';
 

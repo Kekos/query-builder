@@ -79,6 +79,14 @@ class Select extends CriteriaBase
     }
 
     /**
+     * @param array<int|string, string|Raw> $columns
+     */
+    public function setColumns(array $columns): void
+    {
+        $this->columns = $columns;
+    }
+
+    /**
      * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
      * @param mixed|null $value
@@ -97,6 +105,22 @@ class Select extends CriteriaBase
 
         $this->joins[] = $join_builder;
         return $this;
+    }
+
+    /**
+     * @return JoinBuilder[]
+     */
+    public function getJoins(): array
+    {
+        return $this->joins;
+    }
+
+    /**
+     * @param JoinBuilder[] $joins
+     */
+    public function setJoins(array $joins): void
+    {
+        $this->joins = $joins;
     }
 
     /**

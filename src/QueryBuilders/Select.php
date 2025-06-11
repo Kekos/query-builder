@@ -1,14 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * QueryBuilder for PHP
- *
- * Select class
- *
- * @version 1.1
- * @date 2015-12-30
- */
 
 namespace QueryBuilder\QueryBuilders;
 

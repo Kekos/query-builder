@@ -1,14 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * QueryBuilder for PHP
- *
- * JoinBuilder class
- *
- * @version 1.1
- * @date 2017-12-31
- */
 
 namespace QueryBuilder\QueryBuilders;
 

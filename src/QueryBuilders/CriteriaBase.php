@@ -32,7 +32,7 @@ abstract class CriteriaBase extends VerbBase
     /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return static
+     * @return $this
      */
     public function where($key, ?string $operator = null, $value = null, string $joiner = 'AND'): self
     {
@@ -43,7 +43,7 @@ abstract class CriteriaBase extends VerbBase
     /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return static
+     * @return $this
      */
     public function whereNot($key, ?string $operator = null, $value = null): self
     {
@@ -54,7 +54,7 @@ abstract class CriteriaBase extends VerbBase
     /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return static
+     * @return $this
      */
     public function whereOr($key, ?string $operator = null, $value = null): self
     {
@@ -65,7 +65,7 @@ abstract class CriteriaBase extends VerbBase
     /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return static
+     * @return $this
      */
     public function whereOrNot($key, ?string $operator = null, $value = null): self
     {

@@ -23,7 +23,7 @@ class Insert extends VerbBase
 
     /**
      * @param array<string, ?scalar> $values Column name as array key
-     * @return self
+     * @return $this
      */
     public function values(array $values): self
     {

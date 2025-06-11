@@ -57,7 +57,7 @@ class Select extends CriteriaBase
      *
      * @param string|array<string|int, string>|Raw|array<string|int, Raw> $columns Single column as string or multiple
      *  columns in array. Set column alias as array key.
-     * @return self
+     * @return $this
      */
     public function columns($columns): self
     {
@@ -90,7 +90,7 @@ class Select extends CriteriaBase
      * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function join($table, $key, ?string $operator = null, $value = null, string $join_type = 'INNER'): self
     {
@@ -127,7 +127,7 @@ class Select extends CriteriaBase
      * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function leftJoin($table, $key, ?string $operator = null, $value = null): self
     {
@@ -139,7 +139,7 @@ class Select extends CriteriaBase
      * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function rightJoin($table, $key, ?string $operator = null, $value = null): self
     {
@@ -151,7 +151,7 @@ class Select extends CriteriaBase
      * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function leftOuterJoin($table, $key, ?string $operator = null, $value = null): self
     {
@@ -163,7 +163,7 @@ class Select extends CriteriaBase
      * @param string|Raw|array{0: string, 1: string} $table
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function rightOuterJoin($table, $key, ?string $operator = null, $value = null): self
     {
@@ -173,7 +173,7 @@ class Select extends CriteriaBase
 
     /**
      * @param string|array<int, string|Raw> $columns
-     * @return self
+     * @return $this
      */
     public function groupby($columns): self
     {
@@ -208,7 +208,7 @@ class Select extends CriteriaBase
     /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function having($key, ?string $operator = null, $value = null, string $joiner = 'AND'): self
     {
@@ -219,7 +219,7 @@ class Select extends CriteriaBase
     /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function havingNot($key, ?string $operator = null, $value = null): self
     {
@@ -230,7 +230,7 @@ class Select extends CriteriaBase
     /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function havingOr($key, ?string $operator = null, $value = null): self
     {
@@ -241,7 +241,7 @@ class Select extends CriteriaBase
     /**
      * @param string|Closure|Raw $key
      * @param mixed|null $value
-     * @return self
+     * @return $this
      */
     public function havingOrNot($key, ?string $operator = null, $value = null): self
     {
@@ -253,7 +253,7 @@ class Select extends CriteriaBase
      * @param string|array<string|int, string|Raw> $columns Single column as string or multiple
      *  columns in array. Set column as array key and direction as value.
      * @param 'ASC'|'DESC' $default_dir Default sort direction, standard is "ASC"
-     * @return self
+     * @return $this
      * @throws QueryBuilderException
      */
     public function orderby($columns, string $default_dir = 'ASC'): self

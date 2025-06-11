@@ -24,7 +24,7 @@ class Update extends CriteriaBase
 
     /**
      * @param array<string, scalar|Raw|null> $values Column name as array key
-     * @return self
+     * @return $this
      */
     public function set(array $values): self
     {

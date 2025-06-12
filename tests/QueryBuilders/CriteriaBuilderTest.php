@@ -11,8 +11,7 @@ use QueryBuilder\QueryBuilders\Raw;
 
 class CriteriaBuilderTest extends TestCase
 {
-    /** @var CriteriaBuilder */
-    private $criteria_instance;
+    private CriteriaBuilder $criteria_instance;
 
     protected function setUp(): void
     {

@@ -11,11 +11,9 @@ use QueryBuilder\QueryBuilders\Raw;
 
 class JoinBuilderTest extends TestCase
 {
-    /** @var JoinBuilder */
-    private $join_instance;
+    private JoinBuilder $join_instance;
 
-    /** @var string */
-    private static $join_type = 'INNER';
+    private static string $join_type = 'INNER';
 
     protected function setUp(): void
     {
@@ -51,7 +49,7 @@ class JoinBuilderTest extends TestCase
             new MySqlAdapter(),
             [],
             ['foo_join', 'fj'],
-            'INNER'
+            'INNER',
         );
 
         $join_instance->on('bar', '=', 42);
@@ -76,14 +74,14 @@ class JoinBuilderTest extends TestCase
             [
                 2,
                 42,
-            ]
+            ],
         );
 
         $join_instance = new JoinBuilder(
             new MySqlAdapter(),
             [],
             new Raw('(SELECT * FROM `bar_join` WHERE `id` = ?) AS `foo_join`', [2]),
-            self::$join_type
+            self::$join_type,
         );
         $join_instance
             ->on('bar', '=', 42)

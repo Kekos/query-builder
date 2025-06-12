@@ -12,8 +12,7 @@ use QueryBuilder\QueryBuilders\Update;
 
 class QueryBuilder
 {
-    /** @var AdapterInterface */
-    private static $adapter;
+    private static AdapterInterface $adapter;
 
     private function __construct() {}
 
@@ -30,9 +29,8 @@ class QueryBuilder
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
-     * @return Select
      */
-    public static function select($table_name): Select
+    public static function select(string|array|Raw $table_name): Select
     {
         return new Select($table_name, self::$adapter);
     }
@@ -40,9 +38,8 @@ class QueryBuilder
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
-     * @return Insert
      */
-    public static function insert($table_name): Insert
+    public static function insert(string|array|Raw $table_name): Insert
     {
         return new Insert($table_name, self::$adapter);
     }
@@ -50,9 +47,8 @@ class QueryBuilder
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
-     * @return Update
      */
-    public static function update($table_name): Update
+    public static function update(string|array|Raw $table_name): Update
     {
         return new Update($table_name, self::$adapter);
     }
@@ -60,9 +56,8 @@ class QueryBuilder
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
-     * @return Delete
      */
-    public static function delete($table_name): Delete
+    public static function delete(string|array|Raw $table_name): Delete
     {
         return new Delete($table_name, self::$adapter);
     }

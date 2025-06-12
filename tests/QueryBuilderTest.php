@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace QueryBuilder\Tests;
 
 use PHPUnit\Framework\TestCase;
-use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilder;
 
 class QueryBuilderTest extends TestCase

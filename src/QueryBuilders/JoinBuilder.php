@@ -12,11 +12,8 @@ class JoinBuilder extends CriteriaBuilder
     /**
      * @var string|Raw|array{0: string, 1: string}
      */
-    protected $table;
-    /**
-     * @var string
-     */
-    protected $join_type;
+    protected string|array|Raw $table;
+    protected string $join_type;
 
     /**
      * @param array<int, array{
@@ -27,7 +24,7 @@ class JoinBuilder extends CriteriaBuilder
      *    }> $statements
      * @param string|Raw|array{0: string, 1: string} $table
      */
-    public function __construct(AdapterInterface $adapter, array $statements, $table, string $join_type)
+    public function __construct(AdapterInterface $adapter, array $statements, string|array|Raw $table, string $join_type)
     {
         parent::__construct($adapter, $statements);
 
@@ -36,22 +33,18 @@ class JoinBuilder extends CriteriaBuilder
     }
 
     /**
-     * @param string|Closure|Raw $key
-     * @param mixed|null $value
      * @return $this
      */
-    public function on($key, ?string $operator = null, $value = null, string $joiner = 'AND'): self
+    public function on(string|Closure|Raw $key, ?string $operator = null, mixed $value = null, string $joiner = 'AND'): self
     {
         $this->where($key, $operator, $value, $joiner);
         return $this;
     }
 
     /**
-     * @param string|Closure|Raw $key
-     * @param mixed|null $value
      * @return $this
      */
-    public function onOr($key, ?string $operator = null, $value = null): self
+    public function onOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
         return $this;

@@ -15,7 +15,7 @@ class CriteriaBaseTest extends TestCase
     private $criteria_instance;
 
     /** @var array<int, string> */
-    private static $methods = [
+    private static array $methods = [
         'where',
         'whereNot',
         'whereOr',
@@ -32,7 +32,7 @@ class CriteriaBaseTest extends TestCase
             [
                 'test',
                 new MySqlAdapter(),
-            ]
+            ],
         );
     }
 
@@ -144,7 +144,7 @@ class CriteriaBaseTest extends TestCase
                 'operator' => '=',
                 'value' => null,
                 'joiner' => 'AND',
-            ]
+            ],
         ];
 
         $this->criteria_instance->setWhere($expected);

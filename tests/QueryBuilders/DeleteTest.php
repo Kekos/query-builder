@@ -11,8 +11,7 @@ use QueryBuilder\QueryBuilders\Raw;
 
 class DeleteTest extends TestCase
 {
-    /** @var Delete */
-    private $delete;
+    private Delete $delete;
 
     protected function setUp(): void
     {

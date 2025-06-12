@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace QueryBuilder\QueryBuilders;
 
 use QueryBuilder\QueryBuilder;
-use QueryBuilder\QueryBuilderException;
 
 class Update extends CriteriaBase
 {
     /**
      * @var array<string, scalar|Raw|null>
      */
-    private $values = [];
+    private array $values = [];
 
     /**
      * @param array<string, scalar|Raw|null> $values Column name as array key
@@ -25,10 +24,7 @@ class Update extends CriteriaBase
         return $this;
     }
 
-    /**
-     * @param string|Raw $field
-     */
-    private function sanitizeField($field): string
+    private function sanitizeField(string|Raw $field): string
     {
         if ($field instanceof Raw) {
             return (string) $field;

@@ -19,47 +19,39 @@ abstract class CriteriaBase extends VerbBase
      *     joiner: string,
      * }>
      */
-    protected $where = [];
+    protected array $where = [];
 
     /**
-     * @param string|Closure|Raw $key
-     * @param mixed|null $value
      * @return $this
      */
-    public function where($key, ?string $operator = null, $value = null, string $joiner = 'AND'): self
+    public function where(string|Closure|Raw $key, ?string $operator = null, mixed $value = null, string $joiner = 'AND'): self
     {
         $this->where[] = compact('key', 'operator', 'value', 'joiner');
         return $this;
     }
 
     /**
-     * @param string|Closure|Raw $key
-     * @param mixed|null $value
      * @return $this
      */
-    public function whereNot($key, ?string $operator = null, $value = null): self
+    public function whereNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'AND NOT');
         return $this;
     }
 
     /**
-     * @param string|Closure|Raw $key
-     * @param mixed|null $value
      * @return $this
      */
-    public function whereOr($key, ?string $operator = null, $value = null): self
+    public function whereOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
         return $this;
     }
 
     /**
-     * @param string|Closure|Raw $key
-     * @param mixed|null $value
      * @return $this
      */
-    public function whereOrNot($key, ?string $operator = null, $value = null): self
+    public function whereOrNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'OR NOT');
         return $this;
@@ -103,7 +95,7 @@ abstract class CriteriaBase extends VerbBase
                         'Missing the required key `%s` in criterion array index %s: %s',
                         $required_key,
                         $ix,
-                        substr(print_r($criterion, true), 7, -2) // Quick and dirty way to ignore the "Array(" prefix and ")" suffix
+                        substr(print_r($criterion, true), 7, -2), // Quick and dirty way to ignore the "Array(" prefix and ")" suffix
                     ));
                 }
             }

@@ -8,21 +8,18 @@ use QueryBuilder\AdapterInterface;
 
 abstract class VerbBase
 {
-    /**
-     * @var AdapterInterface
-     */
-    protected $adapter;
+    protected AdapterInterface $adapter;
     /**
      * @var string|Raw|array{0: string|Raw, 1: string}
      */
-    protected $table_name;
+    protected string|array|Raw $table_name;
 
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
      *  where first value is table name and second value is alias
      * @param AdapterInterface $adapter
      */
-    public function __construct($table_name, AdapterInterface $adapter)
+    public function __construct(string|array|Raw $table_name, AdapterInterface $adapter)
     {
         $this->table_name = $table_name;
         $this->adapter = $adapter;
@@ -31,7 +28,7 @@ abstract class VerbBase
     /**
      * @return string|Raw|array{0: string|Raw, 1: string}
      */
-    public function getTableName()
+    public function getTableName(): string|array|Raw
     {
         return $this->table_name;
     }

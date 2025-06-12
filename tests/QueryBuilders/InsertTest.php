@@ -11,8 +11,7 @@ use QueryBuilder\QueryBuilders\Raw;
 
 class InsertTest extends TestCase
 {
-    /** @var Insert */
-    private $insert;
+    private Insert $insert;
 
     protected function setUp(): void
     {
@@ -25,7 +24,7 @@ class InsertTest extends TestCase
     {
         $expected = new Raw(
             "INSERT INTO `foo_join` (`foo`, `baz`, `boo`)\n\tVALUES (?, ?, ?)",
-            ['bar', 42, null]
+            ['bar', 42, null],
         );
 
         $this->insert->values([

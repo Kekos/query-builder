@@ -8,10 +8,7 @@ use QueryBuilder\QueryBuilder;
 
 class Delete extends CriteriaBase
 {
-    /**
-     * @param string|Raw $field
-     */
-    private function sanitizeField($field): string
+    private function sanitizeField(string|Raw $field): string
     {
         if ($field instanceof Raw) {
             return (string) $field;

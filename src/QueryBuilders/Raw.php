@@ -6,14 +6,11 @@ namespace QueryBuilder\QueryBuilders;
 
 class Raw
 {
-    /**
-     * @var string
-     */
-    protected $sql;
+    protected string $sql;
     /**
      * @var array<int, ?scalar>
      */
-    protected $params;
+    protected array $params;
 
     /**
      * @param array<int, ?scalar> $params

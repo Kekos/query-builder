@@ -23,7 +23,7 @@ class VerbBaseTest extends TestCase
             [
                 'test',
                 new MySqlAdapter(),
-            ]
+            ],
         );
     }
 
@@ -47,7 +47,7 @@ class VerbBaseTest extends TestCase
             [
                 ['test', 'foo'],
                 new MySqlAdapter(),
-            ]
+            ],
         );
 
         $verb_base->alias('alias');

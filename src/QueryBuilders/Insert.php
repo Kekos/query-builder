@@ -11,7 +11,7 @@ class Insert extends VerbBase
     /**
      * @var array<string, ?scalar>
      */
-    private $values = [];
+    private array $values = [];
 
     /**
      * @param array<string, ?scalar> $values Column name as array key
@@ -24,10 +24,7 @@ class Insert extends VerbBase
         return $this;
     }
 
-    /**
-     * @param string|Raw $field
-     */
-    private function sanitizeField($field): string
+    private function sanitizeField(string|Raw $field): string
     {
         if ($field instanceof Raw) {
             return (string) $field;

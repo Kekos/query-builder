@@ -11,8 +11,7 @@ use QueryBuilder\QueryBuilders\Select;
 
 class SelectTest extends TestCase
 {
-    /** @var Select */
-    private $select;
+    private Select $select;
 
     protected function setUp(): void
     {
@@ -193,7 +192,7 @@ class SelectTest extends TestCase
     {
         $expected = new Raw(
             "SELECT *\n\tFROM `foo`\n\tINNER JOIN `bar` ON `bar`.`foo_id` = `foo`.`id`\n",
-            []
+            [],
         );
 
         $this->select->join('bar', new Raw("`bar`.`foo_id` = `foo`.`id`"));
@@ -205,7 +204,7 @@ class SelectTest extends TestCase
     {
         $expected = new Raw(
             "SELECT *\n\tFROM `foo`\n\tINNER JOIN `bar` ON `id` = ?\n",
-            [42]
+            [42],
         );
 
         $this->select->join('bar', 'id', '=', 42);
@@ -217,7 +216,7 @@ class SelectTest extends TestCase
     {
         $expected = new Raw(
             "SELECT *\n\tFROM `foo`\n\tWHERE `bar` = ?\n",
-            [42]
+            [42],
         );
 
         $this->select->where('bar', '=', 42);
@@ -247,7 +246,7 @@ class SelectTest extends TestCase
     {
         $expected = new Raw(
             "SELECT *\n\tFROM `foo`\n\tORDER BY `bar` ASC, `boo` DESC\n",
-            []
+            [],
         );
 
         $this->select->orderby(['bar' => 'ASC', 'boo' => 'DESC']);
@@ -273,7 +272,7 @@ class SelectTest extends TestCase
             . "HAVING `bar` = ?\n\t"
             . "ORDER BY `bar` ASC, `boo` DESC\n\t"
             . "LIMIT ?, ?\n",
-            [42, 42, 20, 10]
+            [42, 42, 20, 10],
         )
         ;
 
@@ -307,7 +306,7 @@ class SelectTest extends TestCase
 
         $select = new Select(
             [new Raw($subquery, [42]), 'foo'],
-            new MySqlAdapter()
+            new MySqlAdapter(),
         );
 
         $this->assertEquals($expected, $select->toSql());
@@ -323,7 +322,7 @@ class SelectTest extends TestCase
 
         $expected = new Raw(
             "SELECT *\n\tFROM (SELECT `bar`\n\tFROM `baz`\n\tWHERE `baz`.`id` = ?\n) AS `foo`\n",
-            [42]
+            [42],
         );
 
         $select = new Select($subquery->toSql(), $adapter);

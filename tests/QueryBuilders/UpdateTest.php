@@ -11,8 +11,7 @@ use QueryBuilder\QueryBuilders\Update;
 
 class UpdateTest extends TestCase
 {
-    /** @var Update */
-    private $update;
+    private Update $update;
 
     protected function setUp(): void
     {
@@ -26,7 +25,7 @@ class UpdateTest extends TestCase
         $expected = new Raw(
             "UPDATE `foo`\n\t"
             . "SET\n\t\t`foo` = ?,\n\t\t`baz` = ?,\n\t\t`boo` = ?\n",
-            ['bar', 42, null]
+            ['bar', 42, null],
         );
 
         $this->update->set([
@@ -44,7 +43,7 @@ class UpdateTest extends TestCase
         $expected = new Raw(
             "UPDATE `foo`\n\t"
             . "SET\n\t\t`foo` = ?,\n\t\t`baz` = " . $raw_sql . "\n",
-            ['bar', 42]
+            ['bar', 42],
         );
 
         $this->update->set([
@@ -60,7 +59,7 @@ class UpdateTest extends TestCase
         $expected = new Raw(
             "UPDATE `foo`\n\t"
             . "SET\n\t\t`foo` = ?\n\tWHERE `baz` = ? AND `boo` IS NULL",
-            ['bar', 42]
+            ['bar', 42],
         );
 
         $this->update

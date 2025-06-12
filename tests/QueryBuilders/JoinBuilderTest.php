@@ -24,40 +24,21 @@ class JoinBuilderTest extends TestCase
         $this->join_instance = new JoinBuilder(new MySqlAdapter(), [], 'foo_join', self::$join_type);
     }
 
-    public function testOnAddsCriteria(): void
-    {
-        $expected = [
-            'key' => $key = 'foo',
-            'operator' => $operator = 'bar',
-            'value' => $value = 'baz',
-            'joiner' => $joiner = 'boo',
-        ];
-
-        $this->join_instance->on($key, $operator, $value, $joiner);
-
-        $this->assertAttributeEquals([$expected], 'statements', $this->join_instance);
-    }
-
-    public function testOnOrAddsCriteria(): void
-    {
-        $expected = [
-            'key' => $key = 'foo',
-            'operator' => $operator = 'bar',
-            'value' => $value = 'baz',
-        ];
-
-        $this->join_instance->onOr($key, $operator, $value);
-
-        $expected['joiner'] = 'OR';
-
-        $this->assertAttributeEquals([$expected], 'statements', $this->join_instance);
-    }
-
     public function testToSqlSimple(): void
     {
         $expected = new Raw('INNER JOIN `foo_join` ON `bar` = ?', [42]);
 
         $this->join_instance->on('bar', '=', 42);
+
+        $this->assertEquals($expected, $this->join_instance->toSql());
+    }
+
+    public function testToSqlOr(): void
+    {
+        $expected = new Raw('INNER JOIN `foo_join` ON `bar` = ? OR `baz` = ?', [42, 43]);
+
+        $this->join_instance->on('bar', '=', 42);
+        $this->join_instance->onOr('baz', '=', 43);
 
         $this->assertEquals($expected, $this->join_instance->toSql());
     }

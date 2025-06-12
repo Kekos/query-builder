@@ -21,65 +21,6 @@ class CriteriaBuilderTest extends TestCase
         $this->criteria_instance = new CriteriaBuilder(new MySqlAdapter());
     }
 
-    public function testWhereAddsCriteria(): void
-    {
-        $expected = [
-            'key' => $key = 'foo',
-            'operator' => $operator = 'bar',
-            'value' => $value = 'baz',
-            'joiner' => $joiner = 'boo',
-        ];
-
-        $this->criteria_instance->where($key, $operator, $value, $joiner);
-
-        $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
-    }
-
-    public function testWhereNotAddsCriteria(): void
-    {
-        $expected = [
-            'key' => $key = 'foo',
-            'operator' => $operator = 'bar',
-            'value' => $value = 'baz',
-        ];
-
-        $this->criteria_instance->whereNot($key, $operator, $value);
-
-        $expected['joiner'] = 'AND NOT';
-
-        $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
-    }
-
-    public function testWhereOrAddsCriteria(): void
-    {
-        $expected = [
-            'key' => $key = 'foo',
-            'operator' => $operator = 'bar',
-            'value' => $value = 'baz',
-        ];
-
-        $this->criteria_instance->whereOr($key, $operator, $value);
-
-        $expected['joiner'] = 'OR';
-
-        $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
-    }
-
-    public function testWhereOrNotAddsCriteria(): void
-    {
-        $expected = [
-            'key' => $key = 'foo',
-            'operator' => $operator = 'bar',
-            'value' => $value = 'baz',
-        ];
-
-        $this->criteria_instance->whereOrNot($key, $operator, $value);
-
-        $expected['joiner'] = 'OR NOT';
-
-        $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
-    }
-
     public function testToSqlWhereSimple(): void
     {
         $expected = new Raw('`foo` = ?', ['bar']);

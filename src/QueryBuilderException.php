@@ -4,4 +4,6 @@ declare(strict_types=1);
 
 namespace QueryBuilder;
 
-class QueryBuilderException extends \Exception {}
+use Exception;
+
+class QueryBuilderException extends Exception {}

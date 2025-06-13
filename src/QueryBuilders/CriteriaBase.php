@@ -8,6 +8,10 @@ use Closure;
 use QueryBuilder\QueryBuilderException;
 
 use function array_key_exists;
+use function compact;
+use function print_r;
+use function sprintf;
+use function substr;
 
 abstract class CriteriaBase extends VerbBase
 {
@@ -27,6 +31,7 @@ abstract class CriteriaBase extends VerbBase
     public function where(string|Closure|Raw $key, ?string $operator = null, mixed $value = null, string $joiner = 'AND'): self
     {
         $this->where[] = compact('key', 'operator', 'value', 'joiner');
+
         return $this;
     }
 
@@ -36,6 +41,7 @@ abstract class CriteriaBase extends VerbBase
     public function whereNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'AND NOT');
+
         return $this;
     }
 
@@ -45,6 +51,7 @@ abstract class CriteriaBase extends VerbBase
     public function whereOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
+
         return $this;
     }
 
@@ -54,6 +61,7 @@ abstract class CriteriaBase extends VerbBase
     public function whereOrNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'OR NOT');
+
         return $this;
     }
 

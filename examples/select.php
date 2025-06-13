@@ -14,35 +14,41 @@ $result = QB::select(['user', 'u'])
     ->orderby(['username ASC', 'firstname ASC'])
     ->where('firstname', '=', 'Christoffer')
     ->whereNot('u.id', 'IN', [2])
-    ->toSql();
+    ->toSql()
+;
 
-var_dump($result);
+\var_dump($result);
 
 $result = QB::select('user')
     ->orderby('id')
     ->where(function ($qb): void {
         $qb->where('name', 'LIKE', '%chris%')
-            ->whereOr('username', 'LIKE', '%chris%');
+            ->whereOr('username', 'LIKE', '%chris%')
+        ;
     })
     ->where('active', '=', 1)
-    ->toSql();
+    ->toSql()
+;
 
-var_dump($result);
+\var_dump($result);
 
 $result = QB::select('user')
     ->where(function ($qb): void {
         $qb->where('id', 'BETWEEN', [2, 5])
-            ->whereOr('username', 'LIKE', '%chris%');
+            ->whereOr('username', 'LIKE', '%chris%')
+        ;
     })
-    ->toSql();
+    ->toSql()
+;
 
-var_dump($result);
+\var_dump($result);
 
 $result = QB::select('user')
     ->columns('id')
     ->columns(['fname' => 'firstname'])
-    ->toSql();
+    ->toSql()
+;
 
-var_dump($result);
+\var_dump($result);
 ?>
 </pre>

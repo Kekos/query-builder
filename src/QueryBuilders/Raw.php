@@ -7,6 +7,7 @@ namespace QueryBuilder\QueryBuilders;
 class Raw
 {
     protected string $sql;
+
     /**
      * @var array<int, ?scalar>
      */

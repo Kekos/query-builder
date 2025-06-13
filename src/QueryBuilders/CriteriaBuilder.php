@@ -8,6 +8,13 @@ use Closure;
 use QueryBuilder\AdapterInterface;
 use QueryBuilder\QueryBuilder;
 
+use function array_merge;
+use function compact;
+use function implode;
+use function is_array;
+use function preg_replace;
+use function trim;
+
 class CriteriaBuilder
 {
     /**
@@ -19,6 +26,7 @@ class CriteriaBuilder
      *  }>
      */
     protected array $statements;
+
     protected AdapterInterface $adapter;
 
     /**
@@ -41,6 +49,7 @@ class CriteriaBuilder
     public function where(string|Closure|Raw $key, ?string $operator = null, mixed $value = null, string $joiner = 'AND'): self
     {
         $this->statements[] = compact('key', 'operator', 'value', 'joiner');
+
         return $this;
     }
 
@@ -50,6 +59,7 @@ class CriteriaBuilder
     public function whereNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'AND NOT');
+
         return $this;
     }
 
@@ -59,6 +69,7 @@ class CriteriaBuilder
     public function whereOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
+
         return $this;
     }
 
@@ -68,6 +79,7 @@ class CriteriaBuilder
     public function whereOrNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'OR NOT');
+
         return $this;
     }
 
@@ -97,7 +109,7 @@ class CriteriaBuilder
             $value = $statement['value'];
 
             if ($key instanceof Closure) {
-                $criteria_builder = new CriteriaBuilder($this->adapter);
+                $criteria_builder = new self($this->adapter);
                 $key($criteria_builder);
 
                 $criteria = $criteria_builder->toSql();

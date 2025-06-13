@@ -8,20 +8,32 @@ use Closure;
 use QueryBuilder\QueryBuilder;
 use QueryBuilder\QueryBuilderException;
 
+use function array_merge;
+use function compact;
+use function count;
+use function implode;
+use function is_array;
+use function is_int;
+use function is_numeric;
+use function is_string;
+
 class Select extends CriteriaBase
 {
     /**
      * @var array<int|string, string|Raw>
      */
     private array $columns = [];
+
     /**
      * @var JoinBuilder[]
      */
     private array $joins = [];
+
     /**
      * @var array<int, string|Raw>
      */
     private array $group_by = [];
+
     /**
      * @var array<int, array{
      *       key: string|Closure|Raw,
@@ -31,18 +43,21 @@ class Select extends CriteriaBase
      *   }>
      */
     private array $having = [];
+
     /**
      * @var array<int, string>
      */
     private array $order_by = [];
+
     private ?int $limit_offset = null;
+
     private ?int $limit_row_count = null;
 
     /**
      * Adds columns to select
      *
      * @param string|array<string|int, string>|Raw|array<string|int, Raw> $columns Single column as string or multiple
-     *  columns in array. Set column alias as array key.
+     *                                                                             columns in array. Set column alias as array key.
      * @return $this
      */
     public function columns(string|array|Raw $columns): self
@@ -88,6 +103,7 @@ class Select extends CriteriaBase
         $key($join_builder);
 
         $this->joins[] = $join_builder;
+
         return $this;
     }
 
@@ -114,6 +130,7 @@ class Select extends CriteriaBase
     public function leftJoin(string|array|Raw $table, string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'LEFT');
+
         return $this;
     }
 
@@ -124,6 +141,7 @@ class Select extends CriteriaBase
     public function rightJoin(string|array|Raw $table, string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT');
+
         return $this;
     }
 
@@ -134,6 +152,7 @@ class Select extends CriteriaBase
     public function leftOuterJoin(string|array|Raw $table, string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'LEFT OUTER');
+
         return $this;
     }
 
@@ -144,6 +163,7 @@ class Select extends CriteriaBase
     public function rightOuterJoin(string|array|Raw $table, string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT OUTER');
+
         return $this;
     }
 
@@ -187,6 +207,7 @@ class Select extends CriteriaBase
     public function having(string|Closure|Raw $key, ?string $operator = null, mixed $value = null, string $joiner = 'AND'): self
     {
         $this->having[] = compact('key', 'operator', 'value', 'joiner');
+
         return $this;
     }
 
@@ -196,6 +217,7 @@ class Select extends CriteriaBase
     public function havingNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->having($key, $operator, $value, 'AND NOT');
+
         return $this;
     }
 
@@ -205,6 +227,7 @@ class Select extends CriteriaBase
     public function havingOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->having($key, $operator, $value, 'OR');
+
         return $this;
     }
 
@@ -214,12 +237,13 @@ class Select extends CriteriaBase
     public function havingOrNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->having($key, $operator, $value, 'OR NOT');
+
         return $this;
     }
 
     /**
      * @param string|array<string|int, string|Raw> $columns Single column as string or multiple
-     *  columns in array. Set column as array key and direction as value.
+     *                                                      columns in array. Set column as array key and direction as value.
      * @param 'ASC'|'DESC' $default_dir Default sort direction, standard is "ASC"
      * @return $this
      * @throws QueryBuilderException

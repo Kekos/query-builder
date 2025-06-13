@@ -6,6 +6,10 @@ namespace QueryBuilder\QueryBuilders;
 
 use QueryBuilder\QueryBuilder;
 
+use function array_keys;
+use function implode;
+use function is_array;
+
 class Insert extends VerbBase
 {
     /**

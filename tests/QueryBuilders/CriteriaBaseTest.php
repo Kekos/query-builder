@@ -9,6 +9,9 @@ use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilders\CriteriaBase;
 use RuntimeException;
 
+use function call_user_func;
+use function is_callable;
+
 class CriteriaBaseTest extends TestCase
 {
     /** @var CriteriaBase */
@@ -21,7 +24,6 @@ class CriteriaBaseTest extends TestCase
         'whereOr',
         'whereOrNot',
     ];
-
 
     protected function setUp(): void
     {
@@ -53,9 +55,9 @@ class CriteriaBaseTest extends TestCase
     public function testWhereAddsCriteria(): void
     {
         $expected = [
-            'key' => $key =  'foo',
-            'operator' => $operator =  'bar',
-            'value' => $value =  'baz',
+            'key' => $key = 'foo',
+            'operator' => $operator = 'bar',
+            'value' => $value = 'baz',
             'joiner' => $joiner = 'boo',
         ];
 
@@ -67,9 +69,9 @@ class CriteriaBaseTest extends TestCase
     public function testWhereNotAddsCriteria(): void
     {
         $expected = [
-            'key' => $key =  'foo',
-            'operator' => $operator =  'bar',
-            'value' => $value =  'baz',
+            'key' => $key = 'foo',
+            'operator' => $operator = 'bar',
+            'value' => $value = 'baz',
         ];
 
         $this->criteria_instance->whereNot($key, $operator, $value);
@@ -82,9 +84,9 @@ class CriteriaBaseTest extends TestCase
     public function testWhereOrAddsCriteria(): void
     {
         $expected = [
-            'key' => $key =  'foo',
-            'operator' => $operator =  'bar',
-            'value' => $value =  'baz',
+            'key' => $key = 'foo',
+            'operator' => $operator = 'bar',
+            'value' => $value = 'baz',
         ];
 
         $this->criteria_instance->whereOr($key, $operator, $value);
@@ -97,9 +99,9 @@ class CriteriaBaseTest extends TestCase
     public function testWhereOrNotAddsCriteria(): void
     {
         $expected = [
-            'key' => $key =  'foo',
-            'operator' => $operator =  'bar',
-            'value' => $value =  'baz',
+            'key' => $key = 'foo',
+            'operator' => $operator = 'bar',
+            'value' => $value = 'baz',
         ];
 
         $this->criteria_instance->whereOrNot($key, $operator, $value);

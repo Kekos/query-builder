@@ -10,6 +10,10 @@ use QueryBuilder\QueryBuilders\Raw;
 use QueryBuilder\QueryBuilders\Select;
 use QueryBuilder\QueryBuilders\Update;
 
+use function array_map;
+use function explode;
+use function implode;
+
 class QueryBuilder
 {
     private static AdapterInterface $adapter;
@@ -28,7 +32,7 @@ class QueryBuilder
 
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
-     *  where first value is table name and second value is alias
+     *                                                               where first value is table name and second value is alias
      */
     public static function select(string|array|Raw $table_name): Select
     {
@@ -37,7 +41,7 @@ class QueryBuilder
 
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
-     *  where first value is table name and second value is alias
+     *                                                               where first value is table name and second value is alias
      */
     public static function insert(string|array|Raw $table_name): Insert
     {
@@ -46,7 +50,7 @@ class QueryBuilder
 
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
-     *  where first value is table name and second value is alias
+     *                                                               where first value is table name and second value is alias
      */
     public static function update(string|array|Raw $table_name): Update
     {
@@ -55,7 +59,7 @@ class QueryBuilder
 
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
-     *  where first value is table name and second value is alias
+     *                                                               where first value is table name and second value is alias
      */
     public static function delete(string|array|Raw $table_name): Delete
     {

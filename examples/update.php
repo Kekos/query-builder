@@ -12,17 +12,19 @@ $result = QB::update('user')
         'firstname' => 'New firstname',
     ])
     ->where('id', '=', 2)
-    ->toSql();
+    ->toSql()
+;
 
-var_dump($result);
+\var_dump($result);
 
 $result = QB::update('user')
     ->set([
         'firstname' => QB::raw('REPLACE(firstname, ?, ?)', ['Doe', 'Eod']),
     ])
     ->where('firstname', 'LIKE', '%Doe%')
-    ->toSql();
+    ->toSql()
+;
 
-var_dump($result);
+\var_dump($result);
 ?>
 </pre>

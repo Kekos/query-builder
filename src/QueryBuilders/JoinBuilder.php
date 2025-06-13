@@ -7,12 +7,16 @@ namespace QueryBuilder\QueryBuilders;
 use Closure;
 use QueryBuilder\AdapterInterface;
 
+use function array_merge;
+use function is_array;
+
 class JoinBuilder extends CriteriaBuilder
 {
     /**
      * @var string|Raw|array{0: string, 1: string}
      */
     protected string|array|Raw $table;
+
     protected string $join_type;
 
     /**
@@ -38,6 +42,7 @@ class JoinBuilder extends CriteriaBuilder
     public function on(string|Closure|Raw $key, ?string $operator = null, mixed $value = null, string $joiner = 'AND'): self
     {
         $this->where($key, $operator, $value, $joiner);
+
         return $this;
     }
 
@@ -47,6 +52,7 @@ class JoinBuilder extends CriteriaBuilder
     public function onOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where($key, $operator, $value, 'OR');
+
         return $this;
     }
 

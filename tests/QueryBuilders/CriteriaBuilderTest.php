@@ -64,7 +64,8 @@ class CriteriaBuilderTest extends TestCase
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
-            ->where('baz', '<', 5);
+            ->where('baz', '<', 5)
+        ;
 
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
@@ -75,7 +76,8 @@ class CriteriaBuilderTest extends TestCase
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
-            ->whereNot('baz', '<', 5);
+            ->whereNot('baz', '<', 5)
+        ;
 
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
@@ -86,7 +88,8 @@ class CriteriaBuilderTest extends TestCase
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
-            ->whereOr('baz', '<', 5);
+            ->whereOr('baz', '<', 5)
+        ;
 
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
@@ -97,7 +100,8 @@ class CriteriaBuilderTest extends TestCase
 
         $this->criteria_instance
             ->where('foo', '=', 'bar')
-            ->whereOrNot('baz', '<', 5);
+            ->whereOrNot('baz', '<', 5)
+        ;
 
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
@@ -111,7 +115,8 @@ class CriteriaBuilderTest extends TestCase
             ->where(function (CriteriaBuilder $cb): void {
                 $cb
                     ->where('boo', '>=', 5)
-                    ->whereOr('baz', '<', 42);
+                    ->whereOr('baz', '<', 42)
+                ;
             })
         ;
 

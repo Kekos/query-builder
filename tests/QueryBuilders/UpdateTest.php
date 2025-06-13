@@ -67,7 +67,8 @@ class UpdateTest extends TestCase
                 'foo' => 'bar',
             ])
             ->where('baz', '=', 42)
-            ->where('boo', '=', null);
+            ->where('boo', '=', null)
+        ;
 
         $this->assertEquals($expected, $this->update->toSql());
     }

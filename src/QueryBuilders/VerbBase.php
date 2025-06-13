@@ -6,9 +6,12 @@ namespace QueryBuilder\QueryBuilders;
 
 use QueryBuilder\AdapterInterface;
 
+use function is_array;
+
 abstract class VerbBase
 {
     protected AdapterInterface $adapter;
+
     /**
      * @var string|Raw|array{0: string|Raw, 1: string}
      */
@@ -16,8 +19,7 @@ abstract class VerbBase
 
     /**
      * @param string|Raw|array{0: string|Raw, 1: string} $table_name Table name as string or array
-     *  where first value is table name and second value is alias
-     * @param AdapterInterface $adapter
+     *                                                               where first value is table name and second value is alias
      */
     public function __construct(string|array|Raw $table_name, AdapterInterface $adapter)
     {

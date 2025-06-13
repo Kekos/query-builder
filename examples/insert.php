@@ -11,8 +11,9 @@ $result = QB::insert('user')
         'username' => 'Kekos',
         'firstname' => 'Christoffer',
     ])
-    ->toSql();
+    ->toSql()
+;
 
-var_dump($result);
+\var_dump($result);
 ?>
 </pre>

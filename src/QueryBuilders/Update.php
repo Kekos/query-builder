@@ -6,6 +6,11 @@ namespace QueryBuilder\QueryBuilders;
 
 use QueryBuilder\QueryBuilder;
 
+use function array_merge;
+use function count;
+use function implode;
+use function is_array;
+
 class Update extends CriteriaBase
 {
     /**

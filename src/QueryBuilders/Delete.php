@@ -6,6 +6,9 @@ namespace QueryBuilder\QueryBuilders;
 
 use QueryBuilder\QueryBuilder;
 
+use function count;
+use function is_array;
+
 class Delete extends CriteriaBase
 {
     private function sanitizeField(string|Raw $field): string

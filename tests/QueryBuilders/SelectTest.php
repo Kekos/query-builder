@@ -273,15 +273,15 @@ class SelectTest extends TestCase
             . "ORDER BY `bar` ASC, `boo` DESC\n\t"
             . "LIMIT ?, ?\n",
             [42, 42, 20, 10],
-        )
-        ;
+        );
 
         $this->select
             ->where('bar', '=', 42)
             ->groupby(['bar', 'boo'])
             ->having('bar', '=', 42)
             ->orderby(['bar' => 'ASC', 'boo' => 'DESC'])
-            ->limit(10, 20);
+            ->limit(10, 20)
+        ;
 
         $this->assertEquals($expected, $this->select->toSql());
     }
@@ -318,7 +318,8 @@ class SelectTest extends TestCase
         $subquery = new Select('baz', $adapter);
         $subquery
             ->columns('bar')
-            ->where('baz.id', '=', 42);
+            ->where('baz.id', '=', 42)
+        ;
 
         $expected = new Raw(
             "SELECT *\n\tFROM (SELECT `bar`\n\tFROM `baz`\n\tWHERE `baz`.`id` = ?\n) AS `foo`\n",

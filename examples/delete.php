@@ -8,8 +8,9 @@ QB::setAdapter(new QueryBuilder\MySqlAdapter());
 
 $result = QB::delete('user')
     ->where('id', '=', 2)
-    ->toSql();
+    ->toSql()
+;
 
-var_dump($result);
+\var_dump($result);
 ?>
 </pre>

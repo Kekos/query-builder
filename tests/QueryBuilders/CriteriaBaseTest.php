@@ -9,7 +9,6 @@ use QueryBuilder\MySqlAdapter;
 use QueryBuilder\QueryBuilders\CriteriaBase;
 use RuntimeException;
 
-use function call_user_func;
 use function is_callable;
 
 class CriteriaBaseTest extends TestCase
@@ -47,7 +46,7 @@ class CriteriaBaseTest extends TestCase
                 throw new RuntimeException($method . '() is not callable on ' . CriteriaBase::class);
             }
 
-            $return_val = call_user_func($callable, 1, 2, 3, 4);
+            $return_val = $callable('1', '2', 3, '4');
             $this->assertEquals($this->criteria_instance, $return_val);
         }
     }

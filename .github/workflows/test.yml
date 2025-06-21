@@ -1,0 +1,23 @@
+name: Test and static analysis
+on: [push]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 5.6
+          tools: php-cs-fixer:2.19.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Composer dependencies
+        run: composer install
+      - name: PHPUnit
+        run: composer test
+      - name: PHP-CS-Fixer
+        env:
+          PHP_CS_FIXER_IGNORE_ENV: 1
+        run: php-cs-fixer fix --dry-run --stop-on-violation

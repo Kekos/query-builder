@@ -135,4 +135,47 @@ class CriteriaBuilderTest extends TestCase
 
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
+
+    public function testSetStatementsReplaces(): void
+    {
+        $expected = [
+            [
+                'key' => 'foo',
+                'operator' => 'bar',
+                'value' => 'baz',
+                'joiner' => 'AND',
+            ],
+        ];
+
+        $this->criteria_instance->where('id', '=', 1);
+        $this->criteria_instance->setStatements($expected);
+
+        $this->assertEquals($expected, $this->criteria_instance->getStatements());
+    }
+
+    public function testSetStatementsThrowsOnInvalidArrayShape(): void
+    {
+        $this->expectExceptionMessage('Missing the required key `key` in criterion array index 0:');
+
+        // @phpstan-ignore argument.type
+        $this->criteria_instance->setStatements([[
+            'foo' => 'bar',
+        ]]);
+    }
+
+    public function testSetStatementsThrowsOnInvalidArrayShapeAllowNull(): void
+    {
+        $expected = [
+            [
+                'key' => 'id',
+                'operator' => '=',
+                'value' => null,
+                'joiner' => 'AND',
+            ],
+        ];
+
+        $this->criteria_instance->setStatements($expected);
+
+        $this->assertEquals($expected, $this->criteria_instance->getStatements());
+    }
 }

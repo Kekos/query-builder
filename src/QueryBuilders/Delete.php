@@ -4,13 +4,27 @@ declare(strict_types=1);
 
 namespace QueryBuilder\QueryBuilders;
 
+use QueryBuilder\AdapterInterface;
 use QueryBuilder\QueryBuilder;
 
-use function count;
 use function is_array;
 
-class Delete extends CriteriaBase
+class Delete extends VerbBase
 {
+    use HasWhere;
+
+    private CriteriaBuilder $where;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(string|array|Raw $table_name, AdapterInterface $adapter)
+    {
+        parent::__construct($table_name, $adapter);
+
+        $this->where = new CriteriaBuilder($adapter);
+    }
+
     private function sanitizeField(string|Raw $field): string
     {
         if ($field instanceof Raw) {
@@ -34,9 +48,8 @@ class Delete extends CriteriaBase
         }
 
         // Where
-        if (count($this->where) > 0) {
-            $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
-            $where = $criteria_builder->toSql();
+        if (!$this->where->isEmpty()) {
+            $where = $this->where->toSql();
 
             $sql .= "\n\tWHERE " . $where;
             $params = $where->getParams();

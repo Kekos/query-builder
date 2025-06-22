@@ -4,19 +4,33 @@ declare(strict_types=1);
 
 namespace QueryBuilder\QueryBuilders;
 
+use QueryBuilder\AdapterInterface;
 use QueryBuilder\QueryBuilder;
 
 use function array_merge;
-use function count;
 use function implode;
 use function is_array;
 
-class Update extends CriteriaBase
+class Update extends VerbBase
 {
+    use HasWhere;
+
+    private CriteriaBuilder $where;
+
     /**
      * @var array<string, scalar|Raw|null>
      */
     private array $values = [];
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(string|array|Raw $table_name, AdapterInterface $adapter)
+    {
+        parent::__construct($table_name, $adapter);
+
+        $this->where = new CriteriaBuilder($adapter);
+    }
 
     /**
      * @param array<string, scalar|Raw|null> $values Column name as array key
@@ -67,9 +81,8 @@ class Update extends CriteriaBase
         $sql .= implode(",\n", $placeholders) . "\n";
 
         // Where
-        if (count($this->where) > 0) {
-            $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
-            $where = $criteria_builder->toSql();
+        if (!$this->where->isEmpty()) {
+            $where = $this->where->toSql();
 
             $sql .= "\tWHERE " . $where;
             $params = array_merge($params, $where->getParams());

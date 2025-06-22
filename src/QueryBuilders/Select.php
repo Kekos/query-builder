@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace QueryBuilder\QueryBuilders;
 
 use Closure;
+use QueryBuilder\AdapterInterface;
 use QueryBuilder\QueryBuilder;
 use QueryBuilder\QueryBuilderException;
 
 use function array_merge;
-use function compact;
 use function count;
 use function implode;
 use function is_array;
@@ -17,8 +17,10 @@ use function is_int;
 use function is_numeric;
 use function is_string;
 
-class Select extends CriteriaBase
+class Select extends VerbBase
 {
+    use HasWhere;
+
     /**
      * @var array<int|string, string|Raw>
      */
@@ -29,20 +31,14 @@ class Select extends CriteriaBase
      */
     private array $joins = [];
 
+    private CriteriaBuilder $where;
+
     /**
      * @var array<int, string|Raw>
      */
     private array $group_by = [];
 
-    /**
-     * @var array<int, array{
-     *       key: string|Closure|Raw,
-     *       operator: ?string,
-     *       value: ?mixed,
-     *       joiner: string,
-     *   }>
-     */
-    private array $having = [];
+    private CriteriaBuilder $having;
 
     /**
      * @var array<int, string>
@@ -52,6 +48,17 @@ class Select extends CriteriaBase
     private ?int $limit_offset = null;
 
     private ?int $limit_row_count = null;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(string|array|Raw $table_name, AdapterInterface $adapter)
+    {
+        parent::__construct($table_name, $adapter);
+
+        $this->where = new CriteriaBuilder($adapter);
+        $this->having = new CriteriaBuilder($adapter);
+    }
 
     /**
      * Adds columns to select
@@ -206,7 +213,7 @@ class Select extends CriteriaBase
      */
     public function having(string|Closure|Raw $key, ?string $operator = null, mixed $value = null, string $joiner = 'AND'): self
     {
-        $this->having[] = compact('key', 'operator', 'value', 'joiner');
+        $this->having->where($key, $operator, $value, $joiner);
 
         return $this;
     }
@@ -216,7 +223,7 @@ class Select extends CriteriaBase
      */
     public function havingNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
-        $this->having($key, $operator, $value, 'AND NOT');
+        $this->having->whereNot($key, $operator, $value);
 
         return $this;
     }
@@ -226,7 +233,7 @@ class Select extends CriteriaBase
      */
     public function havingOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
-        $this->having($key, $operator, $value, 'OR');
+        $this->having->whereOr($key, $operator, $value);
 
         return $this;
     }
@@ -236,7 +243,7 @@ class Select extends CriteriaBase
      */
     public function havingOrNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
-        $this->having($key, $operator, $value, 'OR NOT');
+        $this->having->whereOrNot($key, $operator, $value);
 
         return $this;
     }
@@ -390,9 +397,8 @@ class Select extends CriteriaBase
         }
 
         // Where
-        if (count($this->where) > 0) {
-            $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
-            $where = $criteria_builder->toSql();
+        if (!$this->where->isEmpty()) {
+            $where = $this->where->toSql();
 
             $sql .= "\tWHERE " . $where . "\n";
             $params = array_merge($params, $where->getParams());
@@ -404,9 +410,8 @@ class Select extends CriteriaBase
         }
 
         // Having
-        if (count($this->having) > 0) {
-            $criteria_builder = new CriteriaBuilder($this->adapter, $this->having);
-            $having = $criteria_builder->toSql();
+        if (!$this->having->isEmpty()) {
+            $having = $this->having->toSql();
 
             $sql .= "\tHAVING " . $having . "\n";
             $params = array_merge($params, $having->getParams());

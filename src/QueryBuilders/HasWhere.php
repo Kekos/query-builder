@@ -7,30 +7,17 @@ namespace QueryBuilder\QueryBuilders;
 use Closure;
 use QueryBuilder\QueryBuilderException;
 
-use function array_key_exists;
-use function compact;
-use function print_r;
-use function sprintf;
-use function substr;
-
-abstract class CriteriaBase extends VerbBase
+/**
+ * @property CriteriaBuilder $where
+ */
+trait HasWhere
 {
-    /**
-     * @var array<int, array{
-     *     key: string|Closure|Raw,
-     *     operator: ?string,
-     *     value: ?mixed,
-     *     joiner: string,
-     * }>
-     */
-    protected array $where = [];
-
     /**
      * @return $this
      */
     public function where(string|Closure|Raw $key, ?string $operator = null, mixed $value = null, string $joiner = 'AND'): self
     {
-        $this->where[] = compact('key', 'operator', 'value', 'joiner');
+        $this->where->where($key, $operator, $value, $joiner);
 
         return $this;
     }
@@ -40,7 +27,7 @@ abstract class CriteriaBase extends VerbBase
      */
     public function whereNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
-        $this->where($key, $operator, $value, 'AND NOT');
+        $this->where->whereNot($key, $operator, $value);
 
         return $this;
     }
@@ -50,7 +37,7 @@ abstract class CriteriaBase extends VerbBase
      */
     public function whereOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
-        $this->where($key, $operator, $value, 'OR');
+        $this->where->whereOr($key, $operator, $value);
 
         return $this;
     }
@@ -60,7 +47,7 @@ abstract class CriteriaBase extends VerbBase
      */
     public function whereOrNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
-        $this->where($key, $operator, $value, 'OR NOT');
+        $this->where->whereOrNot($key, $operator, $value);
 
         return $this;
     }
@@ -75,7 +62,7 @@ abstract class CriteriaBase extends VerbBase
      */
     public function getWhere(): array
     {
-        return $this->where;
+        return $this->where->getStatements();
     }
 
     /**
@@ -89,26 +76,6 @@ abstract class CriteriaBase extends VerbBase
      */
     public function setWhere(array $criteria): void
     {
-        $required_keys = [
-            'key',
-            'operator',
-            'value',
-            'joiner',
-        ];
-
-        foreach ($criteria as $ix => $criterion) {
-            foreach ($required_keys as $required_key) {
-                if (!array_key_exists($required_key, $criterion)) {
-                    throw new QueryBuilderException(sprintf(
-                        'Missing the required key `%s` in criterion array index %s: %s',
-                        $required_key,
-                        $ix,
-                        substr(print_r($criterion, true), 7, -2), // Quick and dirty way to ignore the "Array(" prefix and ")" suffix
-                    ));
-                }
-            }
-        }
-
-        $this->where = $criteria;
+        $this->where->setStatements($criteria);
     }
 }

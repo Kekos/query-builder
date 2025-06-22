@@ -9,3 +9,4 @@ composer.lock
 vendor/
 .idea/
 .php_cs.cache
+php-cs-fixer

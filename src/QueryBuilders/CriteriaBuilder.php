@@ -53,6 +53,28 @@ class CriteriaBuilder
 
     /**
      * @param string|Closure|Raw $key
+     * @return static
+     */
+    public function whereIsNull($key)
+    {
+        $this->where($key, 'IS NULL');
+
+        return $this;
+    }
+
+    /**
+     * @param string|Closure|Raw $key
+     * @return static
+     */
+    public function whereIsNotNull($key)
+    {
+        $this->whereNot($key, 'IS NULL');
+
+        return $this;
+    }
+
+    /**
+     * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
      * @return static
@@ -72,6 +94,28 @@ class CriteriaBuilder
     public function whereOrNot($key, $operator = null, $value = null)
     {
         $this->where($key, $operator, $value, 'OR NOT');
+        return $this;
+    }
+
+    /**
+     * @param string|Closure|Raw $key
+     * @return static
+     */
+    public function whereOrIsNull($key)
+    {
+        $this->whereOr($key, 'IS NULL');
+
+        return $this;
+    }
+
+    /**
+     * @param string|Closure|Raw $key
+     * @return static
+     */
+    public function whereOrIsNotNull($key)
+    {
+        $this->whereOrNot($key, 'IS NULL');
+
         return $this;
     }
 

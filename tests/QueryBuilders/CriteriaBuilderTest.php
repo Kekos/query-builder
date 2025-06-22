@@ -46,7 +46,7 @@ class CriteriaBuilderTest extends TestCase
 
         call_user_func_array([$this->criteria_instance, 'where'], $expected);
 
-        $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
+        $this->assertEquals([$expected], $this->criteria_instance->getStatements());
     }
 
     public function testWhereNotAddsCriteria()
@@ -57,7 +57,7 @@ class CriteriaBuilderTest extends TestCase
 
         $expected['joiner'] = 'AND NOT';
 
-        $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
+        $this->assertEquals([$expected], $this->criteria_instance->getStatements());
     }
 
     public function testWhereOrAddsCriteria()
@@ -68,7 +68,7 @@ class CriteriaBuilderTest extends TestCase
 
         $expected['joiner'] = 'OR';
 
-        $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
+        $this->assertEquals([$expected], $this->criteria_instance->getStatements());
     }
 
     public function testWhereOrNotAddsCriteria()
@@ -79,7 +79,7 @@ class CriteriaBuilderTest extends TestCase
 
         $expected['joiner'] = 'OR NOT';
 
-        $this->assertAttributeEquals([$expected], 'statements', $this->criteria_instance);
+        $this->assertEquals([$expected], $this->criteria_instance->getStatements());
     }
 
     public function testToSqlWhereSimple()
@@ -221,5 +221,41 @@ class CriteriaBuilderTest extends TestCase
         ;
 
         $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
+    public function testSetStatementsReplaces()
+    {
+        $expected = [self::$base_expected];
+        $expected[0]['joiner'] = 'AND';
+
+        $this->criteria_instance->where('id', '=', 1);
+        $this->criteria_instance->setStatements($expected);
+
+        $this->assertEquals($expected, $this->criteria_instance->getStatements());
+    }
+
+    public function testSetStatementsThrowsOnInvalidArrayShape()
+    {
+        $this->expectExceptionMessage('Missing the required key `key` in criterion array index 0:');
+
+        $this->criteria_instance->setStatements([[
+            'foo' => 'bar',
+        ]]);
+    }
+
+    public function testSetStatementsThrowsOnInvalidArrayShapeAllowNull()
+    {
+        $expected = [
+            [
+                'key' => 'id',
+                'operator' => '=',
+                'value' => null,
+                'joiner' => 'AND',
+            ]
+        ];
+
+        $this->criteria_instance->setStatements($expected);
+
+        $this->assertEquals($expected, $this->criteria_instance->getStatements());
     }
 }

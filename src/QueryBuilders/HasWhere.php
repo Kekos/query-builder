@@ -11,12 +11,12 @@
 namespace QueryBuilder\QueryBuilders;
 
 use Closure;
-use QueryBuilder\QueryBuilderException;
 
-abstract class CriteriaBase extends VerbBase
+/**
+ * @property CriteriaBuilder $where
+ */
+trait HasWhere
 {
-    protected $where = [];
-
     /**
      * @param string|Closure|Raw $key
      * @param string|null $operator
@@ -26,7 +26,8 @@ abstract class CriteriaBase extends VerbBase
      */
     public function where($key, $operator = null, $value = null, $joiner = 'AND')
     {
-        $this->where[] = compact('key', 'operator', 'value', 'joiner');
+        $this->where->where($key, $operator, $value, $joiner);
+
         return $this;
     }
 
@@ -38,7 +39,8 @@ abstract class CriteriaBase extends VerbBase
      */
     public function whereNot($key, $operator = null, $value = null)
     {
-        $this->where($key, $operator, $value, 'AND NOT');
+        $this->where->whereNot($key, $operator, $value);
+
         return $this;
     }
 
@@ -50,7 +52,8 @@ abstract class CriteriaBase extends VerbBase
      */
     public function whereOr($key, $operator = null, $value = null)
     {
-        $this->where($key, $operator, $value, 'OR');
+        $this->where->whereOr($key, $operator, $value);
+
         return $this;
     }
 
@@ -62,7 +65,8 @@ abstract class CriteriaBase extends VerbBase
      */
     public function whereOrNot($key, $operator = null, $value = null)
     {
-        $this->where($key, $operator, $value, 'OR NOT');
+        $this->where->whereOrNot($key, $operator, $value);
+
         return $this;
     }
 
@@ -71,31 +75,11 @@ abstract class CriteriaBase extends VerbBase
      */
     public function getWhere()
     {
-        return $this->where;
+        return $this->where->getStatements();
     }
 
     public function setWhere(array $criteria)
     {
-        $required_keys = [
-            'key',
-            'operator',
-            'value',
-            'joiner',
-        ];
-
-        foreach ($criteria as $ix => $criterion) {
-            foreach ($required_keys as $required_key) {
-                if (!array_key_exists($required_key, $criterion)) {
-                    throw new QueryBuilderException(sprintf(
-                        'Missing the required key `%s` in criterion array index %s: %s',
-                        $required_key,
-                        $ix,
-                        substr(print_r($criterion, true), 7, -2) // Quick and dirty way to ignore the "Array(" prefix and ")" suffix
-                    ));
-                }
-            }
-        }
-
-        $this->where = $criteria;
+        $this->where->setStatements($criteria);
     }
 }

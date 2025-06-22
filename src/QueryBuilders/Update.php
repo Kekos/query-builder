@@ -10,12 +10,24 @@
 
 namespace QueryBuilder\QueryBuilders;
 
+use QueryBuilder\AdapterInterface;
 use QueryBuilder\QueryBuilder;
 use QueryBuilder\QueryBuilderException;
 
-class Update extends CriteriaBase
+class Update extends VerbBase
 {
+    use HasWhere;
+
+    /** @var CriteriaBuilder */
+    private $where;
     private $values = [];
+
+    public function __construct($table_name, AdapterInterface $adapter)
+    {
+        parent::__construct($table_name, $adapter);
+
+        $this->where = new CriteriaBuilder($adapter);
+    }
 
     /**
      * @param array $values Column name as array key
@@ -71,9 +83,8 @@ class Update extends CriteriaBase
         $sql .= implode(",\n", $placeholders) . "\n";
 
         // Where
-        if (count($this->where) > 0) {
-            $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
-            $where = $criteria_builder->toSql();
+        if (!$this->where->isEmpty()) {
+            $where = $this->where->toSql();
 
             $sql .= "\tWHERE " . $where['sql'];
             $params = array_merge($params, $where['params']);

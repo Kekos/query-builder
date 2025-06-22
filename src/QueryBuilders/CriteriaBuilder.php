@@ -13,6 +13,7 @@ namespace QueryBuilder\QueryBuilders;
 use Closure;
 use QueryBuilder\AdapterInterface;
 use QueryBuilder\QueryBuilder;
+use QueryBuilder\QueryBuilderException;
 
 class CriteriaBuilder
 {
@@ -74,14 +75,60 @@ class CriteriaBuilder
         return $this;
     }
 
+    /**
+     * @return array[]
+     */
+    public function getStatements()
+    {
+        return $this->statements;
+    }
+
+    /**
+     * @param array[] $criteria
+     * @return void
+     * @throws QueryBuilderException
+     */
+    public function setStatements(array $criteria)
+    {
+        $required_keys = [
+            'key',
+            'operator',
+            'value',
+            'joiner',
+        ];
+
+        foreach ($criteria as $ix => $criterion) {
+            foreach ($required_keys as $required_key) {
+                if (!array_key_exists($required_key, $criterion)) {
+                    throw new QueryBuilderException(sprintf(
+                        'Missing the required key `%s` in criterion array index %s: %s',
+                        $required_key,
+                        $ix,
+                        substr(print_r($criterion, true), 7, -2) // Quick and dirty way to ignore the "Array(" prefix and ")" suffix
+                    ));
+                }
+            }
+        }
+
+        $this->statements = $criteria;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->statements);
+    }
+
     protected function sanitizeField($field)
     {
         if ($field instanceof Raw) {
             return (string)$field;
-        } else {
-            if ($field instanceof Closure) {
-                return $field;
-            }
+        }
+
+        if ($field instanceof Closure) {
+            return $field;
         }
 
         return QueryBuilder::sanitizeField($field, $this->adapter->getSanitizer());

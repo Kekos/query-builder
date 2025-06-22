@@ -11,20 +11,34 @@
 namespace QueryBuilder\QueryBuilders;
 
 use Closure;
+use QueryBuilder\AdapterInterface;
 use QueryBuilder\QueryBuilder;
 use QueryBuilder\QueryBuilderException;
 
-class Select extends CriteriaBase
+class Select extends VerbBase
 {
+    use HasWhere;
+
     /** @var array<string, string>|string[] */
     private $columns = [];
     /** @var JoinBuilder[] */
     private $joins = [];
+    /** @var CriteriaBuilder */
+    private $where;
     private $group_by = [];
-    private $having = [];
+    /** @var CriteriaBuilder */
+    private $having;
     private $order_by = [];
     private $limit_offset = null;
     private $limit_row_count = null;
+
+    public function __construct($table_name, AdapterInterface $adapter)
+    {
+        parent::__construct($table_name, $adapter);
+
+        $this->where = new CriteriaBuilder($adapter);
+        $this->having = new CriteriaBuilder($adapter);
+    }
 
     /**
      * Adds columns to select
@@ -194,7 +208,8 @@ class Select extends CriteriaBase
      */
     public function having($key, $operator = null, $value = null, $joiner = 'AND')
     {
-        $this->having[] = compact('key', 'operator', 'value', 'joiner');
+        $this->having->where($key, $operator, $value, $joiner);
+
         return $this;
     }
 
@@ -206,7 +221,8 @@ class Select extends CriteriaBase
      */
     public function havingNot($key, $operator = null, $value = null)
     {
-        $this->having($key, $operator, $value, 'AND NOT');
+        $this->having->whereNot($key, $operator, $value);
+
         return $this;
     }
 
@@ -218,7 +234,8 @@ class Select extends CriteriaBase
      */
     public function havingOr($key, $operator = null, $value = null)
     {
-        $this->having($key, $operator, $value, 'OR');
+        $this->having->whereOr($key, $operator, $value);
+
         return $this;
     }
 
@@ -230,7 +247,8 @@ class Select extends CriteriaBase
      */
     public function havingOrNot($key, $operator = null, $value = null)
     {
-        $this->having($key, $operator, $value, 'OR NOT');
+        $this->having->whereOrNot($key, $operator, $value);
+
         return $this;
     }
 
@@ -403,9 +421,8 @@ class Select extends CriteriaBase
         }
 
         // Where
-        if (count($this->where) > 0) {
-            $criteria_builder = new CriteriaBuilder($this->adapter, $this->where);
-            $where = $criteria_builder->toSql();
+        if (!$this->where->isEmpty()) {
+            $where = $this->where->toSql();
 
             $sql .= "\tWHERE " . $where['sql'] . "\n";
             $params = array_merge($params, $where['params']);
@@ -417,9 +434,8 @@ class Select extends CriteriaBase
         }
 
         // Having
-        if (count($this->having) > 0) {
-            $criteria_builder = new CriteriaBuilder($this->adapter, $this->having);
-            $having = $criteria_builder->toSql();
+        if (!$this->having->isEmpty()) {
+            $having = $this->having->toSql();
 
             $sql .= "\tHAVING " . $having['sql'] . "\n";
             $params = array_merge($params, $having['params']);

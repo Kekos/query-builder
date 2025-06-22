@@ -231,6 +231,26 @@ class Select extends VerbBase
     /**
      * @return $this
      */
+    public function havingIsNull(string|Closure|Raw $key): self
+    {
+        $this->having->whereIsNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function havingIsNotNull(string|Closure|Raw $key): self
+    {
+        $this->having->whereIsNotNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
     public function havingOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->having->whereOr($key, $operator, $value);
@@ -244,6 +264,26 @@ class Select extends VerbBase
     public function havingOrNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->having->whereOrNot($key, $operator, $value);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function havingOrIsNull(string|Closure|Raw $key): self
+    {
+        $this->having->whereOrIsNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function havingOrIsNotNull(string|Closure|Raw $key): self
+    {
+        $this->having->whereOrIsNotNull($key);
 
         return $this;
     }

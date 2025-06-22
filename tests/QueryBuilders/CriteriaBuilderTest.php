@@ -58,6 +58,24 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
+    public function testToSqlWhereIsNull(): void
+    {
+        $expected = new Raw('`foo` IS NULL', []);
+
+        $this->criteria_instance->whereIsNull('foo');
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
+    public function testToSqlWhereIsNotNull(): void
+    {
+        $expected = new Raw('NOT `foo` IS NULL', []);
+
+        $this->criteria_instance->whereIsNotNull('foo');
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
     public function testToSqlWhereAnd(): void
     {
         $expected = new Raw('`foo` = ? AND `baz` < ?', ['bar', 5]);
@@ -101,6 +119,30 @@ class CriteriaBuilderTest extends TestCase
         $this->criteria_instance
             ->where('foo', '=', 'bar')
             ->whereOrNot('baz', '<', 5)
+        ;
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
+    public function testToSqlWhereOrIsNull(): void
+    {
+        $expected = new Raw('`foo` = ? OR `foo` IS NULL', ['bar']);
+
+        $this->criteria_instance
+            ->where('foo', '=', 'bar')
+            ->whereOrIsNull('foo')
+        ;
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
+    public function testToSqlWhereOrIsNotNull(): void
+    {
+        $expected = new Raw('`foo` = ? OR NOT `foo` IS NULL', ['bar']);
+
+        $this->criteria_instance
+            ->where('foo', '=', 'bar')
+            ->whereOrIsNotNull('foo')
         ;
 
         $this->assertEquals($expected, $this->criteria_instance->toSql());

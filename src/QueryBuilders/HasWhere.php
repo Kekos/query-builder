@@ -35,6 +35,26 @@ trait HasWhere
     /**
      * @return $this
      */
+    public function whereIsNull(string|Closure|Raw $key): self
+    {
+        $this->where->whereIsNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function whereIsNotNull(string|Closure|Raw $key): self
+    {
+        $this->where->whereIsNotNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
     public function whereOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where->whereOr($key, $operator, $value);
@@ -48,6 +68,26 @@ trait HasWhere
     public function whereOrNot(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->where->whereOrNot($key, $operator, $value);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function whereOrIsNull(string|Closure|Raw $key): self
+    {
+        $this->where->whereOrIsNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function whereOrIsNotNull(string|Closure|Raw $key): self
+    {
+        $this->where->whereOrIsNotNull($key);
 
         return $this;
     }

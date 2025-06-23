@@ -36,7 +36,7 @@ parameters to be bound to the query, to be used with prepared statements.
 ```PHP
 $result = QueryBuilder::select(['user', 'u'])
   ->columns(['u.id', 'uname' => 'username'])
-  ->join(['user_permission', 'p'], QB::raw('p.user_id = u.id'))
+  ->joinOn(['user_permission', 'p'], 'p.user_id', 'u.id')
   ->limit(5, 0)
   ->groupby(['u.id'])
   ->orderby(['username ASC', 'firstname ASC'])

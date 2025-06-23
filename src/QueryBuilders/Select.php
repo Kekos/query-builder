@@ -115,6 +115,21 @@ class Select extends VerbBase
     }
 
     /**
+     * @param string|array{0: string, 1: string} $table
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function joinOn(string|array $table, string $left_column, string $right_column, string $operator = '=', string $join_type = 'INNER'): self
+    {
+        $join_builder = new JoinBuilder($this->adapter, [], $table, $join_type);
+        $join_builder->whereColumnsEquals($left_column, $right_column, $operator);
+
+        $this->joins[] = $join_builder;
+
+        return $this;
+    }
+
+    /**
      * @return JoinBuilder[]
      */
     public function getJoins(): array
@@ -142,12 +157,36 @@ class Select extends VerbBase
     }
 
     /**
+     * @param string|array{0: string, 1: string} $table
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function leftJoinOn(string|array $table, string $left_column, string $right_column, string $operator = '='): self
+    {
+        $this->joinOn($table, $left_column, $right_column, $operator, 'LEFT');
+
+        return $this;
+    }
+
+    /**
      * @param string|Raw|array{0: string, 1: string} $table
      * @return $this
      */
     public function rightJoin(string|array|Raw $table, string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT');
+
+        return $this;
+    }
+
+    /**
+     * @param string|array{0: string, 1: string} $table
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function rightJoinOn(string|array $table, string $left_column, string $right_column, string $operator = '='): self
+    {
+        $this->joinOn($table, $left_column, $right_column, $operator, 'RIGHT');
 
         return $this;
     }
@@ -164,12 +203,36 @@ class Select extends VerbBase
     }
 
     /**
+     * @param string|array{0: string, 1: string} $table
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function leftOuterJoinOn(string|array $table, string $left_column, string $right_column, string $operator = '='): self
+    {
+        $this->joinOn($table, $left_column, $right_column, $operator, 'LEFT OUTER');
+
+        return $this;
+    }
+
+    /**
      * @param string|Raw|array{0: string, 1: string} $table
      * @return $this
      */
     public function rightOuterJoin(string|array|Raw $table, string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
         $this->join($table, $key, $operator, $value, 'RIGHT OUTER');
+
+        return $this;
+    }
+
+    /**
+     * @param string|array{0: string, 1: string} $table
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function rightOuterJoinOn(string|array $table, string $left_column, string $right_column, string $operator = '='): self
+    {
+        $this->joinOn($table, $left_column, $right_column, $operator, 'RIGHT OUTER');
 
         return $this;
     }

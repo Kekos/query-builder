@@ -98,6 +98,25 @@ class Select extends VerbBase
     }
 
     /**
+     * @param string|string[] $table
+     * @param string $left_column
+     * @param string $right_column
+     * @param string $operator
+     * @param string $join_type
+     * @return Select
+     * @throws QueryBuilderException
+     */
+    public function joinOn($table, $left_column, $right_column, $operator = '=', $join_type = 'INNER')
+    {
+        $join_builder = new JoinBuilder($this->adapter, [], $table, $join_type);
+        $join_builder->whereColumnsEquals($left_column, $right_column, $operator);
+
+        $this->joins[] = $join_builder;
+
+        return $this;
+    }
+
+    /**
      * @return JoinBuilder[]
      */
     public function getJoins()
@@ -128,6 +147,21 @@ class Select extends VerbBase
 
     /**
      * @param string|string[] $table
+     * @param string $left_column
+     * @param string $right_column
+     * @param string $operator
+     * @return Select
+     * @throws QueryBuilderException
+     */
+    public function leftJoinOn($table, $left_column, $right_column, $operator = '=')
+    {
+        $this->joinOn($table, $left_column, $right_column, $operator, 'LEFT');
+
+        return $this;
+    }
+
+    /**
+     * @param string|string[] $table
      * @param string|Closure $key
      * @param string|null $operator
      * @param mixed|null $value
@@ -136,6 +170,21 @@ class Select extends VerbBase
     public function rightJoin($table, $key, $operator = null, $value = null)
     {
         $this->join($table, $key, $operator, $value, 'RIGHT');
+        return $this;
+    }
+
+    /**
+     * @param string|string[] $table
+     * @param string $left_column
+     * @param string $right_column
+     * @param string $operator
+     * @return Select
+     * @throws QueryBuilderException
+     */
+    public function rightJoinOn($table, $left_column, $right_column, $operator = '=')
+    {
+        $this->joinOn($table, $left_column, $right_column, $operator, 'RIGHT');
+
         return $this;
     }
 
@@ -154,6 +203,21 @@ class Select extends VerbBase
 
     /**
      * @param string|string[] $table
+     * @param string $left_column
+     * @param string $right_column
+     * @param string $operator
+     * @return Select
+     * @throws QueryBuilderException
+     */
+    public function leftOuterJoinOn($table, $left_column, $right_column, $operator = '=')
+    {
+        $this->joinOn($table, $left_column, $right_column, $operator, 'LEFT OUTER');
+
+        return $this;
+    }
+
+    /**
+     * @param string|string[] $table
      * @param string|Closure $key
      * @param string|null $operator
      * @param mixed|null $value
@@ -162,6 +226,21 @@ class Select extends VerbBase
     public function rightOuterJoin($table, $key, $operator = null, $value = null)
     {
         $this->join($table, $key, $operator, $value, 'RIGHT OUTER');
+        return $this;
+    }
+
+    /**
+     * @param string|string[] $table
+     * @param string $left_column
+     * @param string $right_column
+     * @param string $operator
+     * @return Select
+     * @throws QueryBuilderException
+     */
+    public function rightOuterJoinOn($table, $left_column, $right_column, $operator = '=')
+    {
+        $this->joinOn($table, $left_column, $right_column, $operator, 'RIGHT OUTER');
+
         return $this;
     }
 

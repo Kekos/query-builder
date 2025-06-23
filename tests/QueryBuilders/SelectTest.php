@@ -222,6 +222,18 @@ class SelectTest extends TestCase
         $this->assertEquals($expected, $this->select->toSql());
     }
 
+    public function testToSqlJoinOn()
+    {
+        $expected = [
+            'sql' => "SELECT *\n\tFROM `foo`\n\tINNER JOIN `bar` ON `bar`.`foo_id` = `foo`.`id`\n",
+            'params' => [],
+        ];
+
+        $this->select->joinOn('bar', 'bar.foo_id', 'foo.id');
+
+        $this->assertEquals($expected, $this->select->toSql());
+    }
+
     public function testToSqlJoinParams()
     {
         $expected = [

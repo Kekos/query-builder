@@ -250,6 +250,28 @@ class Select extends VerbBase
 
     /**
      * @return $this
+     * @throws QueryBuilderException
+     */
+    public function havingColumnsEquals(string $left, string $right, string $operator = '=', string $joiner = 'AND'): self
+    {
+        $this->having->whereColumnsEquals($left, $right, $operator, $joiner);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function havingColumnsNotEquals(string $left, string $right): self
+    {
+        $this->having->whereColumnsNotEquals($left, $right);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
      */
     public function havingOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
@@ -284,6 +306,28 @@ class Select extends VerbBase
     public function havingOrIsNotNull(string|Closure|Raw $key): self
     {
         $this->having->whereOrIsNotNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function havingOrColumnsEquals(string $left, string $right): self
+    {
+        $this->having->whereOrColumnsEquals($left, $right);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function havingOrColumnsNotEquals(string $left, string $right): self
+    {
+        $this->having->whereOrColumnsNotEquals($left, $right);
 
         return $this;
     }

@@ -54,6 +54,28 @@ trait HasWhere
 
     /**
      * @return $this
+     * @throws QueryBuilderException
+     */
+    public function whereColumnsEquals(string $left, string $right, string $operator = '=', string $joiner = 'AND'): self
+    {
+        $this->where->whereColumnsEquals($left, $right, $operator, $joiner);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function whereColumnsNotEquals(string $left, string $right): self
+    {
+        $this->where->whereColumnsNotEquals($left, $right);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
      */
     public function whereOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
@@ -88,6 +110,28 @@ trait HasWhere
     public function whereOrIsNotNull(string|Closure|Raw $key): self
     {
         $this->where->whereOrIsNotNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function whereOrColumnsEquals(string $left, string $right): self
+    {
+        $this->where->whereOrColumnsEquals($left, $right);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function whereOrColumnsNotEquals(string $left, string $right): self
+    {
+        $this->where->whereOrColumnsNotEquals($left, $right);
 
         return $this;
     }

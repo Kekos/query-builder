@@ -19,6 +19,7 @@ use function array_key_exists;
 use function print_r;
 use function sprintf;
 use function substr;
+use function in_array;
 
 /**
  * @phpstan-type StatementArrayType array<int, array{
@@ -88,6 +89,35 @@ class CriteriaBuilder
 
     /**
      * @return $this
+     * @throws QueryBuilderException
+     */
+    public function whereColumnsEquals(string $left, string $right, string $operator = '=', string $joiner = 'AND'): self
+    {
+        $left_sanitized = $this->sanitizeField($left);
+        $right_sanitized = $this->sanitizeField($right);
+
+        if (!in_array($operator, ['=', '!=', '>', '>=', '<', '<='], true)) {
+            throw new QueryBuilderException('Operator "' . $operator . '" is not allowed for column matching');
+        }
+
+        $this->where(new Raw($left_sanitized . ' ' . $operator . ' ' . $right_sanitized), null, null, $joiner);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function whereColumnsNotEquals(string $left, string $right): self
+    {
+        $this->whereColumnsEquals($left, $right, '!=');
+
+        return $this;
+    }
+
+    /**
+     * @return $this
      */
     public function whereOr(string|Closure|Raw $key, ?string $operator = null, mixed $value = null): self
     {
@@ -122,6 +152,28 @@ class CriteriaBuilder
     public function whereOrIsNotNull(string|Closure|Raw $key): self
     {
         $this->whereOrNot($key, 'IS NULL');
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function whereOrColumnsEquals(string $left, string $right): self
+    {
+        $this->whereColumnsEquals($left, $right, '=', 'OR');
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws QueryBuilderException
+     */
+    public function whereOrColumnsNotEquals(string $left, string $right): self
+    {
+        $this->whereColumnsEquals($left, $right, '!=', 'OR');
 
         return $this;
     }

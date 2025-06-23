@@ -74,6 +74,41 @@ class CriteriaBuilder
     }
 
     /**
+     * @param string $left
+     * @param string $right
+     * @param string $operator
+     * @param string $joiner
+     * @return static
+     * @throws QueryBuilderException
+     */
+    public function whereColumnsEquals($left, $right, $operator = '=', $joiner = 'AND')
+    {
+        $left_sanitized = $this->sanitizeField($left);
+        $right_sanitized = $this->sanitizeField($right);
+
+        if (!in_array($operator, ['=', '!=', '>', '>=', '<', '<='], true)) {
+            throw new QueryBuilderException('Operator "' . $operator . '" is not allowed for column matching');
+        }
+
+        $this->where(new Raw($left_sanitized . ' ' . $operator . ' ' . $right_sanitized), null, null, $joiner);
+
+        return $this;
+    }
+
+    /**
+     * @param string $left
+     * @param string $right
+     * @return static
+     * @throws QueryBuilderException
+     */
+    public function whereColumnsNotEquals($left, $right)
+    {
+        $this->whereColumnsEquals($left, $right, '!=');
+
+        return $this;
+    }
+
+    /**
      * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
@@ -115,6 +150,32 @@ class CriteriaBuilder
     public function whereOrIsNotNull($key)
     {
         $this->whereOrNot($key, 'IS NULL');
+
+        return $this;
+    }
+
+    /**
+     * @param string $left
+     * @param string $right
+     * @return static
+     * @throws QueryBuilderException
+     */
+    public function whereOrColumnsEquals($left, $right)
+    {
+        $this->whereColumnsEquals($left, $right, '=', 'OR');
+
+        return $this;
+    }
+
+    /**
+     * @param string $left
+     * @param string $right
+     * @return static
+     * @throws QueryBuilderException
+     */
+    public function whereOrColumnsNotEquals($left, $right)
+    {
+        $this->whereColumnsEquals($left, $right, '!=', 'OR');
 
         return $this;
     }
@@ -165,6 +226,10 @@ class CriteriaBuilder
         return empty($this->statements);
     }
 
+    /**
+     * @param string|Raw|Closure $field
+     * @return ($field is Closure ? Closure : string)
+     */
     protected function sanitizeField($field)
     {
         if ($field instanceof Raw) {

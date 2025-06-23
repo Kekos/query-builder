@@ -144,6 +144,30 @@ class CriteriaBuilderTest extends TestCase
         $this->assertEquals($expected, $this->criteria_instance->toSql());
     }
 
+    public function testToSqlWhereColumnsEquals()
+    {
+        $expected = [
+            'sql' => '`a`.`foo` = `b`.`bar`',
+            'params' => [],
+        ];
+
+        $this->criteria_instance->whereColumnsEquals('a.foo', 'b.bar');
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
+    public function testToSqlWhereColumnsNotEquals()
+    {
+        $expected = [
+            'sql' => '`a`.`foo` != `b`.`bar`',
+            'params' => [],
+        ];
+
+        $this->criteria_instance->whereColumnsNotEquals('a.foo', 'b.bar');
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
     public function testToSqlWhereIsNotNull()
     {
         $expected = [
@@ -237,6 +261,36 @@ class CriteriaBuilderTest extends TestCase
         $this->criteria_instance
             ->where('foo', '=', 'bar')
             ->whereOrIsNotNull('foo')
+        ;
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
+    public function testToSqlWhereOrColumnsEquals()
+    {
+        $expected = [
+            'sql' => '`foo` = ? OR `a`.`foo` = `b`.`bar`',
+            'params' => ['bar'],
+        ];
+
+        $this->criteria_instance
+            ->where('foo', '=', 'bar')
+            ->whereOrColumnsEquals('a.foo', 'b.bar')
+        ;
+
+        $this->assertEquals($expected, $this->criteria_instance->toSql());
+    }
+
+    public function testToSqlWhereOrColumnsNotEquals()
+    {
+        $expected = [
+            'sql' => '`foo` = ? OR `a`.`foo` != `b`.`bar`',
+            'params' => ['bar'],
+        ];
+
+        $this->criteria_instance
+            ->where('foo', '=', 'bar')
+            ->whereOrColumnsNotEquals('a.foo', 'b.bar')
         ;
 
         $this->assertEquals($expected, $this->criteria_instance->toSql());

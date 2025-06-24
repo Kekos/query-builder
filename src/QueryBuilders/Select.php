@@ -307,6 +307,56 @@ class Select extends VerbBase
 
     /**
      * @param string|Closure|Raw $key
+     * @return static
+     */
+    public function havingIsNull($key)
+    {
+        $this->having->whereIsNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @param string|Closure|Raw $key
+     * @return static
+     */
+    public function havingIsNotNull($key)
+    {
+        $this->having->whereIsNotNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @param string $left
+     * @param string $right
+     * @param string $operator
+     * @param string $joiner
+     * @return static
+     * @throws QueryBuilderException
+     */
+    public function havingColumnsEquals($left, $right, $operator = '=', $joiner = 'AND')
+    {
+        $this->having->whereColumnsEquals($left, $right, $operator, $joiner);
+
+        return $this;
+    }
+
+    /**
+     * @param string $left
+     * @param string $right
+     * @return static
+     * @throws QueryBuilderException
+     */
+    public function havingColumnsNotEquals($left, $right)
+    {
+        $this->having->whereColumnsNotEquals($left, $right);
+
+        return $this;
+    }
+
+    /**
+     * @param string|Closure|Raw $key
      * @param string|null $operator
      * @param mixed|null $value
      * @return Select
@@ -327,6 +377,54 @@ class Select extends VerbBase
     public function havingOrNot($key, $operator = null, $value = null)
     {
         $this->having->whereOrNot($key, $operator, $value);
+
+        return $this;
+    }
+
+    /**
+     * @param string|Closure|Raw $key
+     * @return static
+     */
+    public function havingOrIsNull($key)
+    {
+        $this->having->whereOrIsNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @param string|Closure|Raw $key
+     * @return static
+     */
+    public function havingOrIsNotNull($key)
+    {
+        $this->having->whereOrIsNotNull($key);
+
+        return $this;
+    }
+
+    /**
+     * @param string $left
+     * @param string $right
+     * @return static
+     * @throws QueryBuilderException
+     */
+    public function havingOrColumnsEquals($left, $right)
+    {
+        $this->having->whereOrColumnsEquals($left, $right);
+
+        return $this;
+    }
+
+    /**
+     * @param string $left
+     * @param string $right
+     * @return static
+     * @throws QueryBuilderException
+     */
+    public function havingOrColumnsNotEquals($left, $right)
+    {
+        $this->having->whereOrColumnsNotEquals($left, $right);
 
         return $this;
     }

@@ -430,6 +430,14 @@ class Select extends VerbBase
     }
 
     /**
+     * @return array[]
+     */
+    public function getHaving()
+    {
+        return $this->having->getStatements();
+    }
+
+    /**
      * @param string|array<string|int, string|Raw> $columns Single column as string or multiple
      *  columns in array. Set column as array key and direction as value.
      * @param string $default_dir Default sort direction, standard is "ASC"

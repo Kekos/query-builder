@@ -17,6 +17,9 @@ use function is_int;
 use function is_numeric;
 use function is_string;
 
+/**
+ * @phpstan-import-type StatementArrayType from CriteriaBuilder
+ */
 class Select extends VerbBase
 {
     use HasWhere;
@@ -393,6 +396,14 @@ class Select extends VerbBase
         $this->having->whereOrColumnsNotEquals($left, $right);
 
         return $this;
+    }
+
+    /**
+     * @return StatementArrayType
+     */
+    public function getHaving(): array
+    {
+        return $this->having->getStatements();
     }
 
     /**

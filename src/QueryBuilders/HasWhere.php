@@ -9,6 +9,7 @@ use QueryBuilder\QueryBuilderException;
 
 /**
  * @property CriteriaBuilder $where
+ * @phpstan-import-type StatementArrayType from CriteriaBuilder
  */
 trait HasWhere
 {
@@ -137,12 +138,7 @@ trait HasWhere
     }
 
     /**
-     * @return array<int, array{
-     *      key: string|Closure|Raw,
-     *      operator: ?string,
-     *      value: ?mixed,
-     *      joiner: string,
-     *  }>
+     * @return StatementArrayType
      */
     public function getWhere(): array
     {

@@ -63,6 +63,12 @@ class Select extends VerbBase
         $this->having = new CriteriaBuilder($adapter);
     }
 
+    public function __clone()
+    {
+        $this->where = new CriteriaBuilder($this->adapter);
+        $this->having = new CriteriaBuilder($this->adapter);
+    }
+
     /**
      * Adds columns to select
      *

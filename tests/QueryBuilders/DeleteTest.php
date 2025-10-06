@@ -20,6 +20,14 @@ class DeleteTest extends TestCase
         $this->delete = new Delete('foo_join', new MySqlAdapter());
     }
 
+    public function testCloneWhere(): void
+    {
+        $cloned_delete = clone $this->delete;
+        $cloned_delete->where('foo', '=', 42);
+
+        $this->assertEmpty($this->delete->getWhere());
+    }
+
     public function testToSql(): void
     {
         $expected = new Raw("DELETE FROM `foo_join`\n\tWHERE `id` = ?", [42]);

@@ -20,6 +20,14 @@ class UpdateTest extends TestCase
         $this->update = new Update('foo', new MySqlAdapter());
     }
 
+    public function testCloneWhere(): void
+    {
+        $cloned_update = clone $this->update;
+        $cloned_update->where('foo', '=', 42);
+
+        $this->assertEmpty($this->update->getWhere());
+    }
+
     public function testToSql(): void
     {
         $expected = new Raw(

@@ -111,6 +111,16 @@ class SelectTest extends TestCase
         $this->assertEmpty($this->select->getOrderBy());
     }
 
+    public function testCloneWhereHaving(): void
+    {
+        $cloned_select = clone $this->select;
+        $cloned_select->where('foo', '=', 42);
+        $cloned_select->having('bar', '=', 1337);
+
+        $this->assertEmpty($this->select->getWhere());
+        $this->assertEmpty($this->select->getHaving());
+    }
+
     public function testLimit(): void
     {
         $this->select->limit(10);

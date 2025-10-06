@@ -25,6 +25,11 @@ class Delete extends VerbBase
         $this->where = new CriteriaBuilder($adapter);
     }
 
+    public function __clone()
+    {
+        $this->where = new CriteriaBuilder($this->adapter);
+    }
+
     private function sanitizeField(string|Raw $field): string
     {
         if ($field instanceof Raw) {

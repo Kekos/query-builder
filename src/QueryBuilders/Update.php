@@ -32,6 +32,11 @@ class Update extends VerbBase
         $this->where = new CriteriaBuilder($adapter);
     }
 
+    public function __clone()
+    {
+        $this->where = new CriteriaBuilder($this->adapter);
+    }
+
     /**
      * @param array<string, scalar|Raw|null> $values Column name as array key
      * @return $this

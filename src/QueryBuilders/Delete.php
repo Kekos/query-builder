@@ -29,7 +29,7 @@ class Delete extends VerbBase
 
     public function __clone()
     {
-        $this->where = new CriteriaBuilder($this->adapter);
+        $this->where = clone $this->where;
     }
 
     private function sanitizeField($field)

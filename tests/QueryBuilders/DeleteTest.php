@@ -19,10 +19,26 @@ class DeleteTest extends TestCase
 
     public function testCloneWhere()
     {
-        $cloned_delete = clone $this->delete;
-        $cloned_delete->where('foo', '=', 42);
+        $where_test1 = [
+            'key' => 'test1',
+            'operator' => '=',
+            'value' => 42,
+            'joiner' => 'AND',
+        ];
+        $where_foo = [
+            'key' => 'foo',
+            'operator' => '=',
+            'value' => 42,
+            'joiner' => 'AND',
+        ];
 
-        $this->assertEmpty($this->delete->getWhere());
+        $this->delete->where($where_test1['key'], '=', $where_test1['value']);
+
+        $cloned_delete = clone $this->delete;
+        $cloned_delete->where($where_foo['key'], '=', $where_foo['value']);
+
+        $this->assertEquals([$where_test1], $this->delete->getWhere());
+        $this->assertEquals([$where_test1, $where_foo], $cloned_delete->getWhere());
     }
 
     public function testToSql()

@@ -42,8 +42,8 @@ class Select extends VerbBase
 
     public function __clone()
     {
-        $this->where = new CriteriaBuilder($this->adapter);
-        $this->having = new CriteriaBuilder($this->adapter);
+        $this->where = clone $this->where;
+        $this->having = clone $this->having;
     }
 
     /**

@@ -113,12 +113,42 @@ class SelectTest extends TestCase
 
     public function testCloneWhereHaving(): void
     {
-        $cloned_select = clone $this->select;
-        $cloned_select->where('foo', '=', 42);
-        $cloned_select->having('bar', '=', 1337);
+        $where_test1 = [
+            'key' => 'test1',
+            'operator' => '=',
+            'value' => 42,
+            'joiner' => 'AND',
+        ];
+        $having_test2 = [
+            'key' => 'test2',
+            'operator' => '=',
+            'value' => 1337,
+            'joiner' => 'AND',
+        ];
+        $where_foo = [
+            'key' => 'foo',
+            'operator' => '=',
+            'value' => 42,
+            'joiner' => 'AND',
+        ];
+        $having_bar = [
+            'key' => 'bar',
+            'operator' => '=',
+            'value' => 1337,
+            'joiner' => 'AND',
+        ];
 
-        $this->assertEmpty($this->select->getWhere());
-        $this->assertEmpty($this->select->getHaving());
+        $this->select->where($where_test1['key'], '=', $where_test1['value']);
+        $this->select->having($having_test2['key'], '=', $having_test2['value']);
+
+        $cloned_select = clone $this->select;
+        $cloned_select->where($where_foo['key'], '=', $where_foo['value']);
+        $cloned_select->having($having_bar['key'], '=', $having_bar['value']);
+
+        $this->assertEquals([$where_test1], $this->select->getWhere());
+        $this->assertEquals([$having_test2], $this->select->getHaving());
+        $this->assertEquals([$where_test1, $where_foo], $cloned_select->getWhere());
+        $this->assertEquals([$having_test2, $having_bar], $cloned_select->getHaving());
     }
 
     public function testLimit(): void

@@ -34,7 +34,7 @@ class Update extends VerbBase
 
     public function __clone()
     {
-        $this->where = new CriteriaBuilder($this->adapter);
+        $this->where = clone $this->where;
     }
 
     /**

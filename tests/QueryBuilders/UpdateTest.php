@@ -22,10 +22,26 @@ class UpdateTest extends TestCase
 
     public function testCloneWhere(): void
     {
-        $cloned_update = clone $this->update;
-        $cloned_update->where('foo', '=', 42);
+        $where_test1 = [
+            'key' => 'test1',
+            'operator' => '=',
+            'value' => 42,
+            'joiner' => 'AND',
+        ];
+        $where_foo = [
+            'key' => 'foo',
+            'operator' => '=',
+            'value' => 42,
+            'joiner' => 'AND',
+        ];
 
-        $this->assertEmpty($this->update->getWhere());
+        $this->update->where($where_test1['key'], '=', $where_test1['value']);
+
+        $cloned_update = clone $this->update;
+        $cloned_update->where($where_foo['key'], '=', $where_foo['value']);
+
+        $this->assertEquals([$where_test1], $this->update->getWhere());
+        $this->assertEquals([$where_test1, $where_foo], $cloned_update->getWhere());
     }
 
     public function testToSql(): void
